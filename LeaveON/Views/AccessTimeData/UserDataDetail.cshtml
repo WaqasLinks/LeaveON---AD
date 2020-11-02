@@ -1,0 +1,128 @@
+@model IEnumerable<TimeManagement.Models.UD_TB_AccessTime_Data>
+@{
+
+  <div id="NewData">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+
+    <!-- DataTables -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+    <section class="content">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">User Details</h3>
+
+
+            </div>
+
+
+            <div class="card-body">
+
+              <div d="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                  <div class="col-sm-12 col-md-6">
+                  </div>
+                  <div class="col-sm-12 col-md-6"></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    @if (!(Model is null))
+                    {
+                      TimeSpan AllWorkingHours = new TimeSpan();
+                      TimeSpan AllTotalTime = new TimeSpan();
+                      <table id="example2" class="table table-bordered table-hover dataTable dtr-inline" role="grid" aria-describedby="example2_info">
+                        <thead>
+                          <tr>
+                            <th>
+                              Time Out
+                            </th>
+                            <th>
+                              Time In
+                            </th>
+                            <th>
+                              Off Hours
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @{
+                            TimeSpan timeOff;
+                            for (int i = 0; i < Model.LongCount()-1; i++)
+
+                            {
+                                
+                              <tr>
+                               
+                                <td>
+                                  @*@Html.DisplayFor(modelItem => item.Day_IN)*@
+                                   @*@Model.ElementAtOrDefault(i).Date_OUT.Value.TimeOfDay.ToString(@"hh\:mm\:ss")*@  
+                                  @Model.ElementAtOrDefault(i).Date_OUT.Value.ToString("hh:mm:ss tt")  
+                                  
+                                </td>
+                                <td>
+                                  @*@Model.ElementAtOrDefault(i+1).Date_IN.Value.TimeOfDay.ToString("hh:mm:ss tt")*@
+                                  @Model.ElementAtOrDefault(i+1).Date_IN.Value.ToString("hh:mm:ss tt")
+                                </td>
+                                <td>
+                                  @{
+                                    timeOff = (Model.ElementAtOrDefault(i+1).Date_IN - Model.ElementAtOrDefault(i).Date_OUT).Value.Duration();
+                                  }
+                                  @(timeOff)
+                                </td>
+
+                              </tr>
+                            }
+                          }
+                        </tbody>
+                        <tfoot>
+                          @*<tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="display:none;"></td>
+                            <td style="font-weight:bold">@AllWorkingHours.TotalHours.ToString("N2") Hours</td>
+                            <td style="font-weight:bold">@AllTotalTime.TotalHours.ToString("N2") Hours</td>
+                            <td></td>
+                          </tr>*@
+                        </tfoot>
+                      </table>
+                    }
+
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+}
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true,
+      "autoWidth": false,
+    });
+    $('#example2').DataTable({
+      "paging": false,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": false,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+

@@ -1,0 +1,58 @@
+@model IEnumerable<TimeManagement.Models.UD_TB_AccessTime_Data>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>Index</h2>
+
+  <p>
+    @Html.ActionLink("Create New", "Create")
+  </p>*@
+<select class="selectpicker" id="selectMonth" data-live-search="false" data-done-button="true">
+  <option value="07-2020">July 2020</option>
+  <option value="08-2020">August 2020</option>
+  <option value="09-2020">September 2020</option>
+  <option value="10-2020">October 2020</option>
+  <option value="11-2020">November 2020</option>
+  <option value="12-2020">December 2020</option>
+  <option value="01-2021">January 2021</option>
+  <option value="02-2021">February 2021</option>
+  <option value="03-2021">March 2021</option>
+  <option value="04-2021">April 2021</option>
+  <option value="05-2021">May 2021</option>
+  <option value="06-2021">June 2021</option>
+</select>
+@{Html.RenderPartial("_PersonalData", Model); }
+
+<script type="text/javascript">
+
+        $(document).ready(function () {
+
+          $('#selectMonth').change(function(){
+            var ReqMonthYear = $(this).val();
+
+             $.ajax({
+                    url: "@Url.Action("PersonalData","AccessTimeData")",
+                    data: { 'ReqMonthYear': ReqMonthYear },
+                    type: "GET",
+                    cache: false,
+                    success: function (data) {
+                        //alert(data);
+                        $("#NewData").html(data);
+
+                        //$("#hdnOrigComments").val($('#txtComments').val());
+                        //$('#lblCommentsNotification').text(savingStatus);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        //$('#lblCommentsNotification').text("Error encountered while saving the comments.");
+                        alert('Data provided was not valid');
+                    }
+             });
+          });
+        });
+
+
+</script>
+

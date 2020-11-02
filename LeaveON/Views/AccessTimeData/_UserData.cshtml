@@ -1,0 +1,192 @@
+@model IEnumerable<TimeManagement.Models.UD_TB_AccessTime_Data>
+@{
+
+  <div id="NewData">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+
+    <!-- DataTables -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+    <section class="content">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">User Data</h3>
+
+
+            </div>
+
+
+            <div class="card-body">
+
+              <div d="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                  <div class="col-sm-12 col-md-6">
+                  </div>
+                  <div class="col-sm-12 col-md-6"></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    @if (!(Model is null))
+                    {
+                      TimeSpan AllWorkingHours = new TimeSpan();
+                      TimeSpan AllTotalTime = new TimeSpan();
+                      <table id="example2" class="table table-bordered table-hover dataTable dtr-inline" role="grid" aria-describedby="example2_info">
+                        <thead>
+                          <tr>
+                            <th>
+                              @Html.DisplayNameFor(model => model.EmployeeName)
+                            </th>
+                            <th>
+                              @Html.DisplayNameFor(model => model.EmployeeNumber)
+                            </th>
+
+                            <th>
+                              @Html.DisplayNameFor(model => model.Date_IN)
+                            </th>
+                            <th>
+                              @Html.DisplayNameFor(model => model.Day_IN)
+                            </th>
+                            <th>
+                              @Html.DisplayNameFor(model => model.Time_IN)
+                            </th>
+
+                            <th>
+                              @Html.DisplayNameFor(model => model.Time_OUT)
+                            </th>
+
+                            <th>
+                              Working Hours
+                            </th>
+                            <th>
+                              Total Time
+                            </th>
+                            @*
+                              <th></th>*@
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @{
+                            TimeSpan TotalTime;
+                            TimeSpan oneSlot;
+
+
+                            foreach (var group in Model.GroupBy(x => x.Date_IN.Value.Day))
+
+                            {
+
+                              <tr>
+                                <td>
+                                  @Html.DisplayFor(modelItem => group.First().EmployeeName)
+                                </td>
+                                <td>
+                                  @Html.DisplayFor(modelItem => group.First().EmployeeNumber)
+                                </td>
+
+                                <td>
+                                  @Html.DisplayFor(modelItem => group.First().Date_IN)
+                                </td>
+                                <td>
+                                  @Html.DisplayFor(modelItem => group.First().Day_IN)
+                                </td>
+                                <td>
+                                  @Html.DisplayFor(modelItem => group.First().Time_IN)
+                                </td>
+
+
+                                <td>
+                                  @Html.DisplayFor(modelItem => group.Last().Time_OUT)
+                                </td>
+
+                                
+                                <td>
+                                  @* working hours *@
+                                  @*@{
+                                      group.Sum(x => x.Time_OUT.Value - x.Time_IN.Value)
+                                    }*@
+                                  @{
+                                    TimeSpan WorkingHours = new TimeSpan();//TimeSpan.FromSeconds(0);// TimeSpan.FromSeconds(0);
+                                    foreach (var item in group)
+                                    {
+                                      oneSlot = (item.Time_OUT - item.Time_IN).Value.Duration();
+                                      WorkingHours = WorkingHours.Add(oneSlot);
+                                    }
+                                    @(WorkingHours)
+                                    AllWorkingHours=AllWorkingHours.Add(WorkingHours);
+                                  }
+
+                                </td>
+                                <td>
+                                  @{
+
+                                    TotalTime = (group.Last().Time_OUT - group.First().Time_IN).Value.Duration();
+                                      AllTotalTime=AllTotalTime.Add(TotalTime);
+                                    @(TotalTime)
+                                  }
+
+                                </td>
+                                <td>
+                                  @Html.ActionLink("Detail", "UserDataDetail", new { EmployeeNumber = group.First().EmployeeNumber, DateIn = group.First().Date_IN, DateOut = group.Last().Date_OUT}, new {target="_blank"}) @*|*@
+                                </td>
+                                @*
+                                  <td>
+                                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                  </td>*@
+                              </tr>
+                            }
+                          }
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="display:none;"></td>
+                            <td style="font-weight:bold">@AllWorkingHours.TotalHours.ToString("N2") Hours</td>
+                            <td style="font-weight:bold">@AllTotalTime.TotalHours.ToString("N2") Hours</td>
+                            <td></td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    }
+
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+}
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true,
+      "autoWidth": false,
+    });
+    $('#example2').DataTable({
+      "paging": false,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": false,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+

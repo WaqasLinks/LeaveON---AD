@@ -1,0 +1,105 @@
+@model IEnumerable<Repository.Models.AnnualOffDay>
+
+@*<p>
+      @Html.ActionLink("Create New", "Create")
+  </p>
+  <table class="table">
+      <tr>
+          <th>
+              @Html.DisplayNameFor(model => model.LeaveDate)
+          </th>
+          <th>
+              @Html.DisplayNameFor(model => model.Description)
+          </th>
+          <th></th>
+      </tr>
+
+  @foreach (var item in Model) {
+      <tr>
+          <td>
+              @Html.DisplayFor(modelItem => item.LeaveDate)
+          </td>
+          <td>
+              @Html.DisplayFor(modelItem => item.Description)
+          </td>
+          <td>
+              @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+              @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+              @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+          </td>
+      </tr>
+  }
+
+  </table>*@
+
+@*@Html.DropDownList("Destination.State", (IEnumerable<SelectListItem>)ViewBag.AnnualLeaves)*@
+<div id="NewData">
+  <table class="table table-bordered table-hover" id="customFields">
+    <tr>
+      @*<th></th>*@
+      @*<th>
+        @Html.DisplayName("No")
+      </th>*@
+      <th>
+        @Html.DisplayName("Date")
+      </th>
+      <th>
+        @Html.DisplayName("Description")
+      </th>
+      <th class="DontShowInLeave">
+
+      </th>
+    </tr>
+    @{
+      int counter = 0;
+      //foreach (var item in ViewBag.AnnualLeaves)
+      foreach (Repository.Models.AnnualOffDay item in Model)
+
+      {
+
+        <tr>
+          <td style="display:none;"><input type="hidden" name="AnnualOffDay.Index" value="@(counter)" /></td>
+          @*<td><input type="text" autocomplete="off" class="form-control" name="SaleOrderDetail[0].SalePrice" id="salePrice0"></td>*@
+          @*<td><input type="text" autocomplete="off" class="form-control" name="AnnualOffDay[@(counter)].Id" id="Id@(counter)" value=@(item.Id) style="width: 60px;">  </td>*@
+          <td><input type="text" autocomplete="off" class="form-control datepicker" name="AnnualOffDay[@(counter)].OffDay" id="OffDay@(counter)" value=@(item.OffDay)></td>
+          <td><input type="text" autocomplete="off" class="form-control" name="AnnualOffDay[@(counter)].Description" id="Description@(counter)" value="@(item.Description)"></td>
+          <td class="DontShowInLeave"> <a href="javascript:void(0);" class="btn btn-danger remAnnOffDay">x</a></td>
+
+        </tr>
+        counter += 1;
+        //addData = counter;
+      }
+
+
+    }
+
+
+
+  </table>
+
+
+</div>
+
+
+
+
+
+<script>
+  $(document).ready(function () {
+    addData = '@(Model.Count())';
+    //alert(addData);
+        @*addData="@ViewBag.AnnualLeaves.Count()";*@
+        //addData=2;
+
+        $(".remAnnOffDay").on('click',function(){
+	      		$(this).parent().parent().remove();
+        });
+
+      $(function() {
+          $( ".datepicker" ).datepicker({ dateFormat: "dd-mm-yy" });
+      }); 
+  });
+
+
+</script>
+

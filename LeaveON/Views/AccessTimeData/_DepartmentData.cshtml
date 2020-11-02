@@ -1,0 +1,184 @@
+@model IEnumerable<TimeManagement.Models.UD_TB_AccessTime_Data>
+
+<div id="NewData">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+
+  <!-- DataTables -->
+  <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+  <section class="content">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Department Data</h3>
+
+
+          </div>
+
+
+          <div class="card-body">
+
+            <div d="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+              <div class="row">
+                <div class="col-sm-12 col-md-6">
+                </div>
+                <div class="col-sm-12 col-md-6"></div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  @if (!(Model is null))
+                  {
+                    <table id="example2" class="table table-bordered table-hover dataTable dtr-inline" role="grid" aria-describedby="example2_info">
+                      <thead>
+                        <tr>
+                          <th>
+                            @Html.DisplayNameFor(model => model.EmployeeName)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.EmployeeNumber)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.DepartmentID)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.DepartmentName)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.Date_IN)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.Day_IN)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.Time_IN)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.ReaderID_IN)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.DeviceName_IN)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.Date_OUT)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.Day_OUT)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.Time_OUT)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.ReaderID_OUT)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.DeviceName_OUT)
+                          </th>
+                          <th>
+                            @Html.DisplayNameFor(model => model.Duration)
+                          </th>
+                          @*
+                            <th></th>*@
+                        </tr>
+                      </thead>
+                      @foreach (var item in Model)
+                      {
+                        <tr>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeName)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeNumber)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.DepartmentID)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.DepartmentName)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.Date_IN)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.Day_IN)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.Time_IN)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.ReaderID_IN)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.DeviceName_IN)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.Date_OUT)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.Day_OUT)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.Time_OUT)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.ReaderID_OUT)
+                          </td>
+                          <td>
+                            @Html.DisplayFor(modelItem => item.DeviceName_OUT)
+                          </td>
+                          <td>
+
+                            @{
+                              int val = (int)item.Duration;
+                              TimeSpan minutes = TimeSpan.FromMinutes(val);
+
+                              @*<text>@minutes.ToString("hh':'mm':'ss")</text>*@
+                              <text>@minutes.ToString("hh':'mm")</text>
+                            }
+
+                            @*@Html.DisplayFor(modelItem => item.Duration/60)*@
+                          </td>
+                          @*
+                            <td>
+                              @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                              @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                              @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                            </td>*@
+                        </tr>
+                      }
+
+                    </table>
+                  }
+
+                  
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true,
+      "autoWidth": false,
+    });
+    $('#example2').DataTable({
+      "paging": false,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": false,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+

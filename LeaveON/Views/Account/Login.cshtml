@@ -1,0 +1,66 @@
+@using LeaveON.Models
+@model LoginViewModel
+@{
+  ViewBag.Title = "Log in";
+    Layout = "~/Views/Shared/_LayoutAnonymous.cshtml";
+}
+ 
+<div class="register-box">
+  <div class="register-logo">
+    <h2><b>Login</b></h2>
+  </div>
+
+  <div class="card">
+    <div class="card-body register-card-body">
+      <p class="login-box-msg">Sign in to start your session</p>
+      @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+      {
+
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <form action="../../index.html" method="post">
+      <div class="input-group mb-3">
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control   ", placeholder = "Email" })
+        <div class="input-group-append">
+          <div class="input-group-text">
+            <span class="fas fa-user"></span>
+          </div>
+        </div>
+      </div>
+      @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+
+      <div class="input-group mb-3">
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control fas fa-lock", placeholder = "Password" })
+        <div class="input-group-append">
+          <div class="input-group-text">
+            <span class="fas fa-lock"></span>
+          </div>
+        </div>
+      </div>
+      @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+       
+       
+      <div class="col-4">
+        <button type="submit" class="btn btn-primary btn-block">SignIn</button>
+      </div>
+    </form>
+
+
+
+        @*<a href="login.cshtml" class="text-center">Create New Account</a>*@
+      }
+    </div>
+
+    <!-- /.form-box -->
+  </div><!-- /.card -->
+</div>
+
+
+<!-- /.register-box -->
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>

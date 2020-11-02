@@ -1,0 +1,94 @@
+@model IEnumerable<LeaveON.Models.UserRoleModel>
+
+@{
+  ViewBag.Title = "Access Rights";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+  <div class="form-horizontal">
+    @using (Html.BeginForm("Index", "Account"))
+    {
+      @Html.AntiForgeryToken()
+
+
+      <h4>User Roles</h4>
+      <hr />
+      @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+      @Html.DropDownList("UserId", (IEnumerable<SelectListItem>)ViewBag.Employees, null, new { @class = "form-control" })
+      @Html.DropDownList("ClaimValue", (IEnumerable<SelectListItem>)ViewBag.Roles, null, new { @class = "form-control" })
+
+
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-10 AddClaim">
+          <input type="submit" value="Add" class="btn btn-primary" />
+        </div>
+      </div>
+
+    }
+    
+    @using (Html.BeginForm("DeleteRole", "Account"))
+    {
+      @Html.AntiForgeryToken()
+
+      <table class="table">
+        <tr>
+
+          <th>
+            User
+          </th>
+          <th>
+            Role
+          </th>
+
+          <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+          <tr>
+            @*<td style="display:none;"><input type="hidden" name="AnnualOffDay.Index" value="@(counter)" /></td>*@
+            @*<td>
+              @Html.HiddenFor(modelItem => item.UserId)
+            </td>*@
+            <td>
+              @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+              @Html.DisplayFor(modelItem => item.RoleName)
+            </td>
+
+            <td>
+              @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+              @*<input type="submit" Class="DeleteRole" name="AspNetUserClaim.ClaimType" id="Delete@(item.Id)" value="Delete@(item.Id)" class="btn btn-danger" />*@
+              
+
+              <div class="form-group">
+              <div class="col-md-offset-2 col-md-10">
+                    @*<input type="submit" value="Add" class="btn btn-primary" />*@
+                <button type="submit" Class="btn btn-danger DeleteRole" name="ClaimId" id="Delete@(item.UserId)@(item.RoleId)" value="@(item.UserId),@(item.RoleId)">Delete</button>
+              </div>
+              </div>
+
+            </td>
+          </tr>
+        }
+
+      </table>
+    }
+
+  </div>
+
+<script>
+  $(".DeleteRole").on('click', function () {
+    if (!confirm('Are you sure?')) {
+      return false;
+    }
+  });
+    //
+  $(".AddClaim").on('click', function () {
+    if (!confirm('Are you sure?')) {
+      return false;
+    }
+  });
+</script>

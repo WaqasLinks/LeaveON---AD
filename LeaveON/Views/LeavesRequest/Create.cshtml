@@ -1,0 +1,336 @@
+@model Repository.Models.Leave
+
+@{
+  ViewBag.Title = "Create";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- left column -->
+<div class="col-md-6">
+  <!-- general form elements -->
+  <div class="card card-primary">
+    <div class="card-header">
+      <h3 class="card-title">Apply Leave</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+
+
+
+
+    <div class="card-body">
+      @using (Html.BeginForm(null, null, FormMethod.Post, new { name = "Create", id = "Create" }))
+      {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @*<div class="form-group">
+        @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label" })
+        <div class="col-md-10">
+          @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+        </div>
+      </div>*@
+
+        <div class="form-group">
+          @Html.Label("User Name")
+
+          @Html.Editor("UserName", new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.UserName, @readonly = "readonly" } })
+          @*@Html.Editor((string)ViewBag.UserName)*@
+        </div>
+
+        <div class="form-group">
+          @Html.LabelFor(model => model.LeaveTypeId, "Leave Type", htmlAttributes: new { @class = "" })
+
+          @Html.DropDownList("LeaveTypeId", (IEnumerable<SelectListItem>)ViewBag.LeaveTypeId, null, new { @class = "form-control" })
+          @*@Html.DropDownList("LineManager1Id", (IEnumerable<SelectListItem>)ViewBag.LineManagers, null, new { @class = "form-control" })*@
+          @Html.ValidationMessageFor(model => model.LeaveTypeId, "", new { @class = "text-danger" })
+
+        </div>
+
+        <div class="form-group">
+          @Html.LabelFor(model => model.Reason, htmlAttributes: new { @class = " " })
+          <br>
+          @*<textarea name="Reason" class="form-control " rows="3">
+
+        </textarea>*@
+
+          @Html.TextAreaFor(model => model.Reason, new { @class = "form-control", rows = "3", placeholder = "Give Reason ...", required = "required" })
+
+
+          @Html.ValidationMessageFor(model => model.Reason, "", new { @class = "text-danger" })
+
+        </div>
+
+        @*<div class="form-group">
+
+        <label>Start Date:</label>
+
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              <i class="far fa-calendar-alt"></i>
+            </span>
+          </div>
+
+          <input type="text" class="form-control float-right" id="reservation">
+
+        </div>
+
+      </div>*@
+
+        <div class="form-group">
+          @Html.LabelFor(model => model.StartDate, "Start Date", htmlAttributes: new { @class = " " })
+
+          @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @id = "datepickerStart", required = "required ", @readonly = "readonly" } })
+          @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+
+        </div>
+
+        <div class="form-group">
+          @Html.LabelFor(model => model.EndDate, "End Date", htmlAttributes: new { @class = " " })
+
+          @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @id = "datepickerEnd", required = "required ", @readonly = "readonly" } })
+          @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+
+        </div>
+
+
+        <div class="form-group">
+          @*@Html.LabelFor(model => model.TotalDays, "Total Days", htmlAttributes: new { @class = " " })*@
+
+          @Html.HiddenFor(model => model.TotalDays, new { htmlAttributes = new { @class = "form-control", id = "diff", @readonly = "readonly" } })
+          @Html.ValidationMessageFor(model => model.TotalDays, "", new { @class = "text-danger" })
+
+        </div>
+
+        <div class="form-group">
+          @Html.LabelFor(model => model.EmergencyContact, "Emergency Contact", htmlAttributes: new { @class = " " })
+
+          @Html.EditorFor(model => model.EmergencyContact, new { htmlAttributes = new { @class = "form-control", required = "required " } })
+          @Html.ValidationMessageFor(model => model.EmergencyContact, "", new { @class = "text-danger" })
+
+        </div>
+        <div class="form-group">
+          @Html.LabelFor(model => model.LineManager1Id, "Line Manager 1", htmlAttributes: new { @class = " " })
+
+
+          @*@Html.DropDownList("LineManagers", null, htmlAttributes: new { @class = "form-control" })*@
+          @Html.DropDownList("LineManager1Id", (IEnumerable<SelectListItem>)ViewBag.LineManagers, null, new { @class = "form-control" })
+          @Html.ValidationMessageFor(model => model.LineManager1Id, "", new { @class = "text-danger" })
+
+          @*@Html.EditorFor(model => model.LineManager1Id, new { htmlAttributes = new { @class = "form-control" } })*@
+
+
+        </div>
+
+        <div class="form-group">
+          @Html.LabelFor(model => model.LineManager2Id, "Line Manager 2", htmlAttributes: new { @class = " " })
+
+
+          @*@Html.DropDownList("LineManagers", null, htmlAttributes: new { @class = "form-control" })*@
+          @Html.DropDownList("LineManager2Id", (IEnumerable<SelectListItem>)ViewBag.LineManagers, null, new { @class = "form-control" })
+          @*@Html.EditorFor(model => model.LineManager2Id, new { htmlAttributes = new { @class = "form-control" } })*@
+
+          @Html.ValidationMessageFor(model => model.LineManager2Id, "", new { @class = "text-danger" })
+
+        </div>
+
+
+
+        <div class="form-group">
+          <div class="class=" card-footer">
+            <input type="submit" value="Apply" class="btn btn-primary" style="width: 180px; margin-left:auto;margin-right:auto;display:block;margin-top:auto;margin-bottom:0%" />
+
+          </div>
+        </div>
+
+        <div>
+          @Html.ActionLink("Back to List", "Index")
+        </div>
+
+        @*<div class="form-group">
+        @Html.LabelFor(model => model.ResponseDate1, "Response Date 1", htmlAttributes: new { @class = " " })
+
+        @Html.EditorFor(model => model.ResponseDate1, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+        @Html.ValidationMessageFor(model => model.ResponseDate1, "", new { @class = "text-danger" })
+
+      </div>
+      <div class="form-group">
+        @Html.LabelFor(model => model.IsAccepted1, "Status Line Manager 1", htmlAttributes: new { @class = " " })
+
+        @Html.EditorFor(model => model.IsAccepted1, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+        @Html.ValidationMessageFor(model => model.IsAccepted1, "", new { @class = "text-danger" })
+
+      </div>
+
+      <div class="form-group">
+        @Html.LabelFor(model => model.Remarks1, "Remarks 1", htmlAttributes: new { @class = " " })
+
+        @Html.EditorFor(model => model.Remarks1, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+        @Html.ValidationMessageFor(model => model.Remarks1, "", new { @class = "text-danger" })
+
+      </div>
+
+      <div class="form-group">
+        @Html.LabelFor(model => model.ResponseDate2, "Response Date 2", htmlAttributes: new { @class = " " })
+
+        @Html.EditorFor(model => model.ResponseDate2, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+        @Html.ValidationMessageFor(model => model.ResponseDate2, "", new { @class = "text-danger" })
+
+      </div>
+
+      <div class="form-group">
+        @Html.LabelFor(model => model.IsAccepted2, "Status Line Manager 2", htmlAttributes: new { @class = " " })
+
+        @Html.EditorFor(model => model.IsAccepted2, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+        @Html.ValidationMessageFor(model => model.IsAccepted2, "", new { @class = "text-danger" })
+
+      </div>
+
+      <div class="form-group">
+        @Html.LabelFor(model => model.Remarks2, "Remarks 2", htmlAttributes: new { @class = " " })
+
+        @Html.EditorFor(model => model.Remarks2, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+        @Html.ValidationMessageFor(model => model.Remarks2, "", new { @class = "text-danger" })
+
+      </div>
+
+      <div class="form-group">
+        @Html.LabelFor(model => model.DateCreated, "Date Created", htmlAttributes: new { @class = " " })
+
+        @Html.EditorFor(model => model.DateCreated, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+        @Html.ValidationMessageFor(model => model.DateCreated, "", new { @class = "text-danger" })
+
+      </div>
+
+      <div class="form-group">
+        @Html.LabelFor(model => model.DateModified, "Data Modified", htmlAttributes: new { @class = " " })
+
+        @Html.EditorFor(model => model.DateModified, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+        @Html.ValidationMessageFor(model => model.DateModified, "", new { @class = "text-danger" })
+
+      </div>
+
+      <div class="form-group">
+        @Html.LabelFor(model => model.UserLeavePolicyId, "User Leave Policy ", "UserLeavePolicyId")
+
+        @Html.DropDownList("UserLeavePolicyId", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+        @Html.ValidationMessageFor(model => model.UserLeavePolicyId, "", new { @class = "text-danger" })
+
+      </div>*@
+        @*@Html.Hidden("LeaveUserId", (string)ViewBag.LeaveUserId)*@
+      }
+    </div>
+
+
+
+  </div>
+</div>
+
+<!-- right column -->
+@{
+  //Html.RenderPartial("Edit1");
+  //Html.RenderAction("Edit","UserLeavePolicies",new { id = 7});
+  //Html.RenderPartial("Edit", Repository.Models., new { id = 7 });
+  //Html.Action("Edit", "UserLeavePolicies", new { id = 7 });
+
+  //Html.Partial("../UserLeavePolicies/Edit",)
+  //Html.RenderPartial("_Edit", ViewBag.UserLeavePolicy);
+
+}
+<div id="UserLeavePolicyData" class="col-md-6"></div>
+<!--/.col (right) -->
+
+
+
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+@*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>*@
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+  $(function () {
+
+    $.get('@Url.Action("Edit","UserLeavePolicies")?id=' + "@ViewBag.UserLeavePolicyId" + '&Caller=' + "LeaveRequest" + "&leaveUserId=" + "@ViewBag.LeaveUserId" , function (data) {
+        $("#UserLeavePolicyData").append(data);
+      });
+
+
+    $(document).ready(function () {
+
+      //$('#datepickerStart').change(function () {
+      //   alert('s');
+      //});
+
+      // $('#datepickerEnd').change(function () {
+      //   alert('e');
+      // });
+        var message = "@ViewBag.PolicyAlert";
+      if (message != "") {
+         $("#Create :input").prop("disabled", true);
+         alert(message);
+      }
+
+
+      $("#datepickerStart").datepicker({
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        changeMonth: true,
+        changeYear: true,
+        numberOfMonths: 2,
+        dateFormat: 'DD, MM, d, yy',
+        //showButtonPanel: true
+
+        showOn: "both"
+        //buttonImage: "images/calendar.gif",
+        //buttonImageOnly: true,
+        //buttonText: "Select date",
+
+        //minDate: -20,
+        //maxDate: "+1M +10D"
+      });
+
+      $("#datepickerEnd").datepicker({
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        changeMonth: true,
+        changeYear: true,
+        numberOfMonths: 2,
+        dateFormat: 'DD, MM, d, yy',
+        showOn: "both",
+        onSelect: function () {
+          myfunc();
+
+        }
+      });
+
+
+      function myfunc() {
+        var start = $("#datepickerStart").datepicker("getDate");
+        var end = $("#datepickerEnd").datepicker("getDate");
+        var diff = new Date(end - start);
+
+        var days = diff / 1000 / 60 / 60 / 24 + 1;
+
+        $('#diff').val(days);
+      }
+
+      //showButtonPanel: true
+
+
+      //showOn: "button",
+      //buttonImage: "images/calendar.gif",
+      //buttonImageOnly: true,
+      //buttonText: "Select date",
+
+      //minDate: -20,
+      //maxDate: "+1M +10D"
+    });
+
+  });
+</script>
+
+@*@section Scripts {
+      @Scripts.Render("~/bundles/jqueryval")
+  }*@
+

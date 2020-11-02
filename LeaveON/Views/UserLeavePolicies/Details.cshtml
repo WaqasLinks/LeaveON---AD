@@ -1,0 +1,67 @@
+@model Repository.Models.UserLeavePolicy
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>UserLeavePolicy</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.WeeklyOffDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WeeklyOffDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnnualOffDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AnnualOffDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FiscalYearStart)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FiscalYearStart)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FiscalYearEnd)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FiscalYearEnd)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FiscalYearPeriod)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FiscalYearPeriod)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.AspNetUser.Hometown)
+        </dt>*@
+
+        @*<dd>
+            @Html.DisplayFor(model => model.AspNetUser.Hometown)
+        </dd>*@
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

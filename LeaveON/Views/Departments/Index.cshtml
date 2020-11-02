@@ -1,0 +1,137 @@
+@model IEnumerable<Repository.Models.Department>
+
+@{
+  ViewBag.Title = "Index";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- DataTables -->
+<link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+
+
+
+<!-- DataTables -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+
+
+
+
+
+
+<section class="content">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Departments List  </h3>
+
+
+        </div>
+
+
+        <div class="card-body">
+          @Html.ActionLink("Create New", "Create")
+          <div d="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div class="row">
+              <div class="col-sm-12 col-md-6">
+              </div>
+              <div class="col-sm-12 col-md-6"></div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <table id="example2" class="table table-bordered table-hover dataTable dtr-inline" role="grid" aria-describedby="example2_info">
+                  <thead>
+                    <tr role="row">
+                      
+                      <th class="sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Name : activate to sort column ascending" aria-sort="descending">
+                        @Html.DisplayNameFor(model => model.Name)
+                      </th>
+                      
+                      @*<th class="sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="DateCreated : activate to sort column ascending" aria-sort="descending">
+                        @Html.DisplayNameFor(model => model.DateCreated)
+                      </th>
+                      <th class="sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="DateModified : activate to sort column ascending" aria-sort="descending">
+                        @Html.DisplayNameFor(model => model.DateModified)
+                      </th>*@
+
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    @foreach (var item in Model)
+                    {
+                      <tr>
+                       
+                        <td>
+                          @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                      
+                        @*<td class="sorting_1">
+                          @Html.DisplayFor(modelItem => item.DateCreated)
+                        </td>
+                        <td>
+                          @Html.DisplayFor(modelItem => item.DateModified)
+                        </td>*@
+
+                        <td>
+                          @Html.ActionLink("Edit", "Edit", new { id = item.Id }) @*|*@
+                          @*@Html.ActionLink("Details", "Details", new { id = item.Id }) |*@
+                          @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      @*
+                        <th>
+                          @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                          @Html.DisplayNameFor(model => model.DateCreated)
+                        </th>
+                        <th>
+                          @Html.DisplayNameFor(model => model.DateModified)
+                        </th>
+                        <th>
+                          @Html.DisplayNameFor(model => model.Country.Name)
+                        </th>
+                        <th></th>*@
+                    </tr>
+
+                  </tfoot>
+
+                </table>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- page script -->
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true,
+      "autoWidth": false,
+    });
+    $('#example2').DataTable({
+      "paging": false,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": false,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+

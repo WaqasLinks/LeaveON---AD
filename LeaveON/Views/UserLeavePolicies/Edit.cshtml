@@ -1,0 +1,234 @@
+@*@model Repository.Models.UserLeavePolicy*@
+@model LeaveON.Models.UserLeavePolicyViewModel
+
+@{
+  ViewBag.Title = "Create";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+
+<!-- DataTables -->
+<link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+<!-- left column -->
+<div class="col-md-6">
+  @{
+    Html.RenderPartial("_Edit");
+
+  }
+  </div>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  @*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>*@
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+  <script>
+            $(document).ready(function () {
+              var idxId = 50;
+          
+
+              $("#addBtn").on("click", function () {
+                  $.get('@Url.Action("AddNewRow")?IndexId=' + idxId , function (data) {
+                    $("#allowedLeaves").append(data);
+
+                     idxId += 1;
+                      $(".removeRow").on('click',function(){
+		      	            $(this).parent().parent().remove();
+                      });
+                  });
+
+              });
+
+              var counter = 50;
+
+
+              $("#AnnualOffDays").click(function () {
+
+                $("#customFields").append('<tr valign="top">  <td style="display:none;"><input type="hidden" name="AnnualOffDay.Index" value="' + counter + '" /></td><td><input type="text" class="form-control datepicker" id="OffDay' + counter + '" name="AnnualOffDay[' + counter + '].OffDay" value="" placeholder="Date" /> <td><input type="text" class="form-control" id="Description' + counter + '" name="AnnualOffDay[' + counter + '].Description" value="" placeholder="Description" /></td><td> <a href="javascript:void(0);" class="btn btn-danger AnnualOffDaysRemove">x</a></td></tr>');
+
+
+                counter++;
+
+                $(".AnnualOffDaysRemove").on('click', function () {
+                  $(this).parent().parent().remove();
+
+
+                });
+                  $(function() {
+                       $( ".datepicker" ).datepicker({ dateFormat: "dd-mm-yy" });
+                   });
+
+               });
+
+
+
+                    $(".remLeaveType").on('click',function(){
+			                  $(this).parent().parent().remove();
+                    });
+
+
+              $('#btnUpload').click(function () {
+
+                // Checking whether FormData is available in browser
+                if (window.FormData !== undefined) {
+
+                  var fileUpload = $("#FileUpload1").get(0);
+                  var files = fileUpload.files;
+
+                  // Create FormData object
+                  var fileData = new FormData();
+
+                  // Looping over all files and add it to FormData object
+                  for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                  }
+
+                  // Adding one more key to FormData object
+                  //fileData.append('username', 'Manas');
+                  //alert('1');
+                  $.ajax({
+                    url: '/UserLeavePolicies/UploadFiles',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                      //alert(result);
+                      //alert('4');
+                      $("#NewData").html(result);
+                    },
+                    error: function (err) {
+                      alert(err.statusText);
+                      //alert('5');
+                    }
+                  });
+                } else {
+                  alert("FormData is not supported.");
+                }
+              });
+
+
+
+
+
+
+              //$('#rdoDepartments').change(function () {
+              //   //var end = this.value;
+              //   //var firstDropVal = $('#saleType').val();
+              //   update_itemTotal();
+              //});
+
+
+              //if (document.getElementById('yesCheck').checked) {
+              //    document.getElementById('ifYes').style.display = 'block';
+              //}
+              //else document.getElementById('ifYes').style.display = 'none';
+
+              if ($('input[id="rdoEmployees"]').is(':checked')) {
+                $("#divEmp").show();
+                $("#divDep").hide();
+              }
+              $('input:radio[name=PolicyFor]').change(function () {
+                if (this.value == '1') {
+                  $("#divDep").show();
+                  $("#divEmp").hide();
+                }
+                else if (this.value == '0') {
+                  $("#divEmp").show();
+                  $("#divDep").hide();
+                }
+              });
+
+
+
+              $("#multiSelectOffDays").change(function () {
+                //alert('hi');
+                var dropdownVal = $(this).val();
+                $("#userLeavePolicy_WeeklyOffDays").val(dropdownVal);
+                //alert(dropdownVal);
+              });
+
+              //$('#listDepartments').attr('data-live-search', true);
+
+              //$('.selectCountry').selectpicker(
+              //{
+              //    width: '100%',
+              //    title: '- [Choose Country] -',
+              //    style: 'btn-warning',
+              //    size: 6
+              //});
+
+              //$('#listEmployees').attr('data-live-search', true);
+              $(function () {
+                $("#datepickerStart").datepicker({
+                  showOtherMonths: true,
+                  selectOtherMonths: true,
+                  changeMonth: true,
+                  changeYear: true,
+                  numberOfMonths: 2,
+                  dateFormat: 'DD, MM, d, yy'
+                  //dateFormat: 'dd/mm/yy',
+                  //showStatus: true,
+                  //showWeeks: true,
+                  //currentText: 'Now',
+                  //autoSize: true,
+                  //gotoCurrent: true,
+                  //showAnim: 'blind',
+                  //highlightWeek: true
+                  //showButtonPanel: true
+
+                  //showOn: "button",
+                  //buttonImage: "images/calendar.gif",
+                  //buttonImageOnly: true,
+                  //buttonText: "Select date",
+
+                  //minDate: -20,
+                  //maxDate: "+1M +10D"
+                });
+                $("#datepickerEnd").datepicker({
+                  showOtherMonths: true,
+                  selectOtherMonths: true,
+                  changeMonth: true,
+                  changeYear: true,
+                  numberOfMonths: 2,
+                  //dateFormat: 'dd/mm/yy',
+                  dateFormat: 'DD, MM, d, yy',
+                  onSelect: function () {
+                    myfunc();
+
+                  }
+                });
+
+
+
+
+                //showButtonPanel: true
+
+
+                //showOn: "button",
+                //buttonImage: "images/calendar.gif",
+                //buttonImageOnly: true,
+                //buttonText: "Select date",
+
+                //minDate: -20,
+                //maxDate: "+1M +10D"
+
+              });
+
+
+            });
+  </script>
+
+
+
+  @section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+  }
+
+
+

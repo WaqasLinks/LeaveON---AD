@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        /*.dropdown:hover .dropdown-menu {
+            display: block;
+        }*/
+        .navbar-nav li:hover > ul.dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-submenu {
+            position: relative;
+        }
+
+            .dropdown-submenu .dropdown-menu {
+                top: 0;
+                left: 100%;
+                margin-top: -1px;
+            }
+    </style>
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("INTECH LeaveON", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @*<li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
+                        <li>@Html.ActionLink("API", "Index", "Help", new { area = "HelpPage" }, null)</li>*@
+                    <li><a href="/Leaves/Create">Apply Leave</a></li>
+                    <li class="dropdown">
+                        <a href="/Leaves/Index">Leaves <b class="caret"></b></a>
+                        <ul id="products-menu" class="dropdown-menu clearfix" role="menu">
+                            <li><a href="/Leaves/Create">Apply Leave</a></li>
+                            <li><a href="/Leaves/Index">Leaves History</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#">Actions <b class="caret"></b></a>
+                        <ul id="products-menu" class="dropdown-menu">
+
+                            <li class="dropdown-submenu">
+                                <a class="test" tabindex="-1" href="/Countries/Index">Countries <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="/Countries/Create">Add New</a></li>
+                                    <li><a tabindex="-1" href="/Countries/Index">Countries List</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a class="test" tabindex="-1" href="/Departments/Index">Departments <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="/Departments/Create">Add New</a></li>
+                                    <li><a tabindex="-1" href="/Departments/Index">Departments List</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a class="test" tabindex="-1" href="/AspNetUsers/Index">Users <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="/AspNetUsers/Create">Add New</a></li>
+                                    <li><a tabindex="-1" href="/AspNetUsers/Index">Users List</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a class="test" tabindex="-1" href="/LeaveTypes/Index">Leave Types <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="/LeaveTypes/Create">Add New</a></li>
+                                    <li><a tabindex="-1" href="/LeaveTypes/Index">Leave Types List</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a class="test" tabindex="-1" href="/UserLeavePolicies/Index">User Leave Policies<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="/UserLeavePolicies/Create">Add New</a></li>
+                                    <li><a tabindex="-1" href="/UserLeavePolicies/Index">Leave Types List</a></li>
+                                </ul>
+                            </li>
+
+
+
+
+
+                            @*<li class="dropdown-submenu">
+                                    <a class="test" tabindex="-1" href="#">New dropdown <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a tabindex="-1" href="#">2nd level dropdown</a></li>
+                                        <li><a tabindex="-1" href="#">2nd level dropdown</a></li>
+                                        <li class="dropdown-submenu">
+                                            <a class="test" href="#">Another dropdown <span class="caret"></span></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">3rd level dropdown</a></li>
+                                                <li><a href="#">3rd level dropdown</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>*@
+
+
+
+
+
+
+                        </ul>
+
+                    </li>
+
+
+
+                </ul>
+
+
+
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        @RenderSection("SPAViews", required: false)
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - INTECH LeaveON </p>
+        </footer>
+    </div>
+
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("Scripts", required: false)
+
+
+
+</body>
+</html>

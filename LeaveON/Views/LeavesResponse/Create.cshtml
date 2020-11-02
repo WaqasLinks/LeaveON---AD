@@ -1,0 +1,439 @@
+@model Repository.Models.Leave
+
+@{
+  ViewBag.Title = "Create";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- left column -->
+<div class="col-md-6">
+  <!-- general form elements -->
+  <div class="card card-primary">
+    <div class="card-header">
+      <h3 class="card-title">Apply Leave</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+
+    @using (Html.BeginForm())
+    {
+      @Html.AntiForgeryToken()
+
+
+  <div class="card-body">
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @*<div class="form-group">
+      @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label" })
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+      </div>
+    </div>*@
+
+    <div class="form-group">
+      @Html.Label("User Name")
+
+      @Html.Editor("UserName", new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.UserName, disabled = "disabled" } })
+      @*@Html.Editor((string)ViewBag.UserName)*@
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.LeaveTypeId, "Leave Type", htmlAttributes: new { @class = "" })
+
+      @Html.DropDownList("LeaveTypeId", null, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+      @Html.ValidationMessageFor(model => model.LeaveTypeId, "", new { @class = "text-danger" })
+
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Reason, htmlAttributes: new { @class = "control-label" })
+
+      @Html.EditorFor(model => model.Reason, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+      @Html.ValidationMessageFor(model => model.Reason, "", new { @class = "text-danger" })
+
+    </div>
+
+
+
+    @*<div class="form-group">
+
+      <label>Start Date:</label>
+
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <i class="far fa-calendar-alt"></i>
+          </span>
+        </div>
+
+        <input type="text" class="form-control float-right" id="reservation">
+
+      </div>
+
+    </div>*@
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.StartDate, "Start Date", htmlAttributes: new { @class = " " })
+
+      @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @id = "datepickerStart", disabled = "disabled", } })
+      @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.EndDate, "End Date", htmlAttributes: new { @class = " " })
+
+      @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @id = "datepickerEnd", disabled = "disabled" } })
+      @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+
+    </div>
+
+
+    <div class="form-group">
+      @*@Html.LabelFor(model => model.TotalDays, "Total Days", htmlAttributes: new { @class = " " })*@
+
+      @Html.HiddenFor(model => model.TotalDays, new { htmlAttributes = new { @class = "form-control", id = "diff", disabled = "disabled" } })
+      @Html.ValidationMessageFor(model => model.TotalDays, "", new { @class = "text-danger" })
+
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.EmergencyContact, "Emergency Contact", htmlAttributes: new { @class = " " })
+
+      @Html.EditorFor(model => model.EmergencyContact, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+      @Html.ValidationMessageFor(model => model.EmergencyContact, "", new { @class = "text-danger" })
+
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(model => model.LineManager1Id, "Line Manager 1", htmlAttributes: new { @class = " " })
+
+
+      @Html.DropDownList("LineManagers", null, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+      @Html.ValidationMessageFor(model => model.LineManager1Id, "", new { @class = "text-danger" })
+
+      @*@Html.EditorFor(model => model.LineManager1Id, new { htmlAttributes = new { @class = "form-control" } })
+      @Html.ValidationMessageFor(model => model.LineManager1Id, "", new { @class = "text-danger" })*@
+
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.LineManager2Id, "Line Manager 2", htmlAttributes: new { @class = " " })
+
+
+      @Html.DropDownList("LineManagers", null, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+
+      @*@Html.EditorFor(model => model.LineManager2Id, new { htmlAttributes = new { @class = "form-control" } })*@
+      @Html.ValidationMessageFor(model => model.LineManager2Id, "", new { @class = "text-danger" })
+
+    </div>
+
+
+    <div class="form-group">
+      <div class="class=" card-footer"">
+        @*  class="btn btn-primary"*@
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+      <br />
+
+      <div>
+        @Html.ActionLink("Back to List", "Index")
+      </div>
+
+    </div>
+
+
+    @*<div class="form-group">
+      @Html.LabelFor(model => model.ResponseDate1, "Response Date 1", htmlAttributes: new { @class = " " })
+
+      @Html.EditorFor(model => model.ResponseDate1, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+      @Html.ValidationMessageFor(model => model.ResponseDate1, "", new { @class = "text-danger" })
+
+    </div>
+    <div class="form-group">
+      @Html.LabelFor(model => model.IsAccepted1, "Status Line Manager 1", htmlAttributes: new { @class = " " })
+
+      @Html.EditorFor(model => model.IsAccepted1, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+      @Html.ValidationMessageFor(model => model.IsAccepted1, "", new { @class = "text-danger" })
+
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Remarks1, "Remarks 1", htmlAttributes: new { @class = " " })
+
+      @Html.EditorFor(model => model.Remarks1, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+      @Html.ValidationMessageFor(model => model.Remarks1, "", new { @class = "text-danger" })
+
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.ResponseDate2, "Response Date 2", htmlAttributes: new { @class = " " })
+
+      @Html.EditorFor(model => model.ResponseDate2, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+      @Html.ValidationMessageFor(model => model.ResponseDate2, "", new { @class = "text-danger" })
+
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.IsAccepted2, "Status Line Manager 2", htmlAttributes: new { @class = " " })
+
+      @Html.EditorFor(model => model.IsAccepted2, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+      @Html.ValidationMessageFor(model => model.IsAccepted2, "", new { @class = "text-danger" })
+
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Remarks2, "Remarks 2", htmlAttributes: new { @class = " " })
+
+      @Html.EditorFor(model => model.Remarks2, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+      @Html.ValidationMessageFor(model => model.Remarks2, "", new { @class = "text-danger" })
+
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.DateCreated, "Date Created", htmlAttributes: new { @class = " " })
+
+      @Html.EditorFor(model => model.DateCreated, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+      @Html.ValidationMessageFor(model => model.DateCreated, "", new { @class = "text-danger" })
+
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.DateModified, "Data Modified", htmlAttributes: new { @class = " " })
+
+      @Html.EditorFor(model => model.DateModified, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+      @Html.ValidationMessageFor(model => model.DateModified, "", new { @class = "text-danger" })
+
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.UserLeavePolicyId, "User Leave Policy ", "UserLeavePolicyId")
+
+      @Html.DropDownList("UserLeavePolicyId", null, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+      @Html.ValidationMessageFor(model => model.UserLeavePolicyId, "", new { @class = "text-danger" })
+
+    </div>*@
+
+
+  </div>
+
+    }
+
+  </div>
+</div>
+
+<!-- right column -->
+<div class="col-md-6">
+  <!-- general form elements disabled -->
+  <div class="card card-warning">
+    <div class="card-header">
+      <h3 class="card-title">General Elements</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <form role="form">
+        <div class="row">
+          <div class="col-sm-6">
+            <!-- text input -->
+            <div class="form-group">
+              <label>Text</label>
+              <input type="text" class="form-control" placeholder="Enter ...">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Text Disabled</label>
+              <input type="text" class="form-control" placeholder="Enter ..." disabled>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <!-- textarea -->
+            <div class="form-group">
+              <label>Textarea</label>
+              <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Textarea Disabled</label>
+              <textarea class="form-control" rows="3" placeholder="Enter ..." disabled></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- input states -->
+        <div class="form-group">
+          <label class="col-form-label" for="inputSuccess">
+            <i class="fas fa-check"></i> Input with
+            success
+          </label>
+          <input type="text" class="form-control is-valid" id="inputSuccess" placeholder="Enter ...">
+        </div>
+        <div class="form-group">
+          <label class="col-form-label" for="inputWarning">
+            <i class="far fa-bell"></i> Input with
+            warning
+          </label>
+          <input type="text" class="form-control is-warning" id="inputWarning" placeholder="Enter ...">
+        </div>
+        <div class="form-group">
+          <label class="col-form-label" for="inputError">
+            <i class="far fa-times-circle"></i> Input with
+            error
+          </label>
+          <input type="text" class="form-control is-invalid" id="inputError" placeholder="Enter ...">
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <!-- checkbox -->
+            <div class="form-group">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox">
+                <label class="form-check-label">Checkbox</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" checked>
+                <label class="form-check-label">Checkbox checked</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" disabled>
+                <label class="form-check-label">Checkbox disabled</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <!-- radio -->
+            <div class="form-group">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="radio1">
+                <label class="form-check-label">Radio</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="radio1" checked>
+                <label class="form-check-label">Radio checked</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" disabled>
+                <label class="form-check-label">Radio disabled</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <!-- select -->
+            <div class="form-group">
+              <label>Select</label>
+              <select class="form-control">
+                <option>option 1</option>
+                <option>option 2</option>
+                <option>option 3</option>
+                <option>option 4</option>
+                <option>option 5</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Select Disabled</label>
+              <select class="form-control" disabled>
+                <option>option 1</option>
+                <option>option 2</option>
+                <option>option 3</option>
+                <option>option 4</option>
+                <option>option 5</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <!-- Select multiple-->
+            <div class="form-group">
+              <label>Select Multiple</label>
+              <select multiple class="form-control">
+                <option>option 1</option>
+                <option>option 2</option>
+                <option>option 3</option>
+                <option>option 4</option>
+                <option>option 5</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Select Multiple Disabled</label>
+              <select multiple class="form-control" disabled>
+                <option>option 1</option>
+                <option>option 2</option>
+                <option>option 3</option>
+                <option>option 4</option>
+                <option>option 5</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+</div>
+<!--/.col (right) -->
+ 
+
+
+
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+@*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>*@
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+  $(function () {
+    $("#datepickerStart").datepicker({
+      showOtherMonths: true,
+      selectOtherMonths: true,
+      changeMonth: true,
+      changeYear: true,
+      numberOfMonths: 2
+      //showButtonPanel: true
+
+      //showOn: "button",
+      //buttonImage: "images/calendar.gif",
+      //buttonImageOnly: true,
+      //buttonText: "Select date",
+
+      //minDate: -20,
+      //maxDate: "+1M +10D"
+    });
+    $("#datepickerEnd").datepicker({
+      showOtherMonths: true,
+      selectOtherMonths: true,
+      changeMonth: true,
+      changeYear: true,
+      numberOfMonths: 2
+      //showButtonPanel: true
+      
+      
+      //showOn: "button",
+      //buttonImage: "images/calendar.gif",
+      //buttonImageOnly: true,
+      //buttonText: "Select date",
+
+      //minDate: -20,
+      //maxDate: "+1M +10D"
+    });
+
+  });
+</script>
+
+@*@section Scripts {
+      @Scripts.Render("~/bundles/jqueryval")
+  }*@
+

@@ -1,0 +1,36 @@
+@model string
+
+<tr>
+  <td style="display:none;"><input type="hidden" name="UserLeavePolicyDetail.Index" value="@Model" /></td>
+  <td> @Html.DropDownList("UserLeavePolicyDetail[" + Model + "].LeaveTypeId", (IEnumerable<SelectListItem>)ViewBag.LeaveTypes, null, new
+  {
+    @class = "form-control"@*,style="width: 300px;"*@})</td>
+  <td><input name="UserLeavePolicyDetail[@Model].Allowed" class="form-control" placeholder="Allowed"> </td>
+  <td class="DontShowInPolicy"><input name="UserLeavePolicyDetail[@Model].Taken" class="form-control" placeholder="Taken"> </td>
+  <td class="DontShowInPolicy"><input name="UserLeavePolicyDetail[@Model].Balance" class="form-control" placeholder="Balance" style="width: 50px;"> </td>
+  <td class="DontShowInLeave"> <a href="javascript:void(0);" class=" btn btn-danger removeRow">x</a></td>
+
+</tr>
+
+<script>
+
+  var LockAndHide = "@ViewBag.LockAndHide";
+  if (LockAndHide == "True") {
+    $('.DontShowInLeave').hide();
+
+    //$('.remLeaveType').hide();
+    //$('.remAnnOffDay').hide();
+
+    //document.getElementById("EditPage").disabled = true;
+    //$("#EditPage").children().prop('disabled', true);
+    $("#EditPage *").prop('disabled', true);
+    //$("#EditPage *").attr("disabled", "disabled");
+  }
+  else {
+      $('.DontShowInPolicy').hide();
+  }
+
+</script>
+
+
+

@@ -1,0 +1,46 @@
+@model IEnumerable<TimeManagement.Models.UD_TB_AccessTime_Data>
+
+@{
+  ViewBag.Title = "Index";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>Index</h2>
+
+  <p>
+    @Html.ActionLink("Create New", "Create")
+  </p>*@
+@*<button id="Refresh" name="Refresh">Refresh</button>*@
+<button type="submit" Class="btn btn-success" name="Refresh" id="Refresh" value="Refresh">Refresh</button>
+@{Html.RenderPartial("_WhoIsIn", Model); }
+
+<script type="text/javascript">
+
+        $(document).ready(function () {
+
+          //$('#selectMonth').change(function(){
+          $("#Refresh").on('click', function () {
+            var Refresh = $(this).val();
+             $.ajax({
+                    url: "@Url.Action("WhoIsIn","AccessTimeData")",
+                    data: { 'Refresh': Refresh },
+                    type: "GET",
+                    cache: false,
+                    success: function (data) {
+                        //alert(data);
+                        $("#NewData").html(data);
+
+                        //$("#hdnOrigComments").val($('#txtComments').val());
+                        //$('#lblCommentsNotification').text(savingStatus);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        //$('#lblCommentsNotification').text("Error encountered while saving the comments.");
+                        alert('Data provided was not valid');
+                    }
+             });
+          });
+        });
+
+
+</script>
+
