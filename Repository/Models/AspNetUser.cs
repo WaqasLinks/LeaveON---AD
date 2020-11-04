@@ -18,6 +18,7 @@ namespace Repository.Models
         public AspNetUser()
         {
             this.AspNetUserClaims = new HashSet<AspNetUserClaim>();
+            this.AspNetUserLogins = new HashSet<AspNetUserLogin>();
             this.Leaves = new HashSet<Leave>();
             this.LeaveBalances = new HashSet<LeaveBalance>();
             this.AspNetRoles = new HashSet<AspNetRole>();
@@ -40,12 +41,14 @@ namespace Repository.Models
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
         public string Remarks { get; set; }
-        public int DepartmentId { get; set; }
+        public Nullable<int> DepartmentId { get; set; }
         public Nullable<int> UserLeavePolicyId { get; set; }
-        public int CountryId { get; set; }
+        public Nullable<int> CountryId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual Country Country { get; set; }
         public virtual Department Department { get; set; }
         public virtual UserLeavePolicy UserLeavePolicy { get; set; }

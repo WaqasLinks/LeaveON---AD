@@ -1,84 +1,83 @@
 @using Microsoft.AspNet.Identity
- 
+
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
+  using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+  {
     @Html.AntiForgeryToken()
 
-  <ul class="nav navbar-nav navbar-right">
-    <li>
-      @*@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })*@
-      @*@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "ChangePassword", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })*@
-    </li>
-    @*<li class="nav-item dropdown">
-      <a class="nav-link" data-toggle="dropdown" href="#">
-        <i class="far fa-bell"></i>
-        <span class="badge badge-warning navbar-badge">15</span>
-      </a>
-      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-        <span class="dropdown-item dropdown-header">15 Notifications</span>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item">
-          <i class="fas fa-envelope mr-2"></i>@User.Identity.Name
-          <span class="float-right text-muted text-sm">3 mins</span>
+    <ul class="nav navbar-nav navbar-right">
+      <li>
+        @User.Identity.GetUserName()
+        @*@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })*@
+        @*@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "ChangePassword", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })*@
+      </li>
+      @*<li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#">
+            <i class="far fa-bell"></i>
+            <span class="badge badge-warning navbar-badge">15</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <span class="dropdown-item dropdown-header">15 Notifications</span>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-envelope mr-2"></i>@User.Identity.Name
+              <span class="float-right text-muted text-sm">3 mins</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-envelope mr-2"></i>@User.Identity.Name
+              <span class="float-right text-muted text-sm">3 mins</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-envelope mr-2"></i>@User.Identity.Name
+              <span class="float-right text-muted text-sm">3 mins</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+          </div>
+        </li>*@
+
+      @*<li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-user"></i>
+          <span class="badge badge-warning navbar-badge"></span>
         </a>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item">
-          <i class="fas fa-envelope mr-2"></i>@User.Identity.Name
-          <span class="float-right text-muted text-sm">3 mins</span>
-        </a>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item">
-          <i class="fas fa-envelope mr-2"></i>@User.Identity.Name
-          <span class="float-right text-muted text-sm">3 mins</span>
-        </a>
-        <div class="dropdown-divider"></div>
-        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-      </div>
-    </li>*@
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-item dropdown-header">
+            @User.Identity.Name
+          </span>
+          <div class="dropdown-divider"></div>
 
-    <li class="nav-item dropdown">
-      <a class="nav-link" data-toggle="dropdown" href="#">
-        <i class="far fa-user"></i>
-        <span class="badge badge-warning navbar-badge"></span>
-      </a>
-      <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-        <span class="dropdown-item dropdown-header">
+          <br />
+          <div style="justify-content:center; display: flex;">
+            <i class="  fas fa-key mr-2">
 
-          @*@Html.ActionLink("  " + User.Identity.GetUserName() + " ", "Index", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })*@
-          @User.Identity.Name
-        </span>
-        <div class="dropdown-divider"></div>
-
-        <br />
-        <div style="justify-content:center; display: flex;">
-              <i class="  fas fa-key mr-2">
-
-          </i>
-          @Html.ActionLink("Change Password ", "ChangePassword", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })
+            </i>
+            @Html.ActionLink("Change Password ", "ChangePassword", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })
 
 
-        </div>
+          </div>
           <span class="float-right text-muted text-sm"> </span>
 
-         
+
           <div class="dropdown-divider"></div>
           <br />
           <div style="justify-content:center; display: flex;">
             <a class="  btn btn-default " href="javascript:sessionStorage.removeItem('accessToken');$('#logoutForm').submit();">&nbsp;&nbsp;&nbsp;&nbsp;Sign Out</a>
           </div>
         </div>
+      </li>*@
 
 
-
-</ul>
-    }
+    </ul>
+  }
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "loginLink" })</li>
-    </ul>
+  <ul class="nav navbar-nav navbar-right">
+    @*<li>@Html.ActionLink("Register", "Register", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "registerLink" })</li>*@
+    <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "loginLink" })</li>
+  </ul>
 }

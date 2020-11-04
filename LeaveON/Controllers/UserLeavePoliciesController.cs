@@ -344,7 +344,7 @@ namespace LeaveON.Controllers
           Country dep;
           IQueryable<AspNetUser> usersFilterd = db.AspNetUsers.Where(x => x.UserLeavePolicyId == userLeavePolicy.Id);
           List<int> oldDeps = new List<int>();
-          oldDeps = usersFilterd.Select(p => p.CountryId).Distinct<int>().ToList<int>();
+          oldDeps = usersFilterd.Select(p => p.CountryId.Value).Distinct<int>().ToList<int>();
 
           foreach (int itm in oldDeps)//get all employees of the deps, selected from UI
           {

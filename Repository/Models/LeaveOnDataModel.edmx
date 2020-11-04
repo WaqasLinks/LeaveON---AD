@@ -30,6 +30,16 @@
           <Property Name="ClaimType" Type="nvarchar(max)" />
           <Property Name="ClaimValue" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
         <EntityType Name="AspNetUserRoles">
           <Key>
             <PropertyRef Name="UserId" />
@@ -59,9 +69,9 @@
           <Property Name="DateCreated" Type="datetime" />
           <Property Name="DateModified" Type="datetime" />
           <Property Name="Remarks" Type="nvarchar(max)" />
-          <Property Name="DepartmentId" Type="int" Nullable="false" />
+          <Property Name="DepartmentId" Type="int" />
           <Property Name="UserLeavePolicyId" Type="int" />
-          <Property Name="CountryId" Type="int" Nullable="false" />
+          <Property Name="CountryId" Type="int" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -69,6 +79,17 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="DateCreated" Type="datetime" />
+          <Property Name="DateModified" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Dep">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Idc" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="CountryId" Type="int" />
           <Property Name="DateCreated" Type="datetime" />
           <Property Name="DateModified" Type="datetime" />
         </EntityType>
@@ -167,9 +188,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AspNetUsers_Country">
-          <End Role="Country" Type="Self.Country" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Country">
@@ -181,9 +200,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AspNetUsers_Deparment">
-          <End Role="Department" Type="Self.Department" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Department">
@@ -216,6 +233,20 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -374,9 +405,11 @@
           <EntitySet Name="AnnualOffDays" EntityType="Self.AnnualOffDays" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dep" EntityType="Self.Dep" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Leave" EntityType="Self.Leave" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LeaveBalance" EntityType="Self.LeaveBalance" Schema="dbo" store:Type="Tables" />
@@ -402,6 +435,10 @@
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
@@ -456,8 +493,10 @@
           <EntitySet Name="AnnualOffDays" EntityType="LeaveONModels.AnnualOffDay" />
           <EntitySet Name="AspNetRoles" EntityType="LeaveONModels.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="LeaveONModels.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="LeaveONModels.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="LeaveONModels.AspNetUser" />
           <EntitySet Name="Countries" EntityType="LeaveONModels.Country" />
+          <EntitySet Name="Deps" EntityType="LeaveONModels.Dep" />
           <EntitySet Name="Departments" EntityType="LeaveONModels.Department" />
           <EntitySet Name="Leaves" EntityType="LeaveONModels.Leave" />
           <EntitySet Name="LeaveBalances" EntityType="LeaveONModels.LeaveBalance" />
@@ -471,6 +510,10 @@
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="LeaveONModels.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="LeaveONModels.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
           </AssociationSet>
           <AssociationSet Name="FK_AspNetUsers_Country" Association="LeaveONModels.FK_AspNetUsers_Country">
             <End Role="Country" EntitySet="Countries" />
@@ -553,6 +596,17 @@
           <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUser" Relationship="LeaveONModels.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
         </EntityType>
+        <EntityType Name="AspNetUserLogin">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="LeaveONModels.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+        </EntityType>
         <EntityType Name="AspNetUser">
           <Key>
             <PropertyRef Name="Id" />
@@ -574,10 +628,11 @@
           <Property Name="DateCreated" Type="DateTime" Precision="3" />
           <Property Name="DateModified" Type="DateTime" Precision="3" />
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <Property Name="DepartmentId" Type="Int32" />
           <Property Name="UserLeavePolicyId" Type="Int32" />
-          <Property Name="CountryId" Type="Int32" Nullable="false" />
+          <Property Name="CountryId" Type="Int32" />
           <NavigationProperty Name="AspNetUserClaims" Relationship="LeaveONModels.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="LeaveONModels.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
           <NavigationProperty Name="Country" Relationship="LeaveONModels.FK_AspNetUsers_Country" FromRole="AspNetUser" ToRole="Country" />
           <NavigationProperty Name="Department" Relationship="LeaveONModels.FK_AspNetUsers_Deparment" FromRole="AspNetUser" ToRole="Department" />
           <NavigationProperty Name="UserLeavePolicy" Relationship="LeaveONModels.FK_AspNetUsers_UserLeavePolicy" FromRole="AspNetUser" ToRole="UserLeavePolicy" />
@@ -596,6 +651,17 @@
           <NavigationProperty Name="AspNetUsers" Relationship="LeaveONModels.FK_AspNetUsers_Country" FromRole="Country" ToRole="AspNetUser" />
           <NavigationProperty Name="LeaveTypes" Relationship="LeaveONModels.FK_LeaveType_Country" FromRole="Country" ToRole="LeaveType" />
           <NavigationProperty Name="UserLeavePolicyDetails" Relationship="LeaveONModels.FK_UserLeavePolicyDetail_Country" FromRole="Country" ToRole="UserLeavePolicyDetail" />
+        </EntityType>
+        <EntityType Name="Dep">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Idc" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CountryId" Type="Int32" />
+          <Property Name="DateCreated" Type="DateTime" Precision="3" />
+          <Property Name="DateModified" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Department">
           <Key>
@@ -667,6 +733,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="WeeklyOffDays" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="AgreementType" Type="Int32" />
           <Property Name="FiscalYearStart" Type="DateTime" Precision="3" />
           <Property Name="FiscalYearEnd" Type="DateTime" Precision="3" />
           <Property Name="FiscalYearPeriod" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
@@ -674,12 +741,11 @@
           <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="DefaultPolicy" Type="Boolean" />
           <Property Name="CountryId" Type="Int32" />
+          <Property Name="IsReset" Type="Boolean" />
           <NavigationProperty Name="AnnualOffDays" Relationship="LeaveONModels.FK_AnnualOffDays_UserLeavePolicy" FromRole="UserLeavePolicy" ToRole="AnnualOffDay" />
           <NavigationProperty Name="AspNetUsers" Relationship="LeaveONModels.FK_AspNetUsers_UserLeavePolicy" FromRole="UserLeavePolicy" ToRole="AspNetUser" />
           <NavigationProperty Name="LeaveBalances" Relationship="LeaveONModels.FK_LeaveBalance_UserLeavePolicy" FromRole="UserLeavePolicy" ToRole="LeaveBalance" />
           <NavigationProperty Name="UserLeavePolicyDetails" Relationship="LeaveONModels.FK_UserLeavePolicyDetail_UserLeavePolicy" FromRole="UserLeavePolicy" ToRole="UserLeavePolicyDetail" />
-          <Property Name="AgreementType" Type="Int32" />
-          <Property Name="IsReset" Type="Boolean" />
         </EntityType>
         <EntityType Name="UserLeavePolicyDetail">
           <Key>
@@ -722,10 +788,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_AspNetUsers_Country">
-          <End Type="LeaveONModels.Country" Role="Country" Multiplicity="1">
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="LeaveONModels.AspNetUser" Role="AspNetUser" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
+          <End Type="LeaveONModels.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogin">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AspNetUsers_Country">
+          <End Type="LeaveONModels.Country" Role="Country" Multiplicity="0..1" />
           <End Type="LeaveONModels.AspNetUser" Role="AspNetUser" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Country">
@@ -737,9 +815,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_AspNetUsers_Deparment">
-          <End Type="LeaveONModels.Department" Role="Department" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Type="LeaveONModels.Department" Role="Department" Multiplicity="0..1" />
           <End Type="LeaveONModels.AspNetUser" Role="AspNetUser" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Department">
@@ -922,6 +998,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="LeaveONModels.AspNetUserLogin">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="LeaveONModels.AspNetUser">
               <MappingFragment StoreEntitySet="AspNetUsers">
@@ -954,6 +1039,18 @@
                 <ScalarProperty Name="DateModified" ColumnName="DateModified" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Deps">
+            <EntityTypeMapping TypeName="LeaveONModels.Dep">
+              <MappingFragment StoreEntitySet="Dep">
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Idc" ColumnName="Idc" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1020,7 +1117,6 @@
             <EntityTypeMapping TypeName="LeaveONModels.UserLeavePolicy">
               <MappingFragment StoreEntitySet="UserLeavePolicy">
                 <ScalarProperty Name="IsReset" ColumnName="IsReset" />
-                <ScalarProperty Name="AgreementType" ColumnName="AgreementType" />
                 <ScalarProperty Name="CountryId" ColumnName="CountryId" />
                 <ScalarProperty Name="DefaultPolicy" ColumnName="DefaultPolicy" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -1028,6 +1124,7 @@
                 <ScalarProperty Name="FiscalYearPeriod" ColumnName="FiscalYearPeriod" />
                 <ScalarProperty Name="FiscalYearEnd" ColumnName="FiscalYearEnd" />
                 <ScalarProperty Name="FiscalYearStart" ColumnName="FiscalYearStart" />
+                <ScalarProperty Name="AgreementType" ColumnName="AgreementType" />
                 <ScalarProperty Name="WeeklyOffDays" ColumnName="WeeklyOffDays" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

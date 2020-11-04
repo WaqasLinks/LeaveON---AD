@@ -1,11 +1,12 @@
 @model System.Web.Mvc.HandleErrorInfo
 @{
-  ViewBag.Title = "Error 404";
-  //Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Error";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<form id="Error" action="login.cgi" method="post" autocomplete="off">
+<form id="Error404" action="login.cgi" method="post" autocomplete="off">
+
   <div class="list-header clearfix">
-    <span>Error 404</span>
+    <span>Error</span>
   </div>
   <div class="list-sfs-holder">
     <div class="alert alert-error">
@@ -27,5 +28,4 @@
       </div>
     }
   </div>
-
-</form>
+  </form>

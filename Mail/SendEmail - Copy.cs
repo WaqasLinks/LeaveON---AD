@@ -142,21 +142,3 @@ namespace LMS.Mail
 
   }
 }
-
-//HOD 
-//username: kashifzafar.nuces@gmail.com
-//password: kashifzafar123
-
-//employee 
-//username: aliafzal.nuces@gmail.com
-//password: aliafzal123
-
-//----------------------------------
-
-//HOD 
-//username: arshadhussain.nuces@gmail.com
-//password: arshadhussain123
-
-//employee 
-//username: anjumali.nuces@gmail.com
-//password: anjumali123

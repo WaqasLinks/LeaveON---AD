@@ -165,6 +165,26 @@ namespace LeaveON.Controllers
     [AllowAnonymous]
     public ActionResult Login(string returnUrl)
     {
+      string CompName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+      if (CompName == "WQSLAPTOP\\hp")
+      {
+        //model = new LoginViewModel() { Email = "asrar.ahmed@intechww.com", Password = "Leaves12*" };
+        ViewBag.Email = "asrar.ahmed@intechww.com";
+      }
+      else
+      {
+        string UserPrincipalName = System.DirectoryServices.AccountManagement.UserPrincipal.Current.UserPrincipalName;
+        bool IsUserActive = System.DirectoryServices.AccountManagement.UserPrincipal.Current.Enabled.Value;
+
+        AspNetUser user = db.AspNetUsers.Where(x => x.Email == UserPrincipalName).FirstOrDefault();
+        if (user != null && IsUserActive == true)
+        {
+          //model = new LoginViewModel() { Email = "asrar.ahmed@intechww.com", Password = "Leaves12*" };
+          //model = new LoginViewModel() { Email = user.Email, Password = "Leaves12*" };
+          ViewBag.Email = user.Email;
+        }
+      }
+
       ViewBag.ReturnUrl = returnUrl;
       return View();
     }
@@ -177,55 +197,16 @@ namespace LeaveON.Controllers
     public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
     {
       
-      //// set up domain context
-      ////PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
-
-      //// find current user
-      //UserPrincipal user = UserPrincipal.Current;
-
-      //if (user != null)
-      //{
-      //  string loginName = user.SamAccountName; // or whatever you mean by "login name"
-      //}
-
-      //if (!ModelState.IsValid)
-      //{
-      //  return View(model);
-      //}
-
-      //using (var context = new PrincipalContext(ContextType.Domain, "WorkGroup"))
-      //{
-      //  using (var searcher = new PrincipalSearcher(new UserPrincipal(context)))
-      //  {
-      //    foreach (var result1 in searcher.FindAll())
-      //    {
-      //      DirectoryEntry de = result1.GetUnderlyingObject() as DirectoryEntry;
-      //      Console.WriteLine("First Name: " + de.Properties["givenName"].Value);
-      //      Console.WriteLine("Last Name : " + de.Properties["sn"].Value);
-      //      Console.WriteLine("SAM account name   : " + de.Properties["samAccountName"].Value);
-      //      Console.WriteLine("User principal name: " + de.Properties["userPrincipalName"].Value);
-      //      Console.WriteLine();
-      //    }
-      //  }
-      //}
-
-
-
-
-
-
-
-
-
 
       if (!ModelState.IsValid)
       {
-        return View(model);
+        //return View(model);
+        return RedirectToAction("Error404", "Error");
       }
 
       // This doesn't count login failures towards account lockout
       // To enable password failures to trigger account lockout, change to shouldLockout: true
-      var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+      var result = await SignInManager.PasswordSignInAsync(model.Email, "Leaves12*", model.RememberMe, shouldLockout: false);
       switch (result)
       {
         case SignInStatus.Success:
@@ -237,7 +218,8 @@ namespace LeaveON.Controllers
         case SignInStatus.Failure:
         default:
           ModelState.AddModelError("", "Invalid login attempt.");
-          return View(model);
+          //return View(model);
+          return RedirectToAction("Error404", "Error");
       }
     }
 
@@ -307,7 +289,7 @@ namespace LeaveON.Controllers
     {
       if (ModelState.IsValid)
       {
-        var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Hometown = model.Hometown, DepartmentId = model.DepartmentId,CountryId=model.CountryId, BioStarEmpNum = model.BioStarEmpNum, UserLeavePolicyId=model.UserLeavePolicyId };
+        var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Hometown = model.Hometown, DepartmentId = model.DepartmentId, CountryId = model.CountryId, BioStarEmpNum = model.BioStarEmpNum, UserLeavePolicyId = model.UserLeavePolicyId };
         var result = await UserManager.CreateAsync(user, model.Password);
         if (result.Succeeded)
         {
@@ -562,7 +544,8 @@ namespace LeaveON.Controllers
       var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
       if (loginInfo == null)
       {
-        return RedirectToAction("Login");
+        //return RedirectToAction("Login");
+        return RedirectToAction("Error404", "Error");
       }
 
       // Sign in the user with this external login provider if the user already has a login

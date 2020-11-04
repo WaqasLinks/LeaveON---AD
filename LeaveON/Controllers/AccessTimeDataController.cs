@@ -73,7 +73,7 @@ namespace LeaveON.Controllers
 
         reqDate = DateTime.Now;
         string userId = User.Identity.GetUserId();
-        intDepartmentId = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.Id == userId).DepartmentId;
+        intDepartmentId = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.Id == userId).DepartmentId.Value;
         List<string> SelectedDeps = new List<string>();
         SelectedDeps.Add(intDepartmentId.ToString());
         ViewBag.SelectedDepartments = SelectedDeps;

@@ -5,19 +5,22 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="41b3342e1acf4fda99c28be56ef0d5bf" Name="Diagram1">
-        <EntityTypeShape EntityType="LeaveONModels.AnnualOffDay" Width="1.5" PointX="3" PointY="19.75" />
-        <EntityTypeShape EntityType="LeaveONModels.AspNetRole" Width="1.5" PointX="3.75" PointY="6.625" />
-        <EntityTypeShape EntityType="LeaveONModels.AspNetUserClaim" Width="1.5" PointX="8.25" PointY="19" />
-        <EntityTypeShape EntityType="LeaveONModels.AspNetUser" Width="1.5" PointX="6" PointY="7.375" />
-        <EntityTypeShape EntityType="LeaveONModels.Country" Width="1.5" PointX="3.75" PointY="15.875" />
-        <EntityTypeShape EntityType="LeaveONModels.Department" Width="1.5" PointX="3.75" PointY="13" />
-        <EntityTypeShape EntityType="LeaveONModels.Leave" Width="1.5" PointX="8.25" PointY="7.875" />
-        <EntityTypeShape EntityType="LeaveONModels.LeaveBalance" Width="1.5" PointX="11.25" PointY="9" />
-        <EntityTypeShape EntityType="LeaveONModels.LeaveType" Width="1.5" PointX="6" PointY="3.25" />
-        <EntityTypeShape EntityType="LeaveONModels.UserLeavePolicy" Width="1.5" PointX="0.75" PointY="8.75" />
-        <EntityTypeShape EntityType="LeaveONModels.UserLeavePolicyDetail" Width="1.5" PointX="3" PointY="9.125" />
+        <EntityTypeShape EntityType="LeaveONModels.AnnualOffDay" Width="1.5" PointX="3" PointY="21.375" />
+        <EntityTypeShape EntityType="LeaveONModels.AspNetRole" Width="1.5" PointX="3.75" PointY="17.125" />
+        <EntityTypeShape EntityType="LeaveONModels.AspNetUserClaim" Width="1.5" PointX="8.25" PointY="21.625" />
+        <EntityTypeShape EntityType="LeaveONModels.AspNetUserLogin" Width="1.5" PointX="8.25" PointY="19.125" />
+        <EntityTypeShape EntityType="LeaveONModels.AspNetUser" Width="1.5" PointX="6" PointY="8.625" />
+        <EntityTypeShape EntityType="LeaveONModels.Country" Width="1.5" PointX="3.75" PointY="7" />
+        <EntityTypeShape EntityType="LeaveONModels.Dep" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="LeaveONModels.Department" Width="1.5" PointX="3.75" PointY="14.125" />
+        <EntityTypeShape EntityType="LeaveONModels.Leave" Width="1.5" PointX="11.25" PointY="9.375" />
+        <EntityTypeShape EntityType="LeaveONModels.LeaveBalance" Width="1.5" PointX="8.25" PointY="10.375" />
+        <EntityTypeShape EntityType="LeaveONModels.LeaveType" Width="1.5" PointX="9" PointY="6.625" />
+        <EntityTypeShape EntityType="LeaveONModels.UserLeavePolicy" Width="1.5" PointX="0.75" PointY="9.875" />
+        <EntityTypeShape EntityType="LeaveONModels.UserLeavePolicyDetail" Width="1.5" PointX="3" PointY="10.625" />
         <AssociationConnector Association="LeaveONModels.FK_AnnualOffDays_UserLeavePolicy" />
         <AssociationConnector Association="LeaveONModels.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="LeaveONModels.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="LeaveONModels.FK_AspNetUsers_Country" />
         <AssociationConnector Association="LeaveONModels.FK_AspNetUsers_Deparment" />
         <AssociationConnector Association="LeaveONModels.FK_AspNetUsers_UserLeavePolicy" />

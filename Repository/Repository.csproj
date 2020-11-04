@@ -65,8 +65,14 @@
       <DependentUpon>LeaveOnDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AspNetUserLeavePolicy_Metadata.cs" />
+    <Compile Include="Models\AspNetUserLogin.cs">
+      <DependentUpon>LeaveOnDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AspNetUser_Metadata.cs" />
     <Compile Include="Models\Country.cs">
+      <DependentUpon>LeaveOnDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Dep.cs">
       <DependentUpon>LeaveOnDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Department.cs">
