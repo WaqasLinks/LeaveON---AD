@@ -169,7 +169,7 @@ namespace LeaveON.Controllers
       if (CompName == "WQSLAPTOP\\hp")
       {
         //model = new LoginViewModel() { Email = "asrar.ahmed@intechww.com", Password = "Leaves12*" };
-        ViewBag.Email = "asrar.ahmed@intechww.com";
+        ViewBag.Email = "zunair.hassan@intechww.com";//"asrar.ahmed@intechww.com";
       }
       else
       {

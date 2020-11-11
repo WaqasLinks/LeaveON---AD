@@ -33,10 +33,6 @@
 
         </div>
         <div class="form-group">
-          @Html.DropDownListFor(model => model.userLeavePolicy.AgreementType, new SelectList(ViewBag.AgreementTypes, "Value", "Text", null), null, new { @class = "form-control" })
-          @*@Html.ValidationMessageFor(model => model.userLeavePolicy.FiscalYearStart, "", new { @class = "text-danger" })*@
-        </div>
-        <div class="form-group">
           @Html.LabelFor(model => model.userLeavePolicy.FiscalYearStart, "Year Start", htmlAttributes: new { @class = " " })
 
           @Html.EditorFor(model => model.userLeavePolicy.FiscalYearStart, new { htmlAttributes = new { @class = "form-control", @id = "datepickerStart", @readonly = "readonly" } })
@@ -48,6 +44,10 @@
 
           @Html.EditorFor(model => model.userLeavePolicy.FiscalYearEnd, new { htmlAttributes = new { @class = "form-control", @id = "datepickerEnd", @readonly = "readonly" } })
           @Html.ValidationMessageFor(model => model.userLeavePolicy.FiscalYearEnd, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+          @Html.DropDownListFor(model => model.userLeavePolicy.AgreementType, new SelectList(ViewBag.AgreementTypes, "Value", "Text", null), null, new { @class = "form-control", @disabled = "disabled" })
+          @*@Html.ValidationMessageFor(model => model.userLeavePolicy.FiscalYearStart, "", new { @class = "text-danger" })*@
         </div>
 
       </div>

@@ -42,7 +42,17 @@
     </div>
       @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
        
-       
+       @{ 
+           //User.Identity.Name 
+
+           //string UserPrincipalName = System.DirectoryServices.AccountManagement.UserPrincipal.Current.UserPrincipalName;
+           //bool IsUserActive = System.DirectoryServices.AccountManagement.UserPrincipal.Current.Enabled.Value;
+
+           string Name = new System.Security.Principal.WindowsPrincipal(System.Security.Principal.WindowsIdentity.GetCurrent()).Identity.Name;
+           string Name1 = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+
+
+       }
       <div class="col-4">
         <button type="submit" class="btn btn-primary btn-block" hidden>SignIn</button>
       </div>
@@ -50,7 +60,7 @@
 
 
         @*<a href="login.cshtml" class="text-center">Create New Account</a>*@
-      }
+           }
     </div>
 
     <!-- /.form-box -->

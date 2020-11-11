@@ -20,17 +20,17 @@
     Html.RenderPartial("_Edit");
 
   }
-  </div>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  @*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>*@
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</div>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+@*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>*@
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
-  <script>
+<script>
             $(document).ready(function () {
               var idxId = 50;
-          
+
 
               $("#addBtn").on("click", function () {
                   $.get('@Url.Action("AddNewRow")?IndexId=' + idxId , function (data) {
@@ -171,7 +171,26 @@
                   changeMonth: true,
                   changeYear: true,
                   numberOfMonths: 2,
-                  dateFormat: 'DD, MM, d, yy'
+                  dateFormat: 'DD, MM, d, yy',
+                  onSelect: function (dateText, inst) {
+                    var startDate = new Date(dateText);
+                    var selMonth = startDate.getMonth();
+                    //alert(selMonth);
+                    switch (startDate.getMonth()) {
+                      case 6:
+                        //Jul            //Fiscal year
+                        $('#userLeavePolicy_AgreementType').val('1');
+                        break;
+                      case 0:
+                        //Jan            //Calander year
+                        $('#userLeavePolicy_AgreementType').val('2');
+                        break;
+                      default:
+                        //Contract year
+                        $('#userLeavePolicy_AgreementType').val('3');
+                        break;
+                    }
+                  }
                   //dateFormat: 'dd/mm/yy',
                   //showStatus: true,
                   //showWeeks: true,
@@ -189,6 +208,7 @@
 
                   //minDate: -20,
                   //maxDate: "+1M +10D"
+                  
                 });
                 $("#datepickerEnd").datepicker({
                   showOtherMonths: true,
@@ -222,13 +242,13 @@
 
 
             });
-  </script>
+</script>
 
 
 
-  @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-  }
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+}
 
 
 
