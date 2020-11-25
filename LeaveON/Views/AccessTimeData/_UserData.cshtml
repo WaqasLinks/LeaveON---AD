@@ -64,8 +64,9 @@
                             <th>
                               Total Time
                             </th>
+                            <th>Leave Status</th>
                             @*
-                              <th></th>*@
+    <th></th>*@
                             <th></th>
                           </tr>
                         </thead>
@@ -109,12 +110,15 @@
                                       group.Sum(x => x.Time_OUT.Value - x.Time_IN.Value)
                                     }*@
                                   @{
-                                    TimeSpan WorkingHours = new TimeSpan();//TimeSpan.FromSeconds(0);// TimeSpan.FromSeconds(0);
-                                    foreach (var item in group)
-                                    {
-                                      oneSlot = (item.Time_OUT - item.Time_IN).Value.Duration();
-                                      WorkingHours = WorkingHours.Add(oneSlot);
-                                    }
+                                      TimeSpan WorkingHours = new TimeSpan();//TimeSpan.FromSeconds(0);// TimeSpan.FromSeconds(0);
+                                      foreach (var item in group)
+                                      {
+                                        if (item.Time_IN !=null)
+                                        {
+                                          oneSlot = (item.Time_OUT - item.Time_IN).Value.Duration();
+                                          WorkingHours = WorkingHours.Add(oneSlot);
+                                        }
+                                      }
                                     @(WorkingHours)
                                     AllWorkingHours=AllWorkingHours.Add(WorkingHours);
                                   }
@@ -122,16 +126,26 @@
                                 </td>
                                 <td>
                                   @{
+                                    if (group.First().Time_IN != null)
+                                    {
+                                      TotalTime = (group.Last().Time_OUT - group.First().Time_IN).Value.Duration();
+                                      AllTotalTime = AllTotalTime.Add(TotalTime); 
+                                      @(TotalTime) 
+                                    }
 
-                                    TotalTime = (group.Last().Time_OUT - group.First().Time_IN).Value.Duration();
-                                      AllTotalTime=AllTotalTime.Add(TotalTime);
-                                    @(TotalTime)
                                   }
 
                                 </td>
                                 <td>
-                                  @Html.ActionLink("Detail", "UserDataDetail", new { EmployeeNumber = group.First().EmployeeNumber, DateIn = group.First().Date_IN, DateOut = group.Last().Date_OUT}, new {target="_blank"}) @*|*@
+                                  @{ if (group.First().Time_IN != null)
+                                     {
+                                        @Html.ActionLink("Detail", "UserDataDetail", new { EmployeeNumber = group.First().EmployeeNumber, DateIn = group.First().Date_IN, DateOut = group.Last().Date_OUT }, new { target = "_blank" }) 
+                                        @*|*@ 
+                                     } 
+                                   }
+
                                 </td>
+                                <td>@Html.DisplayFor(modelItem => group.First().Status)</td>
                                 @*
                                   <td>
                                     @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
@@ -153,6 +167,7 @@
                             <td style="display:none;"></td>
                             <td style="font-weight:bold">@AllWorkingHours.TotalHours.ToString("N2") Hours</td>
                             <td style="font-weight:bold">@AllTotalTime.TotalHours.ToString("N2") Hours</td>
+                            <td></td>
                             <td></td>
                           </tr>
                         </tfoot>

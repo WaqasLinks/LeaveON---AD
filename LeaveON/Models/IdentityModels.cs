@@ -10,13 +10,15 @@ namespace LeaveON.Models
     public class ApplicationUser : IdentityUser
     {
         public string Hometown { get; set; }
-        public int DepartmentId { get; set; }
-    public int CountryId { get; set; }
+        public int? DepartmentId { get; set; }
+        public int? CountryId { get; set; }
         public System.DateTime? DateCreated { get; set; }
         public System.DateTime? DateModified { get; set; }
         public string Remarks { get; set; }
         public int? BioStarEmpNum { get; set; }
         public int?  UserLeavePolicyId { get; set; }
+        public bool? IsActive { get; set; }
+
     public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

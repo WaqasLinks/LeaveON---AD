@@ -2,71 +2,98 @@
 @model LoginViewModel
 @{
   ViewBag.Title = "Sign in";
-    Layout = "~/Views/Shared/_LayoutAnonymous.cshtml";
+  Layout = "~/Views/Shared/_LayoutAnonymous.cshtml";
 }
- 
-<div class="register-box">
-  <div class="register-logo">
-    <h2><b>Sign in</b></h2>
+
+@{ //User.Identity.Name
+
+  //string UserPrincipalName = System.DirectoryServices.AccountManagement.UserPrincipal.Current.UserPrincipalName;
+  //bool IsUserActive = System.DirectoryServices.AccountManagement.UserPrincipal.Current.Enabled.Value;
+
+  //string Name = new System.Security.Principal.WindowsPrincipal(System.Security.Principal.WindowsIdentity.GetCurrent()).Identity.Name;
+  //string Name3 = new System.Security.Principal.WindowsPrincipal(System.Security.Principal.WindowsIdentity.GetCurrent()).Identity.AuthenticationType.ToString();
+  //string UserName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+  //huzaifa.ali@intechww.com
+  //string UserName1 = UserName.Substring(UserName.IndexOf("\\")).Replace("\\", "");
+
+  //UserName1 = UserName1 + "@intechww.com";
+  //List<string> loginsList = new List<string>();
+
+  //string id1 = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+  ////string id2 = Page.User.Identity.Name;
+  //string id3 = Html.ViewContext.HttpContext.User.Identity.Name;
+  //string id4 = Request.LogonUserIdentity.Name;
+  //loginsList.Add(id1);
+  ////loginsList.Add(id2);
+  //loginsList.Add(id3);
+  //loginsList.Add(id4);
+  //loginsList.Add("------");
+
+
+
+  //var path = Server.MapPath(@"~/myLog.txt");
+  //System.IO.File.WriteAllLines(path, loginsList);
+
+  //string IsAuthenticated = System.Security.Principal.WindowsIdentity.GetCurrent().IsAuthenticated.ToString();
+
+
+  //Html.Hidden("UserName", UserName);
+  //Html.TextBox("IsAuthenticated", IsAuthenticated, new { @class = "form-control", autocomplete = "off", style = "display: none;" });
+
+
+  <div class="register-box">
+    <div class="register-logo">
+      <h2><b>Sign in</b></h2>
+    </div>
+
+    <div class="card">
+      <div class="card-body register-card-body">
+        <p class="login-box-msg">Signing in to start your session... please wait</p>
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", autocomplete = "off", role = "form", name = "accountLogin", id = "accountLogin" }))
+        {
+
+          @Html.AntiForgeryToken()
+
+          @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+          <form action="../../index.html" method="post">
+            <div class="input-group mb-3">
+              @*@Html.TextBoxFor(m => m.Email, new { @class = "form-control   ", placeholder = "Email" style = "display: none;", autocomplete = "off"  })*@
+              @*@Html.TextBox("Email", (string)ViewBag.Eamil, new { @class = "form-control", autocomplete = "off", placeholder = "Email", style = "display: none;" })*@
+              @Html.TextBox("Email", (string)ViewBag.ADUser, new { @class = "form-control", autocomplete = "off", placeholder = "Email", style = "display: none;" })
+              @*<div class="input-group-append">
+                      <div class="input-group-text">
+                        <span class="fas fa-user"></span>
+                      </div>
+                    </div>
+                </div>*@
+              @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+
+              <div class="input-group mb-3">
+                @*@Html.PasswordFor(m => m.Password, new { @class = "form-control fas fa-lock", placeholder = "Password", style = "display: none;", autocomplete = "off" })*@
+                @Html.Password("Password", "●●●●●●●●●●", new { @class = "form-control fas fa-lock", autocomplete = "off", placeholder = "Password", style = "display: none;" })
+                @*<div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-lock"></span>
+                    </div>
+                  </div>*@
+              </div>
+              @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+
+              <div class="col-4">
+                <button type="submit" class="btn btn-primary btn-block" hidden>SignIn</button>
+              </div>
+          </form>
+
+
+          @*<a href="login.cshtml" class="text-center">Create New Account</a>*@
+        }
+      </div>
+
+      <!-- /.form-box -->
+    </div><!-- /.card -->
   </div>
-
-  <div class="card">
-    <div class="card-body register-card-body">
-      <p class="login-box-msg">Signing in to start your session... please wait</p>
-      @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", autocomplete = "off", role = "form", name="accountLogin", id = "accountLogin"}))
-      {
-
-        @Html.AntiForgeryToken()
-
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <form action="../../index.html" method="post">
-      <div class="input-group mb-3">
-        @*@Html.TextBoxFor(m => m.Email, new { @class = "form-control   ", placeholder = "Email" style = "display: none;", autocomplete = "off"  })*@
-        @Html.TextBox("Email", (string)ViewBag.Eamil, new { @class = "form-control", autocomplete = "off", placeholder = "Email", style = "display: none;"})
-        @*<div class="input-group-append">
-      <div class="input-group-text">
-        <span class="fas fa-user"></span>
-      </div>
-    </div>*@
-      </div>
-      @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-
-    <div class="input-group mb-3">
-      @*@Html.PasswordFor(m => m.Password, new { @class = "form-control fas fa-lock", placeholder = "Password", style = "display: none;", autocomplete = "off" })*@
-      @Html.Password("Password", "Admin1234*", new { @class = "form-control fas fa-lock", autocomplete = "off", placeholder = "Password", style = "display: none;"})
-      @*<div class="input-group-append">
-      <div class="input-group-text">
-        <span class="fas fa-lock"></span>
-      </div>
-    </div>*@
-    </div>
-      @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-       
-       @{ 
-           //User.Identity.Name 
-
-           //string UserPrincipalName = System.DirectoryServices.AccountManagement.UserPrincipal.Current.UserPrincipalName;
-           //bool IsUserActive = System.DirectoryServices.AccountManagement.UserPrincipal.Current.Enabled.Value;
-
-           string Name = new System.Security.Principal.WindowsPrincipal(System.Security.Principal.WindowsIdentity.GetCurrent()).Identity.Name;
-           string Name1 = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-
-
-       }
-      <div class="col-4">
-        <button type="submit" class="btn btn-primary btn-block" hidden>SignIn</button>
-      </div>
-    </form>
-
-
-        @*<a href="login.cshtml" class="text-center">Create New Account</a>*@
-           }
-    </div>
-
-    <!-- /.form-box -->
-  </div><!-- /.card -->
-</div>
-
+}
 
 <!-- /.register-box -->
 <!-- jQuery -->
@@ -77,9 +104,11 @@
 <script src="../../dist/js/adminlte.min.js"></script>
 
 <script type="text/javascript">
+
   $(document).ready(function () {
     //$('#Email').val('admin.intech@intech.com');
-    //$('#Password').val("Admin1234*");
+    //$('#Password').val("●●●●●●●●●●");
+
     $('#accountLogin').attr('autocomplete', 'off');
     document.forms["accountLogin"].submit();
     //$('#submit_100').trigger('click');

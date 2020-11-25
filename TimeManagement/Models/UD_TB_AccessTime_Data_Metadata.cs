@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,8 @@ namespace TimeManagement.Models
     public partial class UD_TB_AccessTime_Data : IUD_TB_AccessTime_Data_Metadata
     {
         /* Id property has already existed in the mapped class */
+        [NotMapped]
+        public string Status { get; set; }
     }
 
 

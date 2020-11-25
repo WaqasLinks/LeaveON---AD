@@ -9,14 +9,14 @@ using Owin;
 
 namespace LeaveON
 {
-    public partial class Startup
+  public partial class Startup
+  {
+    public void Configuration(IAppBuilder app)
     {
-        public void Configuration(IAppBuilder app)
-        {
-            ConfigureAuth(app);
-            new ScheduledTasks().InitTimerForScheduleTasks();
-            //reset.LeavePolicyValues();
-        }
+      ConfigureAuth(app);
+      new ScheduledTasks().InitTimerForScheduleTasks();
+      //reset.LeavePolicyValues();
+    }
 
   }
 }

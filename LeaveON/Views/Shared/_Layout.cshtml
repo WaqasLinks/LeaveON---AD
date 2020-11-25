@@ -482,24 +482,25 @@
                     </p>
                   </a>
                   <ul class="nav nav-treeview">
+                    @*<li class="nav-item">
+                        <a href="/AccessTimeData/PersonalData" class="nav-link">
+                          &nbsp; &nbsp;  <i class="far fas far fa-id-badge"></i>
+                          <p>Personal Data</p>
+                        </a>
+                      </li>*@
                     <li class="nav-item">
-                      <a href="/AccessTimeData/PersonalData" class="nav-link">
-                        &nbsp; &nbsp;  <i class="far fas far fa-id-badge"></i>
-                        <p>Personal Data</p>
+                      <a href="/AccessTimeData/UserData" class="nav-link">
+                        &nbsp; &nbsp;  <i class="far fa fa-history"></i>
+                        <p>User Data</p>
                       </a>
                     </li>
-                    <li class="nav-item">
-                      <a href="/AccessTimeData/DepartmentData" class="nav-link">
-                        &nbsp; &nbsp;  <i class="far fa fa-building"></i>
-                        <p>Department Data</p>
-                      </a>
-                    </li>
+
                     @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                     {
                       <li class="nav-item">
-                        <a href="/AccessTimeData/UserData" class="nav-link">
-                          &nbsp; &nbsp;  <i class="far fa fa-history"></i>
-                          <p>User Data</p>
+                        <a href="/AccessTimeData/DepartmentData" class="nav-link">
+                          &nbsp; &nbsp;  <i class="far fa fa-building"></i>
+                          <p>Department Data</p>
                         </a>
                       </li>
                       <li class="nav-item">

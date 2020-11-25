@@ -10,27 +10,28 @@
   <p>
     @Html.ActionLink("Create New", "Create")
   </p>*@
-  <div>
-    @Html.DropDownList("DepartmentList", new MultiSelectList(ViewBag.Departments, "Value", "Text", ViewBag.SelectedDepartments), htmlAttributes: new { @class = "selectpicker", @id = "listDepartments", data_live_search = "true", data_actions_box = "true", data_done_button = "true" })
+<div>
+  @Html.DropDownList("DepartmentList", new MultiSelectList(ViewBag.Departments, "Value", "Text", ViewBag.SelectedDepartments), htmlAttributes: new { @class = "selectpicker", @id = "listDepartments", data_live_search = "true", data_actions_box = "true", data_done_button = "true" })
 
-    <select class="selectpicker" id="selectMonth" data-live-search="false" data-done-button="true">
-      <option value="07-2020">July 2020</option>
-      <option value="08-2020">August 2020</option>
-      <option value="09-2020">September 2020</option>
-      <option value="10-2020">October 2020</option>
-      <option value="11-2020">November 2020</option>
-      <option value="12-2020">December 2020</option>
-      <option value="01-2021">January 2021</option>
-      <option value="02-2021">February 2021</option>
-      <option value="03-2021">March 2021</option>
-      <option value="04-2021">April 2021</option>
-      <option value="05-2021">May 2021</option>
-      <option value="06-2021">June 2021</option>
-    </select>
-    <button id="load">go</button>
+  @*<select class="selectpicker" id="selectMonth" data-live-search="false" data-done-button="true">
+    <option value="07-2020">July 2020</option>
+    <option value="08-2020">August 2020</option>
+    <option value="09-2020">September 2020</option>
+    <option value="10-2020">October 2020</option>
+    <option value="11-2020">November 2020</option>
+    <option value="12-2020">December 2020</option>
+    <option value="01-2021">January 2021</option>
+    <option value="02-2021">February 2021</option>
+    <option value="03-2021">March 2021</option>
+    <option value="04-2021">April 2021</option>
+    <option value="05-2021">May 2021</option>
+    <option value="06-2021">June 2021</option>
+  </select>*@
+  @Html.DropDownList("selectMonth", (IEnumerable<SelectListItem>)ViewBag.MonthSelectList, htmlAttributes: new { @class = "selectpicker", @id = "selectMonth", data_live_search = "true", data_actions_box = "true", data_done_button = "true" })
+  <button id="load">go</button>
 
-    @{Html.RenderPartial("_DepartmentData", Model); }
-  </div>
+  @{Html.RenderPartial("_DepartmentData", Model); }
+</div>
 <script type="text/javascript">
 
         $(document).ready(function () {

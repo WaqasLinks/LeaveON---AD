@@ -13,6 +13,7 @@ using Repository.Models;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices;
+using System.Web.Hosting;
 
 namespace LeaveON.Controllers
 {
@@ -163,29 +164,55 @@ namespace LeaveON.Controllers
     //
     // GET: /Account/Login
     [AllowAnonymous]
-    public ActionResult Login(string returnUrl)
+    public ActionResult Login(string returnUrl, string ADUser)
     {
-      string CompName = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-      if (CompName == "WQSLAPTOP\\hp")
-      {
-        //model = new LoginViewModel() { Email = "asrar.ahmed@intechww.com", Password = "Leaves12*" };
-        ViewBag.Email = "zunair.hassan@intechww.com";//"asrar.ahmed@intechww.com";
-      }
-      else
-      {
-        string UserPrincipalName = System.DirectoryServices.AccountManagement.UserPrincipal.Current.UserPrincipalName;
-        bool IsUserActive = System.DirectoryServices.AccountManagement.UserPrincipal.Current.Enabled.Value;
+      //ADUser = "bsserviceaccount@intechww.com";
+      //ADUser = "Ahsan.Ahmad@intechww.com";
+      ADUser = "muzammil.riaz@intechww.com";
+      //ADUser = "asrar.ahmed@intechww.com";
+      //var path = System.Web.HttpContext.Current.Server.MapPath(@"~/myLog.txt");
+      //var identityName = HttpContext.User.Identity.Name;
+      //using (HostingEnvironment.Impersonate())
+      //{
+      //  using (var context = new PrincipalContext(ContextType.Domain, "intechww.com", null, ContextOptions.Negotiate | ContextOptions.SecureSocketLayer))
+      //  using (var userPrincipal = UserPrincipal.FindByIdentity(context, IdentityType.SamAccountName, @"NT AUTHORITY\IUSR"))
+      //  {
+      //    var emailAddress = userPrincipal.EmailAddress;
+      //    var lastname = userPrincipal.Surname;
+      //    var firstname = userPrincipal.GivenName;
+      //  }
+      //}
+      //string ab= User.Identity.Name;
+      //var identityName = HttpContext.User.Identity.Name;
 
-        AspNetUser user = db.AspNetUsers.Where(x => x.Email == UserPrincipalName).FirstOrDefault();
-        if (user != null && IsUserActive == true)
-        {
-          //model = new LoginViewModel() { Email = "asrar.ahmed@intechww.com", Password = "Leaves12*" };
-          //model = new LoginViewModel() { Email = user.Email, Password = "Leaves12*" };
-          ViewBag.Email = user.Email;
-        }
-      }
+      //System.IO.File.AppendAllLines(path, new List<string>(new string[] { identityName}));
 
+      //UserPrincipal currentUser = UserPrincipal.Current;
+
+      //string Name1 = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+      //System.IO.File.AppendAllLines(path, new List<string>(new string[] { Name1 }));
+
+      //PrincipalContext ctx = new PrincipalContext(ContextType.Domain, "intechww.com");
+      //UserPrincipal user = UserPrincipal.FindByIdentity(ctx, HttpContext.Request.LogonUserIdentity.Name);
+      //string assdf = HttpContext.User.Identity.Name;
+      //System.IO.File.AppendAllLines(path, new List<string>(new string[] { user.Name.ToString(), assdf }));
+
+      //List<string> loginsList = new List<string>();
+      ////string id1 = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+      ////string id4 = Request.LogonUserIdentity.Name;
+      ////PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
+      ////UserPrincipal currentUser = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
+      //loginsList.Add(currentUser.Name);
+      //loginsList.Add(currentUser.DisplayName);
+      //loginsList.Add(currentUser.GivenName);
+      //loginsList.Add(currentUser.SamAccountName);
+      //loginsList.Add(currentUser.UserPrincipalName);
+
+      //System.IO.File.AppendAllLines(path, loginsList);
+      ViewBag.ADUser = ADUser;//"bsserviceaccount@intechww.com";//ADUser;
       ViewBag.ReturnUrl = returnUrl;
+      //ViewBag.ReturnUrl = @"\LeavesRequest\Index";
+
       return View();
     }
 
@@ -194,9 +221,27 @@ namespace LeaveON.Controllers
     [HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
+    //public async Task<ActionResult> Login(LoginViewModel model, string returnUrl, FormCollection formCollection)
     public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
     {
-      
+      //string abc =User.Identity.Name;
+      //List<string> loginsList = new List<string>();
+      //string id1 = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+      //string id4 = Request.LogonUserIdentity.Name;
+
+      //PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
+      //UserPrincipal currentUser = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
+      //loginsList.Add(currentUser.Name);
+      //loginsList.Add(currentUser.DisplayName);
+      //loginsList.Add(currentUser.GivenName);
+      //loginsList.Add(currentUser.SamAccountName);
+      //loginsList.Add(currentUser.UserPrincipalName);
+
+
+
+      //var path = Server.MapPath(@"~/myLog.txt");
+      //System.IO.File.AppendAllLines(path, loginsList);
+
 
       if (!ModelState.IsValid)
       {
@@ -206,11 +251,22 @@ namespace LeaveON.Controllers
 
       // This doesn't count login failures towards account lockout
       // To enable password failures to trigger account lockout, change to shouldLockout: true
+
+      //string userName = formCollection.Get("UserName");//"Cash"; //cash//other
+      //string IsAuthenticated = formCollection.Get("IsAuthenticated");
+
       var result = await SignInManager.PasswordSignInAsync(model.Email, "Leaves12*", model.RememberMe, shouldLockout: false);
+      //Mubashar.ali@intechww.com
+      //var result = await SignInManager.PasswordSignInAsync("Mubashar.ali@intechww.com", "Leaves12*", model.RememberMe, shouldLockout: false);
+      //var result = await SignInManager.PasswordSignInAsync("umer@tenf.loc", "Leaves12*", model.RememberMe, shouldLockout: false);
+
+
+      //-----------------------
       switch (result)
       {
         case SignInStatus.Success:
           return RedirectToLocal(returnUrl);
+        //return RedirectToAction("Index", "LeavesRequest");
         case SignInStatus.LockedOut:
           return View("Lockout");
         case SignInStatus.RequiresVerification:

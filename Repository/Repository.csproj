@@ -72,9 +72,6 @@
     <Compile Include="Models\Country.cs">
       <DependentUpon>LeaveOnDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Dep.cs">
-      <DependentUpon>LeaveOnDataModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Department.cs">
       <DependentUpon>LeaveOnDataModel.tt</DependentUpon>
     </Compile>

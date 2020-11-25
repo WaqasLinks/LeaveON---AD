@@ -269,6 +269,10 @@
     <Compile Include="Migrations\202009090630134_CountryId.Designer.cs">
       <DependentUpon>202009090630134_CountryId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202011230802383_IsActive added and depId, CtryId nullable.cs" />
+    <Compile Include="Migrations\202011230802383_IsActive added and depId, CtryId nullable.Designer.cs">
+      <DependentUpon>202011230802383_IsActive added and depId, CtryId nullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AnnualLeaveModel.cs" />
@@ -2358,6 +2362,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009090630134_CountryId.resx">
       <DependentUpon>202009090630134_CountryId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011230802383_IsActive added and depId, CtryId nullable.resx">
+      <DependentUpon>202011230802383_IsActive added and depId, CtryId nullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

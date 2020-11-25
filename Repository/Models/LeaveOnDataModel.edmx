@@ -72,6 +72,7 @@
           <Property Name="DepartmentId" Type="int" />
           <Property Name="UserLeavePolicyId" Type="int" />
           <Property Name="CountryId" Type="int" />
+          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -79,17 +80,6 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="500" />
-          <Property Name="DateCreated" Type="datetime" />
-          <Property Name="DateModified" Type="datetime" />
-        </EntityType>
-        <EntityType Name="Dep">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Idc" Type="int" />
-          <Property Name="Name" Type="nvarchar" MaxLength="500" />
-          <Property Name="CountryId" Type="int" />
           <Property Name="DateCreated" Type="datetime" />
           <Property Name="DateModified" Type="datetime" />
         </EntityType>
@@ -409,7 +399,6 @@
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Dep" EntityType="Self.Dep" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Leave" EntityType="Self.Leave" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LeaveBalance" EntityType="Self.LeaveBalance" Schema="dbo" store:Type="Tables" />
@@ -496,7 +485,6 @@
           <EntitySet Name="AspNetUserLogins" EntityType="LeaveONModels.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="LeaveONModels.AspNetUser" />
           <EntitySet Name="Countries" EntityType="LeaveONModels.Country" />
-          <EntitySet Name="Deps" EntityType="LeaveONModels.Dep" />
           <EntitySet Name="Departments" EntityType="LeaveONModels.Department" />
           <EntitySet Name="Leaves" EntityType="LeaveONModels.Leave" />
           <EntitySet Name="LeaveBalances" EntityType="LeaveONModels.LeaveBalance" />
@@ -631,6 +619,7 @@
           <Property Name="DepartmentId" Type="Int32" />
           <Property Name="UserLeavePolicyId" Type="Int32" />
           <Property Name="CountryId" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
           <NavigationProperty Name="AspNetUserClaims" Relationship="LeaveONModels.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="LeaveONModels.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
           <NavigationProperty Name="Country" Relationship="LeaveONModels.FK_AspNetUsers_Country" FromRole="AspNetUser" ToRole="Country" />
@@ -651,17 +640,6 @@
           <NavigationProperty Name="AspNetUsers" Relationship="LeaveONModels.FK_AspNetUsers_Country" FromRole="Country" ToRole="AspNetUser" />
           <NavigationProperty Name="LeaveTypes" Relationship="LeaveONModels.FK_LeaveType_Country" FromRole="Country" ToRole="LeaveType" />
           <NavigationProperty Name="UserLeavePolicyDetails" Relationship="LeaveONModels.FK_UserLeavePolicyDetail_Country" FromRole="Country" ToRole="UserLeavePolicyDetail" />
-        </EntityType>
-        <EntityType Name="Dep">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Idc" Type="Int32" />
-          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CountryId" Type="Int32" />
-          <Property Name="DateCreated" Type="DateTime" Precision="3" />
-          <Property Name="DateModified" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Department">
           <Key>
@@ -1010,6 +988,7 @@
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="LeaveONModels.AspNetUser">
               <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="CountryId" ColumnName="CountryId" />
                 <ScalarProperty Name="UserLeavePolicyId" ColumnName="UserLeavePolicyId" />
                 <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
@@ -1039,18 +1018,6 @@
                 <ScalarProperty Name="DateModified" ColumnName="DateModified" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Deps">
-            <EntityTypeMapping TypeName="LeaveONModels.Dep">
-              <MappingFragment StoreEntitySet="Dep">
-                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Idc" ColumnName="Idc" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
