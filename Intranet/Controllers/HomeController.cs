@@ -40,9 +40,9 @@ namespace Intranet.Controllers
 
             string ReturnUrlValue = "/";
             string ADUserValue = currentUser.UserPrincipalName;//"hp";
-            //return Redirect("http://localhost:9902/Account/Login?ReturnUrl=" + ReturnUrlValue + "&ADUser=" + ADUserValue);
+            //return Redirect("http://localhost:44380/Account/Login?ReturnUrl=" + ReturnUrlValue + "&ADUser=" + ADUserValue); //this for development/testing
             //http://lms.intechww.com/
-            return Redirect("http://lms.intechww.com:9902/Account/Login?ReturnUrl=" + ReturnUrlValue + "&ADUser=" + ADUserValue);
+            return Redirect("http://lms.intechww.com:9902/Account/Login?ReturnUrl=" + ReturnUrlValue + "&ADUser=" + ADUserValue);//this for production
             //return Redirect("https://localhost:9902/Account/Login?ReturnUrl=" + ReturnUrlValue);
             //return Redirect("https://localhost:9902/");
             //return Redirect("http://localhost:9902/");

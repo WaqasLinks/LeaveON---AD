@@ -168,7 +168,7 @@ namespace LeaveON.Controllers
     {
       //ADUser = "bsserviceaccount@intechww.com";
       //ADUser = "Ahsan.Ahmad@intechww.com";
-      ADUser = "muzammil.riaz@intechww.com";
+      //ADUser = "muzammil.riaz@intechww.com";
       //ADUser = "asrar.ahmed@intechww.com";
       //var path = System.Web.HttpContext.Current.Server.MapPath(@"~/myLog.txt");
       //var identityName = HttpContext.User.Identity.Name;
