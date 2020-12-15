@@ -48,11 +48,12 @@
         </div>
 
         <div class="form-group">
-          @Html.LabelFor(model => model.Reason, htmlAttributes: new { @class = " " })
+          @Html.LabelFor(model => model.Reason, htmlAttributes: new { @class = " " })<b style="color:red">*</b>
+          
           <br>
           @*<textarea name="Reason" class="form-control " rows="3">
 
-        </textarea>*@
+    </textarea>*@
 
           @Html.TextAreaFor(model => model.Reason, new { @class = "form-control", rows = "3", placeholder = "Give Reason ...", required = "required" })
 
@@ -79,17 +80,17 @@
       </div>*@
 
         <div class="form-group">
-          @Html.LabelFor(model => model.StartDate, "Start Date", htmlAttributes: new { @class = " " })
+          @Html.LabelFor(model => model.StartDate, "Start Date", htmlAttributes: new { @class = " " })<b style="color:red">*</b>
 
-          @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @id = "datepickerStart", required = "required ", @readonly = "readonly" } })
+          @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @id = "datepickerStart", required = "required "} })
           @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
 
         </div>
 
         <div class="form-group">
-          @Html.LabelFor(model => model.EndDate, "End Date", htmlAttributes: new { @class = " " })
+          @Html.LabelFor(model => model.EndDate, "End Date", htmlAttributes: new { @class = " " })<b style="color:red">*</b>
 
-          @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @id = "datepickerEnd", required = "required ", @readonly = "readonly" } })
+          @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @id = "datepickerEnd", required = "required "} })
           @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
 
         </div>
@@ -104,7 +105,7 @@
         </div>
 
         <div class="form-group">
-          @Html.LabelFor(model => model.EmergencyContact, "Emergency Contact", htmlAttributes: new { @class = " " })
+          @Html.LabelFor(model => model.EmergencyContact, "Emergency Contact", htmlAttributes: new { @class = " " })<b style="color:red">*</b>
 
           @Html.EditorFor(model => model.EmergencyContact, new { htmlAttributes = new { @class = "form-control", required = "required " } })
           @Html.ValidationMessageFor(model => model.EmergencyContact, "", new { @class = "text-danger" })
@@ -139,7 +140,7 @@
 
         <div class="form-group">
           <div class="class=" card-footer">
-            <input type="submit" value="Apply" class="btn btn-primary" style="width: 180px; margin-left:auto;margin-right:auto;display:block;margin-top:auto;margin-bottom:0%" />
+            <input type="submit" value="Apply" id="Apply" class="btn btn-primary" style="width: 180px; margin-left:auto;margin-right:auto;display:block;margin-top:auto;margin-bottom:0%" />
 
           </div>
         </div>
@@ -148,77 +149,6 @@
           @Html.ActionLink("Back to List", "Index")
         </div>
 
-        @*<div class="form-group">
-        @Html.LabelFor(model => model.ResponseDate1, "Response Date 1", htmlAttributes: new { @class = " " })
-
-        @Html.EditorFor(model => model.ResponseDate1, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-        @Html.ValidationMessageFor(model => model.ResponseDate1, "", new { @class = "text-danger" })
-
-      </div>
-      <div class="form-group">
-        @Html.LabelFor(model => model.IsAccepted1, "Status Line Manager 1", htmlAttributes: new { @class = " " })
-
-        @Html.EditorFor(model => model.IsAccepted1, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-        @Html.ValidationMessageFor(model => model.IsAccepted1, "", new { @class = "text-danger" })
-
-      </div>
-
-      <div class="form-group">
-        @Html.LabelFor(model => model.Remarks1, "Remarks 1", htmlAttributes: new { @class = " " })
-
-        @Html.EditorFor(model => model.Remarks1, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-        @Html.ValidationMessageFor(model => model.Remarks1, "", new { @class = "text-danger" })
-
-      </div>
-
-      <div class="form-group">
-        @Html.LabelFor(model => model.ResponseDate2, "Response Date 2", htmlAttributes: new { @class = " " })
-
-        @Html.EditorFor(model => model.ResponseDate2, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-        @Html.ValidationMessageFor(model => model.ResponseDate2, "", new { @class = "text-danger" })
-
-      </div>
-
-      <div class="form-group">
-        @Html.LabelFor(model => model.IsAccepted2, "Status Line Manager 2", htmlAttributes: new { @class = " " })
-
-        @Html.EditorFor(model => model.IsAccepted2, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-        @Html.ValidationMessageFor(model => model.IsAccepted2, "", new { @class = "text-danger" })
-
-      </div>
-
-      <div class="form-group">
-        @Html.LabelFor(model => model.Remarks2, "Remarks 2", htmlAttributes: new { @class = " " })
-
-        @Html.EditorFor(model => model.Remarks2, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-        @Html.ValidationMessageFor(model => model.Remarks2, "", new { @class = "text-danger" })
-
-      </div>
-
-      <div class="form-group">
-        @Html.LabelFor(model => model.DateCreated, "Date Created", htmlAttributes: new { @class = " " })
-
-        @Html.EditorFor(model => model.DateCreated, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-        @Html.ValidationMessageFor(model => model.DateCreated, "", new { @class = "text-danger" })
-
-      </div>
-
-      <div class="form-group">
-        @Html.LabelFor(model => model.DateModified, "Data Modified", htmlAttributes: new { @class = " " })
-
-        @Html.EditorFor(model => model.DateModified, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-        @Html.ValidationMessageFor(model => model.DateModified, "", new { @class = "text-danger" })
-
-      </div>
-
-      <div class="form-group">
-        @Html.LabelFor(model => model.UserLeavePolicyId, "User Leave Policy ", "UserLeavePolicyId")
-
-        @Html.DropDownList("UserLeavePolicyId", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
-        @Html.ValidationMessageFor(model => model.UserLeavePolicyId, "", new { @class = "text-danger" })
-
-      </div>*@
-        @*@Html.Hidden("LeaveUserId", (string)ViewBag.LeaveUserId)*@
       }
     </div>
 
@@ -299,20 +229,37 @@
         dateFormat: 'DD, MM, d, yy',
         showOn: "both",
         onSelect: function () {
-          myfunc();
-
+          IsDatesCorrect();
+          //SubmitButtonStatus();
         }
       });
-
-
-      function myfunc() {
+      //function SubmitButtonStatus() {
+      //  $(':input[type="submit"]').prop('disabled', true);
+      //}
+      //$('#Apply').keydown(function () {
+      //  if (IsDatesCorrect() == false) {
+      //    return false;
+      //  }
+      //});
+      function IsDatesCorrect() {
         var start = $("#datepickerStart").datepicker("getDate");
         var end = $("#datepickerEnd").datepicker("getDate");
         var diff = new Date(end - start);
-
+        
         var days = diff / 1000 / 60 / 60 / 24 + 1;
-
+        if (days == 0 || days < 0) {
+          alert("End date should be greater than start date");
+          $("#datepickerEnd").val("");
+          return false;
+        }
+        if (days > 365) {
+          alert("Can not apply leave more than a year");
+          $("#datepickerEnd").val("");
+          return false;
+        }
+         //alert(days);
         $('#diff').val(days);
+        return true;
       }
 
       //showButtonPanel: true

@@ -56,7 +56,7 @@ namespace LeaveON.Controllers
     [Authorize(Roles = "Admin")]
     public ActionResult Create()
     {
-      ViewBag.Employees = new SelectList(db.AspNetUsers, "Id", "UserName");
+      ViewBag.Employees = new SelectList(db.AspNetUsers.OrderBy(i => i.UserName), "Id", "UserName");
       //ViewBag.LeaveTypes = new SelectList(db.LeaveTypes, "Id", "Name");
       ViewBag.Departments = new SelectList(db.Countries, "Id", "Name");
       List<SelectListItem> AgreementTypes = new List<SelectListItem>()
@@ -121,6 +121,8 @@ namespace LeaveON.Controllers
             foreach (AspNetUser user in dep.AspNetUsers)
             {
               user.UserLeavePolicyId = userLeavePolicy.Id;
+              db.AspNetUsers.Attach(user);
+              db.Entry(user).Property(x => x.UserLeavePolicyId).IsModified = true;
             }
           }
         }
@@ -131,7 +133,8 @@ namespace LeaveON.Controllers
           {
             user = db.AspNetUsers.FirstOrDefault(x => x.Id == empId);
             user.UserLeavePolicyId = userLeavePolicy.Id;
-            //user.UserLeavePolicyId = userLeavePolicy.Id;
+            db.AspNetUsers.Attach(user);
+            db.Entry(user).Property(x => x.UserLeavePolicyId).IsModified = true;
 
           }
         }
@@ -170,7 +173,7 @@ namespace LeaveON.Controllers
       //{
       //  return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
       //}
-      ViewBag.Employees = new SelectList(db.AspNetUsers, "Id", "UserName");
+      ViewBag.Employees = new SelectList(db.AspNetUsers.OrderBy(i=>i.UserName), "Id", "UserName");
       ViewBag.LeaveTypes = new SelectList(db.LeaveTypes, "Id", "Name");
       //always remember viewbag name should not be as model name. other wise probelm. if same multilist will not show selected values
       ViewBag.Departments = new SelectList(db.Countries, "Id", "Name");
@@ -334,9 +337,6 @@ namespace LeaveON.Controllers
         item.UserLeavePolicyId = userLeavePolicy.Id;
       }
 
-
-
-
       if (ModelState.IsValid)
       {
         if (PolicyFor == "1")//department
@@ -372,44 +372,9 @@ namespace LeaveON.Controllers
             }
           }
           await db.SaveChangesAsync();
-          ////apply policy to the list of employees
-          //foreach (AspNetUser aspNetUser in db.AspNetUsers.ToList<AspNetUser>())
-          //{
-
-          //  string userId = EmployeeList.FirstOrDefault(x => x == aspNetUser.Id);
-
-          //  if (string.IsNullOrEmpty(userId))
-          //  {
-          //    aspNetUser.UserLeavePolicyId = null;
-          //  }
-          //  else
-          //  {
-          //    aspNetUser.UserLeavePolicyId = userLeavePolicy.Id;
-          //  }
-          //  db.AspNetUsers.Attach(aspNetUser);
-          //  db.Entry(aspNetUser).Property(x => x.UserLeavePolicyId).IsModified = true;
-          //}
-
         }
         else
         {
-          
-          //foreach (AspNetUser aspNetUser in db.AspNetUsers.ToList<AspNetUser>())
-          //{
-          //  string userId = EmployeeList.FirstOrDefault(x => x == aspNetUser.Id);
-
-          //  if (string.IsNullOrEmpty(userId))
-          //  {
-          //    aspNetUser.UserLeavePolicyId = null;
-          //  }
-          //  else
-          //  {
-          //    aspNetUser.UserLeavePolicyId = userLeavePolicy.Id;
-          //  }
-          //  db.AspNetUsers.Attach(aspNetUser);
-          //  db.Entry(aspNetUser).Property(x => x.UserLeavePolicyId).IsModified = true;
-          //}
-          //////////////
           AspNetUser user;
 
           IQueryable<AspNetUser> oldUsers = db.AspNetUsers.Where(x => x.UserLeavePolicyId == userLeavePolicy.Id);
@@ -419,6 +384,8 @@ namespace LeaveON.Controllers
           //foreach (int itm in oldDeps)//get all employees of the deps, selected from UI
           //{
           //  dep = db.Countries.FirstOrDefault(x => x.Id == itm);
+          if (oldUsers != null && oldUsers.Count() > 0)
+          { 
             foreach (AspNetUser aspNetUser in oldUsers)
             {
               //EmployeeList.Add(aspNetUser.Id);
@@ -426,14 +393,17 @@ namespace LeaveON.Controllers
               db.AspNetUsers.Attach(aspNetUser);
               db.Entry(aspNetUser).Property(x => x.UserLeavePolicyId).IsModified = true;
             }
+          }
           //}
-
-          foreach (string userId in EmployeeList)
+          if (EmployeeList != null && EmployeeList.Count() > 0)
           {
-            user = db.AspNetUsers.FirstOrDefault(x => x.Id == userId);
-            user.UserLeavePolicyId = userLeavePolicy.Id;
-            db.AspNetUsers.Attach(user);
-            db.Entry(user).Property(x => x.UserLeavePolicyId).IsModified = true;
+            foreach (string userId in EmployeeList)
+            {
+              user = db.AspNetUsers.FirstOrDefault(x => x.Id == userId);
+              user.UserLeavePolicyId = userLeavePolicy.Id;
+              db.AspNetUsers.Attach(user);
+              db.Entry(user).Property(x => x.UserLeavePolicyId).IsModified = true;
+            }
           }
           await db.SaveChangesAsync();
         }
