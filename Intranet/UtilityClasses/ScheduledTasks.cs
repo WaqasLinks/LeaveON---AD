@@ -20,6 +20,9 @@ using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices;
 using System.Globalization;
+using System.IO;
+using System.DirectoryServices.ActiveDirectory;
+using System.Collections;
 
 namespace LeaveON.UtilityClasses
 {
@@ -65,12 +68,36 @@ namespace LeaveON.UtilityClasses
             {
                 Debug.WriteLine(String.Concat("Timer Event Handling MyScheduledRunTime Actions: ", DateTime.Now.ToString()));
                 // RUN YOUR PROCESSES HERE
+                //Experiment();
+                //Experiment1();
+                //SyncUsersWithAD();
 
-                SyncUsersWithAD();
+            }
+        }
+        
+        public void Experiment()
+        {
+            var context = new DirectoryContext(DirectoryContextType.Forest, "intechww.com");
+            List<string> Lstabc1= new List<string>();
+            using (var schema = System.DirectoryServices.ActiveDirectory.ActiveDirectorySchema.GetSchema(context))
+            {
+                var userClass = schema.FindClass("user");
+
+                foreach (ActiveDirectorySchemaProperty property in userClass.GetAllProperties())
+                {
+                    var abc = property.Name;
+                    if (property.Name.ToLower().Contains("region"))
+                    {
+                        
+                        Lstabc1.Add(property.Name);
+                    }
+                    // property.Name is what you're looking for
+                }
             }
         }
         public void SyncUsersWithAD()
         {
+
             using (var context = new PrincipalContext(ContextType.Domain, "intechww.com"))// "tenf.loc"))
             {
 
@@ -78,6 +105,9 @@ namespace LeaveON.UtilityClasses
                 int counter = 0;
                 int insertedEmp = 0;
                 int UpdatedEmp = 0;
+                //List<string> loginsList = new List<string>();
+                var path = @"D:\LeaveON - AD\Intranet\ADUserList.txt";
+                var goInto = false;
                 using (var searcher = new PrincipalSearcher(new UserPrincipal(context)))
                 {
 
@@ -127,6 +157,12 @@ namespace LeaveON.UtilityClasses
                         //DateTime WhenCreated = DateTime.Parse(de.Properties["whenCreated"].Value.ToString().Trim());
                         //DateTime LastLogon = DateTime.ParseExact("01/01/2019", "dd/MM/yyyy", CultureInfo.InvariantCulture); //= DateTime.Parse(de.Properties["LastLogon"].Value.ToString().Trim());
                         auth = result as AuthenticablePrincipal;
+                        if (auth != null && auth.UserPrincipalName != null && auth.UserPrincipalName.ToLower().Contains("kashif.ali@intechww.com"))
+                        {
+                            //loginsList.Add(auth.UserPrincipalName + "," + auth.Enabled);
+                            goInto = true;
+                            //var abc = auth.UserPrincipalName;
+                        }
                         if (auth == null || auth.UserPrincipalName == null || string.IsNullOrEmpty(auth.UserPrincipalName) || auth.Enabled == false)
                         {
                             continue;//we dont need this. simply move to next
@@ -155,29 +191,33 @@ namespace LeaveON.UtilityClasses
                         //{
                         //    continue;
                         //}
+                        
+                        ////////////////
+                        //if (goInto==true)
+                        //{
 
-
-                        AspNetUser aspNetUser = LstAspNetUsers.FirstOrDefault(x => x.UserName.Replace(" ","").ToUpper() == auth.UserPrincipalName.Replace(" ", "").ToUpper());
-                        if (aspNetUser == null)
-                        {//Insert
-                            //it means if user is created before "01/01/2019" then totaDays will be in minus. so not add very old users. only add new users. which are after "01/01/2019"
-                            //this is just to fast the process
-                            //if (TimeDifference.TotalDays < 0) continue;
-
-                            insertedEmp += 1;
-                            InsertEmployee(de);
-                        }
-                        else
-                        {//Update
-                            if (aspNetUser.IsActive != IsActive(de))
-                            {
-                                UpdateEmployee(aspNetUser, de);
+                            AspNetUser aspNetUser = LstAspNetUsers.FirstOrDefault(x => x.UserName.Replace(" ", "").ToUpper() == auth.UserPrincipalName.Replace(" ", "").ToUpper());
+                            goInto = false;
+                            if (aspNetUser == null)
+                            {//Insert
+                                //it means if user is created before "01/01/2019" then totaDays will be in minus. so not add very old users. only add new users. which are after "01/01/2019"
+                                //this is just to fast the process
+                                //if (TimeDifference.TotalDays < 0) continue;
+                                insertedEmp += 1;
+                                InsertEmployee(de);
                             }
-                        }
-
+                            else
+                            {//Update
+                                if (aspNetUser.IsActive != IsActive(de))
+                                {
+                                    UpdateEmployee(aspNetUser, de);
+                                }
+                            }
+                        //}
+                        ////////////////////////////
                     }
 
-
+                    //System.IO.File.WriteAllLines(path, loginsList);
                     ////////////////////////////now find in AD
 
                     //foreach (Employee item in _LstEmployees)

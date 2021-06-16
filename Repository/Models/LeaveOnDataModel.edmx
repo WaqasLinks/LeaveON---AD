@@ -152,6 +152,7 @@
           <Property Name="DefaultPolicy" Type="bit" />
           <Property Name="CountryId" Type="int" />
           <Property Name="IsReset" Type="bit" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="2000" />
         </EntityType>
         <EntityType Name="UserLeavePolicyDetail">
           <Key>
@@ -724,6 +725,7 @@
           <NavigationProperty Name="AspNetUsers" Relationship="LeaveONModels.FK_AspNetUsers_UserLeavePolicy" FromRole="UserLeavePolicy" ToRole="AspNetUser" />
           <NavigationProperty Name="LeaveBalances" Relationship="LeaveONModels.FK_LeaveBalance_UserLeavePolicy" FromRole="UserLeavePolicy" ToRole="LeaveBalance" />
           <NavigationProperty Name="UserLeavePolicyDetails" Relationship="LeaveONModels.FK_UserLeavePolicyDetail_UserLeavePolicy" FromRole="UserLeavePolicy" ToRole="UserLeavePolicyDetail" />
+          <Property Name="Remarks" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="UserLeavePolicyDetail">
           <Key>
@@ -1083,6 +1085,7 @@
           <EntitySetMapping Name="UserLeavePolicies">
             <EntityTypeMapping TypeName="LeaveONModels.UserLeavePolicy">
               <MappingFragment StoreEntitySet="UserLeavePolicy">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
                 <ScalarProperty Name="IsReset" ColumnName="IsReset" />
                 <ScalarProperty Name="CountryId" ColumnName="CountryId" />
                 <ScalarProperty Name="DefaultPolicy" ColumnName="DefaultPolicy" />

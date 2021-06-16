@@ -78,9 +78,9 @@ namespace LeaveON.Controllers
         ViewBag.PolicyAlert = "No Policy is implemented for your account, Contact Admin";
       }
            
-      List<AspNetUser> Seniors = GetSeniorStaff();
-      
-      ViewBag.LineManagers = new SelectList(Seniors, "Id", "UserName");
+      //List<AspNetUser> Seniors = GetSeniorStaff();
+      //ViewBag.LineManagers = new SelectList(Seniors, "Id", "UserName");
+      ViewBag.LineManagers = new SelectList(db.AspNetUsers.OrderBy(x=>x.UserName), "Id", "UserName");
       ViewBag.UserName = User.Identity.Name;//"LoggedIn User";
       ViewBag.LeaveUserId = userId;
       //UserLeavePoliciesController UserLeavePolicies = new UserLeavePoliciesController();//.FileUploadMsgView("some string");
@@ -118,9 +118,9 @@ namespace LeaveON.Controllers
       {
         ViewBag.PolicyAlert = "No Policy is implemented for your account, Contact Admin";
       }
-      List<AspNetUser> Seniors = GetSeniorStaff();
-
-      ViewBag.LineManagers = new SelectList(Seniors, "Id", "UserName");
+      //List<AspNetUser> Seniors = GetSeniorStaff();
+      //ViewBag.LineManagers = new SelectList(Seniors, "Id", "UserName");
+      ViewBag.LineManagers = new SelectList(db.AspNetUsers, "Id", "UserName");
       ViewBag.UserName = User.Identity.Name;//"LoggedIn User";
       ViewBag.LeaveUserId =userId;
       //UserLeavePoliciesController UserLeavePolicies = new UserLeavePoliciesController();//.FileUploadMsgView("some string");
@@ -221,6 +221,7 @@ namespace LeaveON.Controllers
       leave.AspNetUser = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.UserId);
       leave.DateCreated = DateTime.Now;
       leave.IsQuotaRequest = false;
+      leave.LeaveType = db.LeaveTypes.FirstOrDefault(x => x.Id == leave.LeaveTypeId);
       if (ModelState.IsValid)
       {
 

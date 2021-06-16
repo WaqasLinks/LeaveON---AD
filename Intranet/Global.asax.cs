@@ -17,7 +17,9 @@ namespace Intranet
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            new ScheduledTasks().InitTimerForScheduleTasks();
+            //new ScheduledTasks().Experiment1();
+            //new ScheduledTasks().InitTimerForScheduleTasks();
+            //new ScheduledTasks().SyncUsersWithAD();
         }
     }
 }

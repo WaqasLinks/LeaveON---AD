@@ -20,8 +20,8 @@
         <div class="form-group">
           @*@Html.LabelFor(model => model.userLeavePolicy.UserId, "User", htmlAttributes: new { @class = " " })
 
-      @Html.DropDownList("Employees", null, htmlAttributes: new { @class = "form-control" })
-      @Html.ValidationMessageFor(model => model.userLeavePolicy.UserId, "", new { @class = "text-danger" })*@
+            @Html.DropDownList("Employees", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.userLeavePolicy.UserId, "", new { @class = "text-danger" })*@
 
           @Html.HiddenFor(model => model.userLeavePolicy.Id, new { htmlAttributes = new { @class = "form-control" } })
         </div>
@@ -110,20 +110,20 @@
                                   <td class="DontShowInPolicy"><input name="UserLeavePolicyDetail[@sNo].Balance" value="@(leaveBalance != null ? leaveBalance.Balance.ToString() : "")" class="form-control" placeholder="Balance" style="width: 50px;"> </td>
                                   <td class="DontShowInLeave"><a href="javascript:void(0);" class=" btn btn-danger remLeaveType">x</a></td>
                                 </tr>
-                                  sNo += 1;
-                                  //if (sNo == 2) { break; };
-                                }
-                                if (ViewBag.LockAndHide == "True")
-                                {
+                                sNo += 1;
+                                //if (sNo == 2) { break; };
+                              }
+                              if (ViewBag.LockAndHide == "True")
+                              {
 
-                                  leaveBalance = (Repository.Models.LeaveBalance)ViewBag.CompensatoryLeaveBalance;/*Model.userLeavePolicy.LeaveBalances.FirstOrDefault(x => x.LeaveTypeId == LMS.Constants.Consts.CompensatoryLeaveTypeId && x.UserId == CurrentLoginUserId);*/
-                                  Taken = leaveBalance != null ? leaveBalance.Taken.ToString() : "";
-                                  Balance = leaveBalance != null ? leaveBalance.Balance.ToString() : "";
-                                  string Allowed = string.Empty;
-                                  if (!(string.IsNullOrEmpty(Taken) && string.IsNullOrEmpty(Balance)))
-                                  { 
-                                    Allowed = (decimal.Parse(Taken) + decimal.Parse(Balance)).ToString();
-                                  }
+                                leaveBalance = (Repository.Models.LeaveBalance)ViewBag.CompensatoryLeaveBalance;/*Model.userLeavePolicy.LeaveBalances.FirstOrDefault(x => x.LeaveTypeId == LMS.Constants.Consts.CompensatoryLeaveTypeId && x.UserId == CurrentLoginUserId);*/
+                                Taken = leaveBalance != null ? leaveBalance.Taken.ToString() : "";
+                                Balance = leaveBalance != null ? leaveBalance.Balance.ToString() : "";
+                                string Allowed = string.Empty;
+                                if (!(string.IsNullOrEmpty(Taken) && string.IsNullOrEmpty(Balance)))
+                                {
+                                  Allowed = (decimal.Parse(Taken) + decimal.Parse(Balance)).ToString();
+                                }
                                 <tr>
                                   <td style="display:none;"><input type="hidden" name="UserLeavePolicyDetail.Index" value="@sNo" /></td>
                                   <td>
@@ -222,7 +222,7 @@
 
 
 
-      <div class="DontShowInLeave">
+      <div >
 
         @*<div class="form-group">
             @Html.LabelFor(model => model.userLeavePolicy.FiscalYearPeriod, "Fiscal Year Period", htmlAttributes: new { @class = " " })
@@ -243,63 +243,69 @@
         <div>
 
           @*@Html.DropDownList("SaleOrderDetail[" + sNo + "].SaleType", new SelectList(ViewBag.OptionLst, "Value", "Text", item.SaleType),
-                                          new { @class = "form-control", id = "saleType" + sNo })
-            @Html.DropDownListFor
+                                        new { @class = "form-control", id = "saleType" + sNo })
+          @Html.DropDownListFor
 
-            @Html.DropDownListFor(model => model.departments, Model.departments)
+          @Html.DropDownListFor(model => model.departments, Model.departments)
 
-            model => model.userLeavePolicy.WeeklyOffDays, "", new { @class = "text-danger" }
+          model => model.userLeavePolicy.WeeklyOffDays, "", new { @class = "text-danger" }
 
-            @Html.DropDownList*@
+          @Html.DropDownList*@
 
-
-          <input type="radio" name="PolicyFor" id="rdoDepartments" value="1" checked="@(ViewBag.DepStatus)">Countries
-
-          <input type="radio" name="PolicyFor" id="rdoEmployees" value="0" checked="@(ViewBag.EmpStatus)">Employees
+          <div class="DontShowInLeave"><input type="radio" name="PolicyFor" id="rdoDepartments" value="1" checked="@(ViewBag.DepStatus)">Countries</div>
+          <div class="DontShowInLeave"><input type="radio" name="PolicyFor" id="rdoEmployees" value="0" checked="@(ViewBag.EmpStatus)">Employees</div>
 
           @*@Html.RadioButtonFor(model => model.userLeavePolicy.DepartmentPolicy, "1", new { @checked = true })
-            @Html.RadioButtonFor(model => model.userLeavePolicy.DepartmentPolicy, "0", new { @checked = true })*@
+         @Html.RadioButtonFor(model => model.userLeavePolicy.DepartmentPolicy, "0", new { @checked = true })*@
 
 
           @*@Html.DropDownList("UserLeavePolicyDetail[" + sNo + "].LeaveTypeId", new SelectList(ViewBag.LeaveTypes, "Value", "Text", item.LeaveTypeId), null, new { @class = "form-control" })*@
 
-          <div id="divDep">
+          <div id="divDep" class="DontShowInLeave">
 
             @* DropDownList name should not be any of the ViewModel Class name other wise custom selection will not be select *@
             @* so that i change Departments to DepartmentList and same for Employees *@
             @Html.DropDownList("DepartmentList", new MultiSelectList(ViewBag.Departments, "Value", "Text", ViewBag.SelectedDepartments), htmlAttributes: new { @class = "form-control selectpicker", @id = "listDepartments", @multiple = "multiple", data_live_search = "true", data_actions_box = "true", data_done_button = "true" })
           </div>
 
-          <div id="divEmp" style="display: none;">
+          <div id="divEmp" style="display: none;" class="DontShowInLeave">
             @Html.DropDownList("EmployeeList", new MultiSelectList(ViewBag.Employees, "Value", "Text", ViewBag.SelectedEmployees), htmlAttributes: new { @class = "form-control selectpicker", @id = "listEmployees", @multiple = "multiple", data_live_search = "true", data_actions_box = "true", data_done_button = "true" })
           </div>
           @*
-            <select name="search-alias-us" id="com" class="searchSelect form-control" title="Search in">
-              <option value="aps" selected="selected">All Departments</option>
-              <option value="CS">CS</option>
-              <option value="ABC">ABC</option>
-            </select>
-            <select name="search-alias-ca" id="ca" class="searchSelect form-control" title="Search in">
-              <option value="aps" selected="selected">Employees</option>
-              <option value="Ali">Ali</option>
-              <option value="Ahmad">Ahmad</option>
-            </select>*@
+          <select name="search-alias-us" id="com" class="searchSelect form-control" title="Search in">
+            <option value="aps" selected="selected">All Departments</option>
+            <option value="CS">CS</option>
+            <option value="ABC">ABC</option>
+          </select>
+          <select name="search-alias-ca" id="ca" class="searchSelect form-control" title="Search in">
+            <option value="aps" selected="selected">Employees</option>
+            <option value="Ali">Ali</option>
+            <option value="Ahmad">Ahmad</option>
+          </select>*@
 
+          <div class="form-group">
+            @Html.LabelFor(model => model.userLeavePolicy.Remarks, htmlAttributes: new { @class = "control-label" })
+            <div class="col-md-10">
+              @Html.TextAreaFor(model => model.userLeavePolicy.Remarks, new { @class = "form-control", @rows = "4", @cols = "4", @placeholder = "Remarks..." })
+              @Html.ValidationMessageFor(model => model.userLeavePolicy.Remarks, "", new { @class = "text-danger" })
+            </div>
+          </div>
 
 
         </div>
-
+        
 
 
         <br />
-
-        <div class="form-group">
-          <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Update" class="btn btn-default btn-Md" style="background-color:#FFBB00;width: 180px; margin-left:auto;margin-right:auto;display:block;margin-top:auto;margin-bottom:0%" />
+        <div class="DontShowInLeave">
+          <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+              <input type="submit" value="Update" class="btn btn-default btn-Md" style="background-color:#FFBB00;width: 180px; margin-left:auto;margin-right:auto;display:block;margin-top:auto;margin-bottom:0%" />
+            </div>
           </div>
-        </div>
-        <div>
-          @Html.ActionLink("Back to List", "Index")
+          <div>
+            @Html.ActionLink("Back to List", "Index")
+          </div>
         </div>
       </div>
     </div>
@@ -320,9 +326,11 @@
     //$("#EditPage").children().prop('disabled', true);
     $("#EditPage *").prop('disabled', true);
     //$("#EditPage *").attr("disabled", "disabled");
+    
   }
   else {
       $('.DontShowInPolicy').hide();
   }
+  
 
 </script>

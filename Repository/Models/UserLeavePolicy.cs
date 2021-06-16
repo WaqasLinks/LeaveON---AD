@@ -34,6 +34,7 @@ namespace Repository.Models
         public Nullable<bool> DefaultPolicy { get; set; }
         public Nullable<int> CountryId { get; set; }
         public Nullable<bool> IsReset { get; set; }
+        public string Remarks { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AnnualOffDay> AnnualOffDays { get; set; }

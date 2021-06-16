@@ -86,14 +86,23 @@
                   </td>
 
                   <td>
-                    @Html.DisplayFor(modelItem => item.Department.Name)
+                    @if (item.Department != null)
+                    {
+                  @Html.DisplayFor(modelItem => item.Department.Name)}
+
                   </td>
                   <td>
-                    @Html.DisplayFor(modelItem => item.Country.Name)
-                  </td>
+                    @if (item.Country != null)
+                    {
+                      @Html.DisplayFor(modelItem => item.Country.Name)
+                    }
+                    </td>
                   <td>
-                    @Html.DisplayFor(modelItem => item.UserLeavePolicy.Description)
-                  </td>
+                    @if (item.UserLeavePolicy != null)
+                    {
+                      @Html.DisplayFor(modelItem => item.UserLeavePolicy.Description)
+                    }
+                    </td>
                   <td>
                     @Html.DisplayFor(modelItem => item.DateCreated)
                   </td>

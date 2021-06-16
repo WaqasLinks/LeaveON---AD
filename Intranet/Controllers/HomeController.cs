@@ -1,7 +1,9 @@
 ﻿using Repository.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Globalization;
@@ -16,6 +18,7 @@ namespace Intranet.Controllers
         private LeaveONEntities db = new LeaveONEntities();
         public ActionResult Index()
         {
+            Experiment1();
             List<string> loginsList = new List<string>();
             //string id1 = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             //string id4 = Request.LogonUserIdentity.Name;
@@ -41,26 +44,61 @@ namespace Intranet.Controllers
             string ReturnUrlValue = "/";
             string ADUserValue = currentUser.UserPrincipalName;//"hp";
             //return Redirect("http://localhost:44380/Account/Login?ReturnUrl=" + ReturnUrlValue + "&ADUser=" + ADUserValue); //this for development/testing
-            //http://lms.intechww.com/
-            return Redirect("http://lms.intechww.com:9902/Account/Login?ReturnUrl=" + ReturnUrlValue + "&ADUser=" + ADUserValue);//this for production
+            //http://lms-test.intechww.com/
+            //return Redirect("http://lms-test.intechww.com:9902/Account/Login?ReturnUrl=" + ReturnUrlValue + "&ADUser=" + ADUserValue);//this for production
+            //https://localhost:1002/Account/Login?ReturnUrl=/&ADUser=bsserviceaccount@intechww.com
+            return Redirect("https://lms.intechww.com:1002/Account/Login?ReturnUrl=" + ReturnUrlValue + "&ADUser=" + ADUserValue);//this for production
             //return Redirect("https://localhost:9902/Account/Login?ReturnUrl=" + ReturnUrlValue);
             //return Redirect("https://localhost:9902/");
             //return Redirect("http://localhost:9902/");
         }
-
-        public ActionResult About()
+        public void Experiment1()
         {
-            ViewBag.Message = "Your application description page.";
+            var path = Server.MapPath(@"~/UsersAndProperties.txt");
+            //List<User> users = new List<User>();
+            List<string> userprops = new List<string>();
+            try
+            {
+                DirectoryEntry root = new DirectoryEntry("LDAP://RootDSE");
+                root = new DirectoryEntry("LDAP://" + root.Properties["defaultNamingContext"][0]);
+                DirectorySearcher search = new DirectorySearcher(root);
+                search.Filter = "(&(objectClass=user)(objectCategory=person))";
 
-            return View();
+                //search.PropertiesToLoad.Add("samaccountname");
+                //search.PropertiesToLoad.Add("displayname");
+                //search.PropertiesToLoad.Add("mail");
+                //search.PropertiesToLoad.Add("telephoneNumber");
+                //search.PropertiesToLoad.Add("department");
+                //search.PropertiesToLoad.Add("title");
+
+                SearchResultCollection results = search.FindAll();
+                if (results != null)
+                {
+                    foreach (SearchResult result in results)
+                    {
+                        foreach (DictionaryEntry property in result.Properties)
+                        {
+                            //Debug.Write(property.Key + ": ");
+                            userprops.Add(property.Key + ": ");
+                            foreach (var val in (property.Value as ResultPropertyValueCollection))
+                            {
+                                //Debug.Write(val + "; ");
+                                userprops.Add(val + "; ");
+                            }
+                            //Debug.WriteLine("");
+                            userprops.Add(Environment.NewLine + "");
+                        }
+                        userprops.Add(Environment.NewLine + "------------------------------------");
+                    }
+                }
+                System.IO.File.WriteAllLines(path, userprops);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
+      
 
     }
 }

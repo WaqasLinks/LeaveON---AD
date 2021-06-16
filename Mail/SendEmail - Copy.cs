@@ -31,6 +31,7 @@ namespace LMS.Mail
 
             SmtpClient smtpServer = new SmtpClient("mail.smtp2go.com");
             // SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+            // SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
             // mail.smtp2go.com
             smtpServer.UseDefaultCredentials = false;
 
@@ -52,7 +53,7 @@ namespace LMS.Mail
                     case "LeaveRequest":
                         mail.Subject = sender.UserName + " posted a Leave request";
                         mail.Body = "Dear , " + receiver.UserName +
-                            Environment.NewLine + "I have sent you a leave request. kindly login to LeaveON account " + "http://lms.intechww.com:9902/LeavesResponse/Index" + " for detail." +
+                            Environment.NewLine + "I have sent you a leave request. kindly login to LeaveON account " +  " for detail." +
                             Environment.NewLine + leave1.LeaveType.Name +
                             Environment.NewLine + leave1.Reason +
                             Environment.NewLine + leave1.StartDate +
@@ -67,7 +68,7 @@ namespace LMS.Mail
 
                         mail.Subject = sender.UserName + " posted a Leave response";
                         mail.Body = "Dear " + receiver.UserName + "," +
-                            Environment.NewLine + "I have just sent you feed back regarding your leave request. kindly login to LeaveON account  " + "http://lms.intechww.com:9902/LeavesRequest/Index" + " for detail." +
+                            Environment.NewLine + "I have just sent you feed back regarding your leave request. kindly login to LeaveON account  " + "http://lms.intechww.com:1002/LeavesRequest/Index" + " for detail." +
                              Environment.NewLine + leave1.LeaveType.Name +
                            
                             Environment.NewLine + leave1.Reason +
