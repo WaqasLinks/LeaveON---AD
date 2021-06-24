@@ -2,13 +2,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Diagnostics;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
-using System.Globalization;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Intranet.Controllers
@@ -18,7 +13,7 @@ namespace Intranet.Controllers
         private LeaveONEntities db = new LeaveONEntities();
         public ActionResult Index()
         {
-            Experiment1();
+            //Experiment1();
             List<string> loginsList = new List<string>();
             //string id1 = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             //string id4 = Request.LogonUserIdentity.Name;

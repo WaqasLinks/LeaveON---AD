@@ -91,12 +91,12 @@
     });
   </script>
   @*<style>
-    .required:after {
-      content: "*";
-      color: red;
+      .required:after {
+        content: "*";
+        color: red;
 
-    }
-  </style>*@
+      }
+    </style>*@
 
 
 </head>
@@ -363,12 +363,12 @@
                         <p>Users List</p>
                       </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="/Account/Register" class="nav-link">
-                          &nbsp; &nbsp; <i class="far fa fa-edit"></i>
-                          <p>Register User</p>
-                        </a>
-                      </li>
+                    @*<li class="nav-item">
+                      <a href="/Account/Register" class="nav-link">
+                        &nbsp; &nbsp; <i class="far fa fa-edit"></i>
+                        <p>Register User</p>
+                      </a>
+                    </li>*@
                   </ul>
                 </li>
               }
@@ -384,17 +384,21 @@
                   </a>
                   <ul class="nav nav-treeview">
                     <li class="nav-item">
-                      <a href="/Departments/Index" class="nav-link">
+                      @*<a href="/Departments/Index" class="nav-link">
+                          &nbsp; &nbsp; <i class="far fa fa-list"></i>
+                          <p>Departments List</p>
+                        </a>*@
+                      <a href="/DepartmentNames/Index" class="nav-link">
                         &nbsp; &nbsp; <i class="far fa fa-list"></i>
                         <p>Departments List</p>
                       </a>
                     </li>
-                    <li class="nav-item">
-                      <a href="/Departments/Create" class="nav-link">
-                        &nbsp; &nbsp; <i class="far fa fa-edit"></i>
-                        <p>Add Department</p>
-                      </a>
-                    </li>
+                    @*<li class="nav-item">
+                        <a href="/Departments/Create" class="nav-link">
+                          &nbsp; &nbsp; <i class="far fa fa-edit"></i>
+                          <p>Add Department</p>
+                        </a>
+                      </li>*@
                   </ul>
                 </li>
               }
@@ -494,8 +498,14 @@
                           <p>Personal Data</p>
                         </a>
                       </li>*@
-                    <li class="nav-item">
+                    @*<li class="nav-item">
                       <a href="/AccessTimeData/UserData" class="nav-link">
+                        &nbsp; &nbsp;  <i class="far fa fa-history"></i>
+                        <p>User Data</p>
+                      </a>
+                    </li>*@
+                    <li class="nav-item">
+                      <a href="/AccessBiostarAC/UserData" class="nav-link">
                         &nbsp; &nbsp;  <i class="far fa fa-history"></i>
                         <p>User Data</p>
                       </a>

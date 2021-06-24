@@ -18,6 +18,7 @@ namespace LeaveON.Models
         public int? BioStarEmpNum { get; set; }
         public int?  UserLeavePolicyId { get; set; }
         public bool? IsActive { get; set; }
+        public string DepartmentName { get; set; }
 
     public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

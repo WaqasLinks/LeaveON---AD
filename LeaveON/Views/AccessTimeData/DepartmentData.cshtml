@@ -38,11 +38,11 @@
 
           $('#load').click(function () {
             var ReqMonthYear = $('#selectMonth').val();
-            var DepartmentId = $('#listDepartments').val();
+            var DepartmentName = $('#listDepartments').val();
 
              $.ajax({
                     url: "@Url.Action("DepartmentData","AccessTimeData")",
-                    data: { 'ReqMonthYear': ReqMonthYear, 'DepartmentId': DepartmentId },
+               data: { 'ReqMonthYear': ReqMonthYear, 'DepartmentName': DepartmentName },
                     type: "GET",
                     cache: false,
                     success: function (data) {

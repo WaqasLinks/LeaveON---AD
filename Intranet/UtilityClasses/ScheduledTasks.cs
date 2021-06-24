@@ -5,13 +5,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
 using Repository.Models;
 
 using System.Web.Configuration;
@@ -19,10 +13,9 @@ using System.Timers;
 using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices;
-using System.Globalization;
-using System.IO;
 using System.DirectoryServices.ActiveDirectory;
-using System.Collections;
+using System.Reflection;
+using System.Globalization;
 
 namespace LeaveON.UtilityClasses
 {
@@ -74,11 +67,11 @@ namespace LeaveON.UtilityClasses
 
             }
         }
-        
+
         public void Experiment()
         {
             var context = new DirectoryContext(DirectoryContextType.Forest, "intechww.com");
-            List<string> Lstabc1= new List<string>();
+            List<string> Lstabc1 = new List<string>();
             using (var schema = System.DirectoryServices.ActiveDirectory.ActiveDirectorySchema.GetSchema(context))
             {
                 var userClass = schema.FindClass("user");
@@ -88,7 +81,7 @@ namespace LeaveON.UtilityClasses
                     var abc = property.Name;
                     if (property.Name.ToLower().Contains("region"))
                     {
-                        
+
                         Lstabc1.Add(property.Name);
                     }
                     // property.Name is what you're looking for
@@ -112,7 +105,7 @@ namespace LeaveON.UtilityClasses
                 {
 
                     /////////////find in app database
-                    
+
                     var AllIntechUsers = searcher.FindAll();
                     List<AspNetUser> LstAspNetUsers = db.AspNetUsers.ToList<AspNetUser>();
 
@@ -140,8 +133,10 @@ namespace LeaveON.UtilityClasses
 
                     //}
                     //-------
-
+                    DateTime DateMark = DateTime.ParseExact("30/12/2019", "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    DateTime lastLogonStr;
                     AuthenticablePrincipal auth;
+                    List<string> departmentsList = new List<string>();
                     foreach (var result in AllIntechUsers)
                     {
                         DirectoryEntry de = result.GetUnderlyingObject() as DirectoryEntry;
@@ -159,9 +154,9 @@ namespace LeaveON.UtilityClasses
                         auth = result as AuthenticablePrincipal;
                         if (auth != null && auth.UserPrincipalName != null && auth.UserPrincipalName.ToLower().Contains("kashif.ali@intechww.com"))
                         {
-                            //loginsList.Add(auth.UserPrincipalName + "," + auth.Enabled);
+                            //////loginsList.Add(auth.UserPrincipalName + "," + auth.Enabled);
                             goInto = true;
-                            //var abc = auth.UserPrincipalName;
+                            //////var abc = auth.UserPrincipalName;
                         }
                         if (auth == null || auth.UserPrincipalName == null || string.IsNullOrEmpty(auth.UserPrincipalName) || auth.Enabled == false)
                         {
@@ -191,31 +186,86 @@ namespace LeaveON.UtilityClasses
                         //{
                         //    continue;
                         //}
-                        
+
                         ////////////////
                         //if (goInto==true)
                         //{
+                        //var anyvalue = de.Properties["LastLogon"].Value.ToString();
 
+                        //long lastLogon = (long)de.Properties["lastLogon"][0];
+                        //DateTime dtLastLogon = DateTime.FromFileTime(lastLogon);
+
+                        //var lastLogOn = DateTime.FromFileTime((long)de.Properties["lastLogon"][0]);
+
+                        object adsLargeInteger = de.Properties["lastLogon"].Value;
+                        if (adsLargeInteger == null)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            long highPart =
+                                   (Int32)
+                                       adsLargeInteger.GetType()
+                                           .InvokeMember("HighPart", BindingFlags.GetProperty, null, adsLargeInteger, null);
+                            long lowPart =
+                                       (Int32)
+                                           adsLargeInteger.GetType()
+                                               .InvokeMember("LowPart", BindingFlags.GetProperty, null, adsLargeInteger, null);
+                            long lastLogonL = (long)((uint)lowPart + (((long)highPart) << 32)); // Get value as long
+                            lastLogonStr = DateTime.FromFileTime(lastLogonL); // get value as DateTime string
+
+                        }
+
+                        //TimeSpan TimeDifference = LastLogon - DateMarker;
+                        if (lastLogonStr > DateMark)
+                        {
+                            departmentsList.Add(Convert.ToString(de.Properties["department"].Value));
                             AspNetUser aspNetUser = LstAspNetUsers.FirstOrDefault(x => x.UserName.Replace(" ", "").ToUpper() == auth.UserPrincipalName.Replace(" ", "").ToUpper());
                             goInto = false;
+                            
                             if (aspNetUser == null)
                             {//Insert
-                                //it means if user is created before "01/01/2019" then totaDays will be in minus. so not add very old users. only add new users. which are after "01/01/2019"
-                                //this is just to fast the process
-                                //if (TimeDifference.TotalDays < 0) continue;
+                             //it means if user is created before "01/01/2019" then totaDays will be in minus. so not add very old users. only add new users. which are after "01/01/2019"
+                             //this is just to fast the process
+                             //if (TimeDifference.TotalDays < 0) continue;
                                 insertedEmp += 1;
                                 InsertEmployee(de);
+                                
+
                             }
                             else
                             {//Update
-                                if (aspNetUser.IsActive != IsActive(de))
+                                if (aspNetUser.IsActive != IsActive(de) || string.IsNullOrEmpty(aspNetUser.DepartmentName))
                                 {
                                     UpdateEmployee(aspNetUser, de);
                                 }
                             }
+                        }
                         //}
                         ////////////////////////////
                     }
+                    //add department name which does not exist in LMS-DB
+                    List<string> distinctDepartmentNames = departmentsList.Distinct().ToList();
+                    foreach (string itm in distinctDepartmentNames)
+                    {
+                        DepartmentName departmentName = db.DepartmentNames.FirstOrDefault(x => x.Name == itm);
+                        if (departmentName == null && !string.IsNullOrEmpty(itm.Trim()))
+                        {
+                            departmentName = new DepartmentName() { Name = itm };
+                            db.DepartmentNames.Add(departmentName);
+                        }
+                    }
+                    //remove department name which does not exist in AD
+                    foreach (var itm in db.DepartmentNames.ToList())
+                    {
+                       string foundName = distinctDepartmentNames.FirstOrDefault(x => x == itm.Name);
+                        if (string.IsNullOrEmpty(foundName))
+                        {
+                            db.DepartmentNames.Remove(itm);
+                        }
+                    }
+                        db.SaveChanges();
 
                     //System.IO.File.WriteAllLines(path, loginsList);
                     ////////////////////////////now find in AD
@@ -282,6 +332,7 @@ namespace LeaveON.UtilityClasses
             emp.AccessFailedCount = 0;
             emp.DateCreated = DateTime.Now;
             emp.DepartmentId = 1000; //Anonymous Users
+            emp.DepartmentName = Convert.ToString(de.Properties["department"].Value);
             emp.IsActive = IsActive(de);
 
             db.AspNetUsers.Add(emp);
@@ -294,8 +345,11 @@ namespace LeaveON.UtilityClasses
             //emp = new AspNetUser();
             //emp.IsActive = IsActive(de);
             oldEmp.IsActive = IsActive(de);
+            oldEmp.DepartmentName = Convert.ToString(de.Properties["department"].Value);
             db.AspNetUsers.Attach(oldEmp);
+
             db.Entry(oldEmp).Property(x => x.IsActive).IsModified = true;
+            db.Entry(oldEmp).Property(x => x.DepartmentName).IsModified = true;
             //db.SaveChangesAsync();
             db.SaveChanges();
             //db.Entry(emp).State = EntityState.Modified;

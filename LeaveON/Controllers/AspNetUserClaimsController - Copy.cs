@@ -20,7 +20,7 @@ namespace LeaveON.Controllers
     {
       ViewBag.Employees = new SelectList(db.AspNetUsers.OrderBy(x=>x.UserName), "Id", "UserName");
       //ViewBag.LeaveTypes = new SelectList(db.LeaveTypes, "Id", "Name");
-      ViewBag.Departments = new SelectList(db.DepartmentNames.OrderBy(x=>x.Name), "Name", "Name");
+      ViewBag.Departments = new SelectList(db.Departments.OrderBy(x=>x.Name), "Id", "Name");
       var aspNetUserClaims = db.AspNetUserClaims.Include(a => a.AspNetUser);
       return View(await aspNetUserClaims.ToListAsync());
     }
@@ -31,7 +31,7 @@ namespace LeaveON.Controllers
     {
       if (ModelState.IsValid)
       {
-        aspNetUserClaim.ClaimType = db.DepartmentNames.FirstOrDefault(x => x.Name.ToString() == aspNetUserClaim.ClaimValue).Name;
+        aspNetUserClaim.ClaimType = db.Departments.FirstOrDefault(x => x.Id.ToString() == aspNetUserClaim.ClaimValue).Name;
         db.AspNetUserClaims.Add(aspNetUserClaim);
         await db.SaveChangesAsync();
         return RedirectToAction("Index");

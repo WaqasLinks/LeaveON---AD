@@ -49,7 +49,7 @@ namespace LeaveON.Controllers
 
     }
 
-    public async Task<ActionResult> DepartmentData(string ReqMonthYear, string DepartmentName)
+    public async Task<ActionResult> DepartmentData(string ReqMonthYear, string DepartmentId)
     {
 
 
@@ -58,11 +58,11 @@ namespace LeaveON.Controllers
       //                                 System.Globalization.CultureInfo.InvariantCulture);
       ViewBag.MonthSelectList = GetMonthSelectList();
       DateTime reqDate;
-      //int intDepartmentId;
+      int intDepartmentId;
       if (!string.IsNullOrEmpty(ReqMonthYear))
       {
 
-        //intDepartmentId = int.Parse(DepartmentId);
+        intDepartmentId = int.Parse(DepartmentId);
         //user.DepartmentId;//User.Identity.GetUserId();//
         reqDate = DateTime.ParseExact(ReqMonthYear, "MM-yyyy",
                                  System.Globalization.CultureInfo.CurrentCulture);
@@ -74,19 +74,19 @@ namespace LeaveON.Controllers
 
         reqDate = DateTime.Now;
         string userId = User.Identity.GetUserId();
-        DepartmentName = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.Id == userId).DepartmentName;
+        intDepartmentId = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.Id == userId).DepartmentId.Value;
         List<string> SelectedDeps = new List<string>();
-        SelectedDeps.Add(DepartmentName);
+        SelectedDeps.Add(intDepartmentId.ToString());
         ViewBag.SelectedDepartments = SelectedDeps;
-        //ViewBag.Departments = new SelectList(dbLeaveOn.Departments, "Id", "Name");
-        ViewBag.Departments = new SelectList(dbLeaveOn.DepartmentNames, "Name", "Name");
+        ViewBag.Departments = new SelectList(dbLeaveOn.Departments, "Id", "Name");
+
       }
       IQueryable<UD_TB_AccessTime_Data> depData = null;
       if (!string.IsNullOrEmpty(ReqMonthYear))
       {
         var identity = (ClaimsIdentity)User.Identity;
         IEnumerable<Claim> claims = identity.Claims;
-        Claim claim = claims.Where(x => x.Value == DepartmentName).FirstOrDefault();
+        Claim claim = claims.Where(x => x.Value == DepartmentId).FirstOrDefault();
 
         if (claim is null) return null;
 
@@ -97,7 +97,7 @@ namespace LeaveON.Controllers
         //int bioStarEmpNum = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.Id == userId).BioStarEmpNum.Value;
 
         //IQueryable<UD_TB_AccessTime_Data> allUsersData = null;
-        List<AspNetUser> users = dbLeaveOn.AspNetUsers.Where(x => x.DepartmentName == DepartmentName).ToList<AspNetUser>();
+        List<AspNetUser> users = dbLeaveOn.AspNetUsers.Where(x => x.DepartmentId == intDepartmentId).ToList<AspNetUser>();
 
         List<int> userIds = users.Select(x => x.BioStarEmpNum.Value).ToList<int>();
         //foreach (AspNetUser user in users)
@@ -155,7 +155,7 @@ namespace LeaveON.Controllers
       //DateTime myDate = DateTime.ParseExact("2009-05-08 14:40:52,531", "yyyy-MM-dd HH:mm:ss,fff",
       //                                 System.Globalization.CultureInfo.InvariantCulture);
 
-
+    
       ViewBag.MonthSelectList = GetMonthSelectList();
       //ViewBag.SelectedMonth = monthSelectList[0];
       DateTime reqDate;
@@ -167,7 +167,7 @@ namespace LeaveON.Controllers
         //user.DepartmentId;//User.Identity.GetUserId();//
         reqDate = DateTime.ParseExact(ReqMonthYear, "MM-yyyy",
                                  System.Globalization.CultureInfo.CurrentCulture);
-        reqDate=reqDate.AddYears(-2);
+
       }
       else
       {
@@ -225,44 +225,40 @@ namespace LeaveON.Controllers
         List<UD_TB_AccessTime_Data> leaveDays = new List<UD_TB_AccessTime_Data>();
 
         string empName = users[0].UserName;
-        empName = empName.Substring(0, empName.IndexOf('@')).Replace("."," ");
-        //string biostarEmpName = LstEmpData[0].EmployeeName;
+        string biostarEmpName = LstEmpData[0].EmployeeName;
         int iEmpNum = users[0].BioStarEmpNum.Value;
-        if (users[0].UserLeavePolicyId != null)
+        int UserLeavePolicyId = users[0].UserLeavePolicyId.Value;
+        foreach (Leave leave in thisMonthsLeaves)
         {
-          int UserLeavePolicyId = users[0].UserLeavePolicyId.Value;
-          foreach (Leave leave in thisMonthsLeaves)
-          {
-            for (int i = 0; i < leave.TotalDays; i++)
-            {
-              UD_TB_AccessTime_Data accessTime_Data = new UD_TB_AccessTime_Data
-              {
-                EmployeeName = empName,
-                EmployeeNumber = leave.AspNetUser.BioStarEmpNum,
-                Date_IN = leave.StartDate.AddDays(i),
-                Day_IN = leave.StartDate.AddDays(i).ToString("dddd"),
-                Status = leave.Reason
-              };
-              leaveDays.Add(accessTime_Data);
-            }
-          }
-
-          //get natioanl off days
-          foreach (AnnualOffDay annualOffDay in dbLeaveOn.AnnualOffDays.Where(x => x.OffDay.Value.Month == reqDate.Month && x.OffDay.Value.Year == reqDate.Year && x.UserLeavePolicyId == UserLeavePolicyId).ToList<AnnualOffDay>())
+          for (int i = 0; i < leave.TotalDays; i++)
           {
             UD_TB_AccessTime_Data accessTime_Data = new UD_TB_AccessTime_Data
             {
-              EmployeeName = empName,
-              EmployeeNumber = iEmpNum,
-              Date_IN = annualOffDay.OffDay,
-              Day_IN = annualOffDay.OffDay.Value.ToString("dddd"),
-              Status = annualOffDay.Description
+              EmployeeName = biostarEmpName,
+              EmployeeNumber = leave.AspNetUser.BioStarEmpNum,
+              Date_IN = leave.StartDate.AddDays(i),
+              Day_IN = leave.StartDate.AddDays(i).ToString("dddd"),
+              Status = leave.Reason
             };
-            //dayCntr += 1;
             leaveDays.Add(accessTime_Data);
           }
-          LstEmpData.AddRange(leaveDays);
         }
+
+        //get natioanl off days
+        foreach (AnnualOffDay annualOffDay in dbLeaveOn.AnnualOffDays.Where(x => x.OffDay.Value.Month == reqDate.Month && x.OffDay.Value.Year == reqDate.Year && x.UserLeavePolicyId == UserLeavePolicyId).ToList<AnnualOffDay>())
+        {
+          UD_TB_AccessTime_Data accessTime_Data = new UD_TB_AccessTime_Data
+          {
+            EmployeeName = biostarEmpName,
+            EmployeeNumber = iEmpNum,
+            Date_IN = annualOffDay.OffDay,
+            Day_IN = annualOffDay.OffDay.Value.ToString("dddd"),
+            Status = annualOffDay.Description
+          };
+          //dayCntr += 1;
+          leaveDays.Add(accessTime_Data);
+        }
+        LstEmpData.AddRange(leaveDays);
       }
       //return View(await db.UD_TB_AccessTime_Data.ToListAsync());
       if (string.IsNullOrEmpty(ReqMonthYear))

@@ -45,6 +45,7 @@ namespace Repository.Models
         public Nullable<int> UserLeavePolicyId { get; set; }
         public Nullable<int> CountryId { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public string DepartmentName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
