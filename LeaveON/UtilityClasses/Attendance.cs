@@ -12,7 +12,7 @@ namespace LeaveON.UtilityClasses
     [Key]
     public int Sr { get; set; }
     public string EmployeeName { get; set; }
-    public string EmployeeNumber { get; set; }
+    public int EmployeeNumber { get; set; }
 
     [DisplayFormat(DataFormatString = "{0: dd/MM/yyyy}")]
     public DateTime Date { get; set; }

@@ -2326,6 +2326,7 @@
     <Content Include="Views\Attendances\Index.cshtml" />
     <Content Include="Views\AccessBiostarAC\_UserData.cshtml" />
     <Content Include="Views\AccessBiostarAC\OffTimeDetail.cshtml" />
+    <Content Include="Views\AccessBiostarAC\DepartmentData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

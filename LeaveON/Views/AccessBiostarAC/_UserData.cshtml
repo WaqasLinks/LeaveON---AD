@@ -100,7 +100,7 @@
                                 @{ 
                                     if (String.IsNullOrEmpty(item.Status))
                                     {
-                                      @Html.ActionLink("Detail", "ConnectToDBandReturnOffHours", new { ReqMonthYear = @ViewBag.ReqMonthYear, UserId = @ViewBag.UserId, reqDate= item.Date.ToString("dd-MM-yyyy") }, new { target = "_blank" }) 
+                                      @Html.ActionLink("Detail", "ConnectToDBandReturnOffHours", new { reqDate = item.Date.ToString("dd-MM-yyyy"), UserId = item.EmployeeNumber}, new { target = "_blank" }) 
                                     }
                                   else
                                     {

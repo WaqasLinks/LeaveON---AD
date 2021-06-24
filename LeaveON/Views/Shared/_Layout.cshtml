@@ -513,8 +513,14 @@
 
                     @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                     {
-                      <li class="nav-item">
+                      @*<li class="nav-item">
                         <a href="/AccessTimeData/DepartmentData" class="nav-link">
+                          &nbsp; &nbsp;  <i class="far fa fa-building"></i>
+                          <p>Department Data</p>
+                        </a>
+                      </li>*@
+                      <li class="nav-item">
+                        <a href="/AccessBiostarAC/DepartmentData" class="nav-link">
                           &nbsp; &nbsp;  <i class="far fa fa-building"></i>
                           <p>Department Data</p>
                         </a>
