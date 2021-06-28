@@ -138,7 +138,7 @@
             </div>
 
             @Html.LabelFor(model => model.Remarks1, "Remarks", htmlAttributes: new { @class = " " })
-            @Html.EditorFor(model => model.Remarks1, new { htmlAttributes = new { @class = "form-control diff", @id = "diff1"} })
+            @Html.EditorFor(model => model.Remarks1, new { htmlAttributes = new { @class = "form-control diff", @id = "diff1", placeholder = "Enter numaric value" } })
             @Html.ValidationMessageFor(model => model.Remarks1, "", new { @class = "text-danger" })
           </div>
 
@@ -188,7 +188,7 @@
 
             @Html.LabelFor(model => model.Remarks2, "Remarks", htmlAttributes: new { @class = " " })
 
-            @Html.EditorFor(model => model.Remarks2, new { htmlAttributes = new { @class = "form-control diff", @id = "diff2"} })
+            @Html.EditorFor(model => model.Remarks2, new { htmlAttributes = new { @class = "form-control diff", @id = "diff2", placeholder = "Enter numaric value" } })
             @Html.ValidationMessageFor(model => model.Remarks2, "", new { @class = "text-danger" })
 
           </div>
@@ -230,6 +230,13 @@
   });
 
   $(document).ready(function () {
+
+    $("#Remarks1,#Remarks2").keypress(function (e) {
+      var charCode = (e.which) ? e.which : e.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+      }
+    });
 
     //$(".diff").numeric();
     $(".diff").keypress(function (e){

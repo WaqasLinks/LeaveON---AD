@@ -223,7 +223,7 @@ namespace LeaveON.UtilityClasses
                             departmentsList.Add(Convert.ToString(de.Properties["department"].Value));
                             AspNetUser aspNetUser = LstAspNetUsers.FirstOrDefault(x => x.UserName.Replace(" ", "").ToUpper() == auth.UserPrincipalName.Replace(" ", "").ToUpper());
                             goInto = false;
-                            
+
                             if (aspNetUser == null)
                             {//Insert
                              //it means if user is created before "01/01/2019" then totaDays will be in minus. so not add very old users. only add new users. which are after "01/01/2019"
@@ -231,7 +231,7 @@ namespace LeaveON.UtilityClasses
                              //if (TimeDifference.TotalDays < 0) continue;
                                 insertedEmp += 1;
                                 InsertEmployee(de);
-                                
+
 
                             }
                             else
@@ -259,13 +259,14 @@ namespace LeaveON.UtilityClasses
                     //remove department name which does not exist in AD
                     foreach (var itm in db.DepartmentNames.ToList())
                     {
-                       string foundName = distinctDepartmentNames.FirstOrDefault(x => x == itm.Name);
+                        string foundName = distinctDepartmentNames.FirstOrDefault(x => x == itm.Name);
                         if (string.IsNullOrEmpty(foundName))
                         {
                             db.DepartmentNames.Remove(itm);
                         }
                     }
-                        db.SaveChanges();
+                    
+                    db.SaveChanges();
 
                     //System.IO.File.WriteAllLines(path, loginsList);
                     ////////////////////////////now find in AD

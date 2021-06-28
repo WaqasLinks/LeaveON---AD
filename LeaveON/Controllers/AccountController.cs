@@ -96,12 +96,12 @@ namespace LeaveON.Controllers
         {
           case "Admin":
             await UserManager.AddToRoleAsync(userRoleModel.UserId, "Admin");
-            //await UserManager.AddToRoleAsync(userRoleModel.UserId, "Manager");
+            await UserManager.AddToRoleAsync(userRoleModel.UserId, "Manager");
             await UserManager.AddToRoleAsync(userRoleModel.UserId, "User");
             break;
           case "Manager":
             await UserManager.AddToRoleAsync(userRoleModel.UserId, "Manager");
-            //await UserManager.AddToRoleAsync(userRoleModel.UserId, "User");
+            await UserManager.AddToRoleAsync(userRoleModel.UserId, "User");
             break;
           case "User":
             await UserManager.AddToRoleAsync(userRoleModel.UserId, "User");
@@ -168,7 +168,8 @@ namespace LeaveON.Controllers
     {
       //ADUser = "bsserviceaccount@intechww.com";
       //ADUser = "Ahsan.Ahmad@intechww.com";
-      ADUser = "muzammil.riaz@intechww.com";
+      //ADUser = "muzammil.riaz@intechww.com";
+      ADUser = "waqqasjavaid@gmail.com";
       //ADUser = "testing@intechww.com";
       //ADUser = "kashif.ali@intechww.com";
       //ali.raza@intechww.com
@@ -268,7 +269,7 @@ namespace LeaveON.Controllers
       switch (result)
       {
         case SignInStatus.Success:
-          return RedirectToLocal(returnUrl);
+          return Redirect(returnUrl);
         //return RedirectToAction("Index", "LeavesRequest");
         case SignInStatus.LockedOut:
           return View("Lockout");
