@@ -53,7 +53,7 @@ namespace LMS.Mail
                     case "LeaveRequest":
                         mail.Subject = sender.UserName + " posted a Leave request";
                         mail.Body = "Dear , " + receiver.UserName +
-                            Environment.NewLine + "I have sent you a leave request. kindly login to LeaveON account " +  " for detail." +
+                            Environment.NewLine + "I have sent you a leave request. kindly login to LeaveON account " + " for detail." +
                             Environment.NewLine + leave1.LeaveType.Name +
                             Environment.NewLine + leave1.Reason +
                             Environment.NewLine + leave1.StartDate +
@@ -68,9 +68,12 @@ namespace LMS.Mail
 
                         mail.Subject = sender.UserName + " posted a Leave response";
                         mail.Body = "Dear " + receiver.UserName + "," +
-                            Environment.NewLine + "I have just sent you feed back regarding your leave request. kindly login to LeaveON account  " + "http://lms.intechww.com:1002/LeavesRequest/Index" + " for detail." +
+                            Environment.NewLine + "I have just sent you feed back regarding your leave request. kindly login to LeaveON account  " +
+                            //"http://lms.intechww.com:1002/LeavesRequest/Index" + " for detail." +
+                            //https://localhost:44339/?ReturnUrl=https://localhost:44380/LeavesResponse/Edit/60
+                            "http://lms.intechww.com:1001/?ReturnUrl=https://lms.intechww.com:1002/LeavesResponse/Edit/" + leave1.Id + " for detail." +
                              Environment.NewLine + leave1.LeaveType.Name +
-                           
+
                             Environment.NewLine + leave1.Reason +
                             Environment.NewLine + leave1.StartDate +
                             Environment.NewLine + leave1.EndDate +

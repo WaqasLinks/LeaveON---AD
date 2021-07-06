@@ -30,17 +30,19 @@ namespace LeaveON.Controllers
       SqlConnection con = new SqlConnection(connection);
       SqlCommand cmd;
       SqlDataReader dr;
-      List<Attendance> LstAttendances =new List<Attendance>();
+      List<Attendance> LstAttendances = new List<Attendance>();
       TimeSpan TotalTime = new TimeSpan();
       TimeSpan TotalWorkingHours = new TimeSpan();
-      string UserName=string.Empty;
+      string UserName = string.Empty;
+      DateTime reqDate = DateTime.ParseExact(dateAttr[1] + "/" + dateAttr[0] + "/01", "yyyy/MM/dd", CultureInfo.InvariantCulture);
+      int ThisMonthTotalDays = DateTime.DaysInMonth(int.Parse(dateAttr[1]), int.Parse(dateAttr[0]));
       con.Open();
       foreach (int Id in UserIds)
       {
         int UserId = Id;
         //cmd = new SqlCommand("select * from T_LG202106 where USRID = '9919' and SRVDT>= '2021-06-01' AND SRVDT<= '2021-06-30' order by EVTLGUID", con);
         //cmd = new SqlCommand("select * from T_LG201901 where USRID = '2205' order by EVTLGUID", con);
-        cmd = new SqlCommand("select * from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId +  "' order by EVTLGUID", con);
+        cmd = new SqlCommand("select * from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' order by EVTLGUID", con);
         dr = cmd.ExecuteReader();
         DataTable dt = new DataTable();
         dt.Load(dr);
@@ -49,41 +51,57 @@ namespace LeaveON.Controllers
         DateTime LastDate = (DateTime)dt.Rows[rowsCount - 1]["SRVDT"];
         DateTime thisDateTime = (DateTime)dt.Rows[0]["SRVDT"];
         int thisDay = thisDateTime.Day;
-
         int LastDay = LastDate.Day;
-        
+        int dayCounter = 1;
+        List<int> LstEmptyDays = new List<int>();
         //---
         Attendance attendance;
         DateTime timeIn;
         DateTime timeOut;
         DateTime FirsTimeIn = DateTime.Today;
         DateTime LastTimeOut = DateTime.Today;
-        
+        DateTime blankDateTime = DateTime.Today;
+        int EmptyDays = 0;
         bool IsFirstDone = false;
         TimeSpan ThidDayWorkingHours = new TimeSpan();
-        
+        //for (int k = dayCounter; k < thisDay; k++)
+        //{
+        //  LstEmptyDays.Add(k);
+        //}
+        AspNetUser aspNetUser = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId);
+        UserName = aspNetUser.UserName.Substring(0, aspNetUser.UserName.IndexOf('@')).Replace(".", " ");
         for (int j = 0; j <= rowsCount - 1; j++)
         {
+
           thisDateTime = (DateTime)dt.Rows[j]["SRVDT"];
+
           if (thisDateTime.Day != thisDay)
           {//its mean new date started. so add all previois date calcuation here and add to list
+
             TotalTime = TotalTime.Add(LastTimeOut - FirsTimeIn);
-            UserName = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId).UserName;
-            UserName = UserName.Substring(0, UserName.IndexOf('@')).Replace(".", " ");
+            //UserName = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId).UserName;
+            //UserName = UserName.Substring(0, UserName.IndexOf('@')).Replace(".", " ");
             attendance = new Attendance() { EmployeeName = UserName, EmployeeNumber = UserId, Date = FirsTimeIn.Date, Day = FirsTimeIn.DayOfWeek.ToString(), TimeIn = FirsTimeIn, TimeOut = LastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (LastTimeOut - FirsTimeIn) };
             LstAttendances.Add(attendance);
             TotalWorkingHours = TotalWorkingHours.Add(ThidDayWorkingHours);
-            thisDay = thisDateTime.Day;
 
             //reIntiallize variables to next date calculations
             ThidDayWorkingHours = new TimeSpan();
             IsFirstDone = false;
+            for (int k = dayCounter; k < thisDay; k++)
+            {
+              LstEmptyDays.Add(k);
+            }
+            dayCounter = thisDay + 1;
+            thisDay = thisDateTime.Day;
+
+
           }
           if (IsFirstDone == false && (int)dt.Rows[j]["TNAKEY"] == 1)
           {//get first time in
             FirsTimeIn = (DateTime)dt.Rows[j]["SRVDT"];
             IsFirstDone = true;
-            UserId = Convert.ToInt32( dt.Rows[j]["USRID"]);
+            UserId = Convert.ToInt32(dt.Rows[j]["USRID"]);
           }
           if ((int)dt.Rows[j]["TNAKEY"] == 2)
           {//get last time out
@@ -107,20 +125,93 @@ namespace LeaveON.Controllers
         attendance = new Attendance() { EmployeeName = UserName, EmployeeNumber = UserId, Date = FirsTimeIn.Date, Day = FirsTimeIn.DayOfWeek.ToString(), TimeIn = FirsTimeIn, TimeOut = LastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (LastTimeOut - FirsTimeIn) };
         LstAttendances.Add(attendance);
         TotalWorkingHours = TotalWorkingHours.Add(ThidDayWorkingHours);
+        dayCounter = thisDay + 1;
+        for (int k = dayCounter; k <= ThisMonthTotalDays; k++)
+        {
+          LstEmptyDays.Add(k);
+        }
 
+        //----------------------
+        //int LastDayOfMonth = DateTime.DaysInMonth(reqDate.Year, reqDate.Month);
+        //IQueryable<Leave> thisMonthsLeaves = dbLeaveOn.Leaves.Where(x => x.StartDate.Day >= 1 && x.EndDate.Day <= LastDayOfMonth && x.StartDate.Year == reqDate.Year && x.UserId == users[0].Id).AsQueryable<Leave>();
+        //IQueryable<Leave> thisMonthsLeaves = dbLeaveOn.Leaves.Where(x => x.StartDate.Day >= 1 && x.EndDate.Day <= LastDayOfMonth && x.StartDate.Month == reqDate.Month && x.StartDate.Year == reqDate.Year && x.UserId == users[0].Id).AsQueryable<Leave>();
+        List<Leave> thisMonthsLeaves = dbLeaveOn.Leaves.Where(x => x.StartDate.Day >= 1 && x.EndDate.Day <= ThisMonthTotalDays && x.StartDate.Month == reqDate.Month && x.StartDate.Year == reqDate.Year && x.UserId == aspNetUser.Id).ToList<Leave>();
+        //List<Leave> thisMonthsLeaves = dbLeaveOn.Leaves.Where(x => x.UserId == UserGuidId).ToList<Leave>();
+        List<Attendance> offDays = new List<Attendance>();
+
+        //string empName = users[0].UserName;
+        string biostarEmpName = "Test";//LstEmpData[0].EmployeeName;
+        int iEmpNum = aspNetUser.BioStarEmpNum.Value;
+        if (aspNetUser.UserLeavePolicyId != null)
+        {
+          int UserLeavePolicyId = aspNetUser.UserLeavePolicyId.Value;
+          foreach (Leave leave in thisMonthsLeaves)
+          {
+            for (int i = 0; i < leave.TotalDays; i++)
+            {
+              Attendance leaveDay = new Attendance
+              {
+                EmployeeName = biostarEmpName,
+                EmployeeNumber = leave.AspNetUser.BioStarEmpNum.Value,
+                Date = leave.StartDate.AddDays(i),
+                Day = leave.StartDate.AddDays(i).ToString("dddd"),
+                Status = leave.Reason
+              };
+              offDays.Add(leaveDay);
+            }
+          }
+
+          //get natioanl off days
+          foreach (AnnualOffDay annualOffDay in dbLeaveOn.AnnualOffDays.Where(x => x.OffDay.Value.Month == reqDate.Month && x.OffDay.Value.Year == reqDate.Year && x.UserLeavePolicyId == UserLeavePolicyId).ToList<AnnualOffDay>())
+          {
+            Attendance annualOff = new Attendance
+            {
+              EmployeeName = biostarEmpName,
+              EmployeeNumber = iEmpNum,
+              Date = annualOffDay.OffDay.Value,
+              Day = annualOffDay.OffDay.Value.ToString("dddd"),
+              Status = annualOffDay.Description
+            };
+            //dayCntr += 1;
+            offDays.Add(annualOff);
+          }
+
+
+          foreach (Attendance offday in offDays.ToList())
+          {
+            int? delThisDay = LstEmptyDays.FirstOrDefault(x => x == offday.Date.Day);
+            
+            if (delThisDay !=null && delThisDay >0)
+            {
+              LstEmptyDays.Remove(delThisDay.Value);
+            }
+            
+          }
+          LstAttendances.AddRange(offDays);
+        }
+        //----------------------
+
+
+
+        foreach (int emptyday in LstEmptyDays)
+        {
+          blankDateTime = DateTime.ParseExact(dateAttr[1] + "/" + dateAttr[0] + "/" + emptyday.ToString("00"), "yyyy/MM/dd", CultureInfo.InvariantCulture);
+          attendance = new Attendance() { EmployeeName = UserName, EmployeeNumber = UserId, Date = blankDateTime, Day = blankDateTime.DayOfWeek.ToString(), Status = "Holiday" };
+          LstAttendances.Add(attendance);
+        }
       }
       ViewBag.TotalHours = TotalTime.TotalHours.ToString("N2");
       ViewBag.TotalWorkingHours = TotalWorkingHours.TotalHours.ToString("N2");
       con.Close();
       return Task.FromResult(LstAttendances);
     }
-    public async Task<ActionResult> ConnectToDBandReturnOffHours(string reqDate, string UserId )
+    public async Task<ActionResult> ConnectToDBandReturnOffHours(string reqDate, string UserId)
     {
-      
+
       DateTime from_Date = DateTime.ParseExact(reqDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
       DateTime to_Date = from_Date.AddDays(1);
       //ReqMonthYear = "06-2019";
-      
+
       //reqDate = reqDate.Replace("/","-") + ".000";
       //List<string> dateAttr = ReqMonthYear.Split('-').ToList();
       string connection = @"Data Source=10.1.10.27;Initial Catalog=BiostarAC;User Id=sa;Password=@intech#123;";
@@ -254,61 +345,7 @@ namespace LeaveON.Controllers
         List<int> User_Ids = new List<int>();
         User_Ids.Add(dEmpNum);
         LstAttendances = await ConnectToDBandReturnWorkingHours(ReqMonthYearFormated, User_Ids);
-        //ViewBag.ReqMonthYear = ReqMonthYear;
-        //ViewBag.UserId = UserId;
-        //empData = dbBioStar.UD_TB_AccessTime_Data.Where(x => userIds.Contains(x.EmployeeNumber.Value) && ((x.Date_IN.Value.Month == reqDate.Month && x.Date_IN.Value.Year == reqDate.Year) ||
-        //x.Date_OUT.Value.Month == reqDate.Month && x.Date_OUT.Value.Year == reqDate.Year)).AsQueryable<UD_TB_AccessTime_Data>();
-        //var groupByData = empData.ToList().GroupBy(x => x.Date_IN.Value.Day);
-        //}
-        //LstEmpData = await empData.ToListAsync<UD_TB_AccessTime_Data>();
-
-        //get leaves days
-
-        int LastDayOfMonth = DateTime.DaysInMonth(reqDate.Year, reqDate.Month);
-        //IQueryable<Leave> thisMonthsLeaves = dbLeaveOn.Leaves.Where(x => x.StartDate.Day >= 1 && x.EndDate.Day <= LastDayOfMonth && x.StartDate.Year == reqDate.Year && x.UserId == users[0].Id).AsQueryable<Leave>();
-        //IQueryable<Leave> thisMonthsLeaves = dbLeaveOn.Leaves.Where(x => x.StartDate.Day >= 1 && x.EndDate.Day <= LastDayOfMonth && x.StartDate.Month == reqDate.Month && x.StartDate.Year == reqDate.Year && x.UserId == users[0].Id).AsQueryable<Leave>();
-        List<Leave> thisMonthsLeaves = dbLeaveOn.Leaves.Where(x => x.StartDate.Day >= 1 && x.EndDate.Day <= LastDayOfMonth && x.StartDate.Month == reqDate.Month && x.StartDate.Year == reqDate.Year && x.UserId == GuidUserId).ToList<Leave>();
-        //List<Leave> thisMonthsLeaves = dbLeaveOn.Leaves.Where(x => x.UserId == UserGuidId).ToList<Leave>();
-        List<Attendance> leaveDays = new List<Attendance>();
-
-        string empName = users[0].UserName;
-        string biostarEmpName = "Test";//LstEmpData[0].EmployeeName;
-        int iEmpNum = users[0].BioStarEmpNum.Value;
-        if (users[0].UserLeavePolicyId != null)
-        {
-          int UserLeavePolicyId = users[0].UserLeavePolicyId.Value;
-          foreach (Leave leave in thisMonthsLeaves)
-          {
-            for (int i = 0; i < leave.TotalDays; i++)
-            {
-              Attendance accessTime_Data = new Attendance
-              {
-                EmployeeName = biostarEmpName,
-                EmployeeNumber = leave.AspNetUser.BioStarEmpNum.Value,
-                Date = leave.StartDate.AddDays(i),
-                Day = leave.StartDate.AddDays(i).ToString("dddd"),
-                Status = leave.Reason
-              };
-              leaveDays.Add(accessTime_Data);
-            }
-          }
-
-          //get natioanl off days
-          foreach (AnnualOffDay annualOffDay in dbLeaveOn.AnnualOffDays.Where(x => x.OffDay.Value.Month == reqDate.Month && x.OffDay.Value.Year == reqDate.Year && x.UserLeavePolicyId == UserLeavePolicyId).ToList<AnnualOffDay>())
-          {
-            Attendance accessTime_Data = new Attendance
-            {
-              EmployeeName = biostarEmpName,
-              EmployeeNumber = iEmpNum,
-              Date = annualOffDay.OffDay.Value,
-              Day = annualOffDay.OffDay.Value.ToString("dddd"),
-              Status = annualOffDay.Description
-            };
-            //dayCntr += 1;
-            leaveDays.Add(accessTime_Data);
-          }
-          LstAttendances.AddRange(leaveDays);
-        }
+        
       }
       //return View(await db.UD_TB_AccessTime_Data.ToListAsync());
       if (string.IsNullOrEmpty(ReqMonthYear))
@@ -503,9 +540,9 @@ namespace LeaveON.Controllers
 
 
       }
-      
-      
-      return View("_UserData", await Task.FromResult(LstAttendances));
+
+
+      return View("_UserDataToday", await Task.FromResult(LstAttendances));
     }
   }
 }

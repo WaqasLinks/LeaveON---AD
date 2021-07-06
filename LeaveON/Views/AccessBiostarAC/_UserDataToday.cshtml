@@ -14,7 +14,7 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">User Data</h3>
+              <h3 class="card-title">Who is In</h3>
 
 
             </div>
@@ -52,15 +52,7 @@
                             <th>
                               @Html.DisplayNameFor(model => model.TimeIn)
                             </th>
-                            <th>
-                              @Html.DisplayNameFor(model => model.TimeOut)
-                            </th>
-                            <th>
-                              @Html.DisplayNameFor(model => model.WorkingHours)
-                            </th>
-                            <th>
-                              @Html.DisplayNameFor(model => model.TotalTime)
-                            </th>
+                            
                             <th>
                               @Html.DisplayNameFor(model => model.Status)
                             </th>
@@ -86,15 +78,7 @@
                               <td>
                                 @Html.DisplayFor(modelItem => item.TimeIn)
                               </td>
-                              <td>
-                                @Html.DisplayFor(modelItem => item.TimeOut)
-                              </td>
-                              <td>
-                                @Html.DisplayFor(modelItem => item.WorkingHours)
-                              </td>
-                              <td>
-                                @Html.DisplayFor(modelItem => item.TotalTime)
-                              </td>
+                              
                               <td>
 
                                 @{ 
@@ -157,7 +141,6 @@
       "info": false,
       "autoWidth": false,
       "responsive": true,
-      "order": [[2, "asc"]]
     });
   });
 </script>

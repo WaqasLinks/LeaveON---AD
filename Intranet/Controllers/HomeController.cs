@@ -35,21 +35,29 @@ namespace Intranet.Controllers
             //ADUser
 
             //Response.Redirect("~/Pages/Product.aspx?id=" + id + "&Customize=" + custTotle);
-            ReturnUrl = "https://localhost:44380/LeavesResponse/Edit/60";
+            //ReturnUrl = "https://localhost:44380/LeavesResponse/Edit/60"; example
             string ReturnUrlValue = "/";
+
+            if (string.IsNullOrEmpty(ReturnUrl)) ReturnUrl = "/";
+
             string ADUserValue = currentUser.UserPrincipalName;//"hp";
             //return Redirect("http://localhost:44380/Account/Login?ReturnUrl=" + ReturnUrlValue + "&ADUser=" + ADUserValue); //this for development/testing
             //http://lms-test.intechww.com/
             //return Redirect("http://lms-test.intechww.com:9902/Account/Login?ReturnUrl=" + ReturnUrlValue + "&ADUser=" + ADUserValue);//this for production
             //https://localhost:1002/Account/Login?ReturnUrl=/&ADUser=bsserviceaccount@intechww.com
             //return Redirect("https://lms.intechww.com:1002/Account/Login?ReturnUrl=" + ReturnUrl + "&ADUser=" + ADUserValue);//this for production
-            //return Redirect("https://localhost:9902/Account/Login?ReturnUrl=" + ReturnUrlValue);
             
+            //return Redirect("https://lms.intechww.com:1002/Account/Login?ReturnUrl=" + ReturnUrl + "&ADUser=" + ADUserValue);//this for production *new
+            return Redirect("http://localhost:802/Account/Login?ReturnUrl=" + ReturnUrl + "&ADUser=" + ADUserValue);//this for production *new test
+
+
+            //return Redirect("https://localhost:9902/Account/Login?ReturnUrl=" + ReturnUrlValue);
+
             //return Redirect("https://localhost:9902/");
             //return Redirect("http://localhost:9902/");
 
             //return Redirect("https://localhost:44380/LeavesResponse/Edit/60");
-            return Redirect("https://localhost:44380/Account/Login?ReturnUrl=" + ReturnUrl + "&ADUser=" + ADUserValue);//this for production
+            //return Redirect("https://localhost:44380/Account/Login?ReturnUrl=" + ReturnUrl + "&ADUser=" + ADUserValue);//this for production
 
         }
         public void Experiment1()

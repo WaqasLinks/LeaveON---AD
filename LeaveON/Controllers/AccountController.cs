@@ -168,8 +168,8 @@ namespace LeaveON.Controllers
     {
       //ADUser = "bsserviceaccount@intechww.com";
       //ADUser = "Ahsan.Ahmad@intechww.com";
-      //ADUser = "muzammil.riaz@intechww.com";
-      ADUser = "waqqasjavaid@gmail.com";
+      ADUser = "muzammil.riaz@intechww.com";
+      //ADUser = "waqqasjavaid@gmail.com";
       //ADUser = "testing@intechww.com";
       //ADUser = "kashif.ali@intechww.com";
       //ali.raza@intechww.com

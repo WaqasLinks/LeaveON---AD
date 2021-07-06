@@ -287,7 +287,7 @@
 
     </section>
 
-    @*<div class="form-group">
+    <div class="form-group">
       @Html.LabelFor(model => model.userLeavePolicy.WeeklyOffDays, "Weekly Off Days", htmlAttributes: new { @class = " " })
       @Html.HiddenFor(model => model.userLeavePolicy.WeeklyOffDays, new { htmlAttributes = new { @class = "form-control" } })
       <br>
@@ -301,7 +301,7 @@
         <option value="5">Friday</option>
       </select>
       @Html.ValidationMessageFor(model => model.userLeavePolicy.WeeklyOffDays, "", new { @class = "text-danger" })
-    </div>*@
+    </div>
 
 
     <div>

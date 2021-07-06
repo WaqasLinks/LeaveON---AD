@@ -2327,6 +2327,7 @@
     <Content Include="Views\AccessBiostarAC\_UserData.cshtml" />
     <Content Include="Views\AccessBiostarAC\OffTimeDetail.cshtml" />
     <Content Include="Views\AccessBiostarAC\DepartmentData.cshtml" />
+    <Content Include="Views\AccessBiostarAC\_UserDataToday.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

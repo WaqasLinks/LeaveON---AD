@@ -83,7 +83,7 @@ namespace LeaveON.Controllers
       [Bind(Prefix = "AnnualOffDay", Include = "OffDay,Description")] List<AnnualOffDay> AnnualOffDays, string[] Departments, string[] Employees, string PolicyFor)
     {
       int maxId = db.UserLeavePolicies.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
-      userLeavePolicy.WeeklyOffDays = "6,0";
+      userLeavePolicy.WeeklyOffDays = userLeavePolicy.WeeklyOffDays;//"6,0";
       userLeavePolicy.Id = maxId;
       userLeavePolicy.CountryId = 1;//from which user is Login. but admin who can view all coutries there we have to user a list of country so that he choose a country
       //userLeavePolicy.AnnualOffDays = string.Join(",", AnnualOffDays);
@@ -322,7 +322,7 @@ namespace LeaveON.Controllers
       //UserLeavePolicy userLeavePolicyOld = await db.UserLeavePolicies.FindAsync(userLeavePolicy.Id);
       //db.UserLeavePolicyDetails.RemoveRange(userLeavePolicyOld.UserLeavePolicyDetails);
       //await db.SaveChangesAsync();
-      userLeavePolicy.WeeklyOffDays = "6,0";
+      userLeavePolicy.WeeklyOffDays = userLeavePolicy.WeeklyOffDays;//"6,0";
       userLeavePolicy.CountryId = 1;//from which user is Login. but admin who can view all coutries there we have to user a list of country so that he choose a country
       //userLeavePolicy.AnnualOffDays = string.Join(",", AnnualOffDays);
       userLeavePolicy.DepartmentPolicy = (PolicyFor == "1") ? true : false;
