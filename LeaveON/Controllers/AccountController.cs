@@ -168,7 +168,9 @@ namespace LeaveON.Controllers
     {
       //ADUser = "bsserviceaccount@intechww.com";
       //ADUser = "Ahsan.Ahmad@intechww.com";
-      ADUser = "muzammil.riaz@intechww.com";
+     ADUser = "muzammil.riaz@intechww.com";
+      //ADUser = "Hassan.masood@intechww.com";
+      //ADUser = "salman.saleem@intechww.com";
       //ADUser = "waqqasjavaid@gmail.com";
       //ADUser = "testing@intechww.com";
       //ADUser = "kashif.ali@intechww.com";
@@ -213,6 +215,21 @@ namespace LeaveON.Controllers
       //loginsList.Add(currentUser.UserPrincipalName);
 
       //System.IO.File.AppendAllLines(path, loginsList);
+
+      AspNetUser user = db.AspNetUsers.Where(x => x.UserName.Trim().ToUpper() == ADUser.Trim().ToUpper()).FirstOrDefault();
+      //if (user != null)
+      //{
+      //  UserManager.AddToRoleAsync(user.Id, "User");
+      //}
+
+      if (user != null && !UserManager.IsInRole(user.Id, "User"))
+      {
+        UserManager.AddToRole(user.Id, "User");
+        UserManager.AddToRole(user.Id, "Manager");
+      }
+
+
+
       ViewBag.ADUser = ADUser;//"bsserviceaccount@intechww.com";//ADUser;
       ViewBag.ReturnUrl = returnUrl;
       //ViewBag.ReturnUrl = @"\LeavesRequest\Index";
@@ -332,9 +349,9 @@ namespace LeaveON.Controllers
     [Authorize(Roles = "Admin,Manager")]
     public ActionResult Register()
     {
-      ViewBag.Countries = db.Countries;
+      ViewBag.Countries = db.CountryNames;
       //onchange country... department list is populating using ajax in view. but has little problem. so sending departements data from view. when done comment ViewBag.Departments = db.Departments;
-      ViewBag.Departments = db.Departments;
+      ViewBag.Departments = db.DepartmentNames;
       ViewBag.LeavePolicies = db.UserLeavePolicies;
       return View();
     }
@@ -349,7 +366,7 @@ namespace LeaveON.Controllers
     {
       if (ModelState.IsValid)
       {
-        var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Hometown = model.Hometown, DepartmentId = model.DepartmentId, CountryId = model.CountryId, BioStarEmpNum = model.BioStarEmpNum, UserLeavePolicyId = model.UserLeavePolicyId };
+        var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Hometown = model.Hometown, BioStarEmpNum = model.BioStarEmpNum, UserLeavePolicyId = model.UserLeavePolicyId };
         var result = await UserManager.CreateAsync(user, model.Password);
         if (result.Succeeded)
         {
@@ -386,7 +403,7 @@ namespace LeaveON.Controllers
       }
 
       // If we got this far, something failed, redisplay form
-      ViewBag.Departments = db.Departments;
+      ViewBag.Departments = db.DepartmentNames;
       return View(model);
     }
     [HttpPost]
@@ -397,7 +414,7 @@ namespace LeaveON.Controllers
     {
       if (ModelState.IsValid)
       {
-        var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Hometown = model.Hometown, DepartmentId = model.DepartmentId, BioStarEmpNum = model.BioStarEmpNum, UserLeavePolicyId = model.UserLeavePolicyId };
+        var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Hometown = model.Hometown, BioStarEmpNum = model.BioStarEmpNum, UserLeavePolicyId = model.UserLeavePolicyId };
         //var result = await UserManager.CreateAsync(user, model.Password);
         var result = await UserManager.UpdateAsync(user);
         if (result.Succeeded)
@@ -439,7 +456,7 @@ namespace LeaveON.Controllers
       }
 
       // If we got this far, something failed, redisplay form
-      ViewBag.Departments = db.Departments;
+      ViewBag.Departments = db.DepartmentNames;
       return View(model);
     }
 
@@ -447,7 +464,7 @@ namespace LeaveON.Controllers
     public ActionResult GetDepartmentByCountryId(int CountryId)
     {
 
-      List<Department> Departments = db.Departments.Where(x => x.CountryId == CountryId).ToList<Department>(); //GetAllDepartment().Where(m => m.StateId == stateid).ToList();
+      List<DepartmentName> Departments = db.DepartmentNames.Where(x => x.Id == CountryId).ToList<DepartmentName>(); //GetAllDepartment().Where(m => m.StateId == stateid).ToList();
       SelectList LstDepartments = new SelectList(Departments, "Id", "Name", 0);
       return Json(LstDepartments);
     }

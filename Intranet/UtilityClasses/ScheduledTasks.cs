@@ -63,7 +63,7 @@ namespace LeaveON.UtilityClasses
                 // RUN YOUR PROCESSES HERE
                 //Experiment();
                 //Experiment1();
-                //SyncUsersWithAD();
+                SyncAppWithAD();
 
             }
         }
@@ -88,7 +88,7 @@ namespace LeaveON.UtilityClasses
                 }
             }
         }
-        public void SyncUsersWithAD()
+        public void SyncAppWithAD()
         {
 
             using (var context = new PrincipalContext(ContextType.Domain, "intechww.com"))// "tenf.loc"))
@@ -137,6 +137,7 @@ namespace LeaveON.UtilityClasses
                     DateTime lastLogonStr;
                     AuthenticablePrincipal auth;
                     List<string> departmentsList = new List<string>();
+                    List<string> countriesList = new List<string>();
                     foreach (var result in AllIntechUsers)
                     {
                         DirectoryEntry de = result.GetUnderlyingObject() as DirectoryEntry;
@@ -162,41 +163,7 @@ namespace LeaveON.UtilityClasses
                         {
                             continue;//we dont need this. simply move to next
                         }
-                        //if (auth != null && auth.Enabled == true)
-                        //{
-                        //    //Console.WriteLine("Name: " + auth.Name);
-                        //    //Console.WriteLine("Last Logon Time: " + auth.LastLogon);
-                        //    //Console.WriteLine();
-                        //    //LastLogon = auth.LastLogon.Value;
-                        //}
-                        //else
-                        //{
-                        //    continue;
-                        //}
-                        //DateTime DateMarker = DateTime.ParseExact("01/01/2020", "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                        //TimeSpan TimeDifference = LastLogon - DateMarker;
-
-                        //string userPrincipalName_AD = de.Properties["userPrincipalName"].Value.ToString().Trim();
-
-
-                        //if (WhenCreated)
                         counter += 1;
-
-                        //if (userPrincipalName_AD == null || string.IsNullOrEmpty(userPrincipalName_AD))
-                        //{
-                        //    continue;
-                        //}
-
-                        ////////////////
-                        //if (goInto==true)
-                        //{
-                        //var anyvalue = de.Properties["LastLogon"].Value.ToString();
-
-                        //long lastLogon = (long)de.Properties["lastLogon"][0];
-                        //DateTime dtLastLogon = DateTime.FromFileTime(lastLogon);
-
-                        //var lastLogOn = DateTime.FromFileTime((long)de.Properties["lastLogon"][0]);
-
                         object adsLargeInteger = de.Properties["lastLogon"].Value;
                         if (adsLargeInteger == null)
                         {
@@ -218,9 +185,10 @@ namespace LeaveON.UtilityClasses
                         }
 
                         //TimeSpan TimeDifference = LastLogon - DateMarker;
-                        if (lastLogonStr > DateMark)
+                        if (lastLogonStr > DateMark && !string.IsNullOrEmpty(Convert.ToString(de.Properties["co"].Value)))
                         {
                             departmentsList.Add(Convert.ToString(de.Properties["department"].Value));
+                            countriesList.Add(Convert.ToString(de.Properties["co"].Value));
                             AspNetUser aspNetUser = LstAspNetUsers.FirstOrDefault(x => x.UserName.Replace(" ", "").ToUpper() == auth.UserPrincipalName.Replace(" ", "").ToUpper());
                             goInto = false;
 
@@ -245,7 +213,8 @@ namespace LeaveON.UtilityClasses
                         //}
                         ////////////////////////////
                     }
-                    //add department name which does not exist in LMS-DB
+
+                    //-----------add department name which does not exist in LMS-DB------------
                     List<string> distinctDepartmentNames = departmentsList.Distinct().ToList();
                     foreach (string itm in distinctDepartmentNames)
                     {
@@ -256,7 +225,7 @@ namespace LeaveON.UtilityClasses
                             db.DepartmentNames.Add(departmentName);
                         }
                     }
-                    //remove department name which does not exist in AD
+                    //-------------remove department name which does not exist in AD-------------
                     foreach (var itm in db.DepartmentNames.ToList())
                     {
                         string foundName = distinctDepartmentNames.FirstOrDefault(x => x == itm.Name);
@@ -265,7 +234,19 @@ namespace LeaveON.UtilityClasses
                             db.DepartmentNames.Remove(itm);
                         }
                     }
-                    
+
+                    //-----------add country name which does not exist in LMS-DB------------
+                    List<string> distinctCountriesNames = countriesList.Distinct().ToList();
+                    foreach (string itm in distinctCountriesNames)
+                    {
+                        CountryName countryName = db.CountryNames.FirstOrDefault(x => x.Name == itm);
+                        if (countryName == null && !string.IsNullOrEmpty(itm.Trim()))
+                        {
+                            countryName = new CountryName() { Name = itm };
+                            db.CountryNames.Add(countryName);
+                        }
+                    }
+
                     db.SaveChanges();
 
                     //System.IO.File.WriteAllLines(path, loginsList);
@@ -305,7 +286,6 @@ namespace LeaveON.UtilityClasses
 
             }
 
-
         }
 
         private bool IsActive(DirectoryEntry de)
@@ -318,8 +298,9 @@ namespace LeaveON.UtilityClasses
         }
         private void InsertEmployee(DirectoryEntry de)
         {
-            AspNetUser emp;
-            emp = new AspNetUser();
+            //return;
+            AspNetUser emp = new AspNetUser();
+            
             emp.UserName = Convert.ToString(de.Properties["userPrincipalName"].Value);
             emp.Email = Convert.ToString(de.Properties["userPrincipalName"].Value);
             emp.Id = Guid.NewGuid().ToString();
@@ -332,16 +313,26 @@ namespace LeaveON.UtilityClasses
             emp.LockoutEnabled = true;
             emp.AccessFailedCount = 0;
             emp.DateCreated = DateTime.Now;
-            emp.DepartmentId = 1000; //Anonymous Users
+            
             emp.DepartmentName = Convert.ToString(de.Properties["department"].Value);
+            emp.CntryName = Convert.ToString(de.Properties["co"].Value);
             emp.IsActive = IsActive(de);
-
+            
             db.AspNetUsers.Add(emp);
+
+            //----add user role
+            //if (String.IsNullOrEmpty( emp.CntryName ))
+            //{
+            //    var abc = 1;
+            //    return;
+            //}
             //db.SaveChangesAsync();
             db.SaveChanges();
         }
+
         private void UpdateEmployee(AspNetUser oldEmp, DirectoryEntry de)
         {
+            //return;
             //AspNetUser emp;
             //emp = new AspNetUser();
             //emp.IsActive = IsActive(de);
@@ -351,6 +342,7 @@ namespace LeaveON.UtilityClasses
 
             db.Entry(oldEmp).Property(x => x.IsActive).IsModified = true;
             db.Entry(oldEmp).Property(x => x.DepartmentName).IsModified = true;
+            db.Entry(oldEmp).Property(x => x.CntryName).IsModified = true;
             //db.SaveChangesAsync();
             db.SaveChanges();
             //db.Entry(emp).State = EntityState.Modified;

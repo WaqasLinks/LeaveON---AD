@@ -39,6 +39,7 @@ namespace LMS.Mail
             //smtpServer.Host = "smtp.gmail.com"; not neccesry now. as mention above
             smtpServer.Port = 587; //465;//587; // Gmail works on this port
             smtpServer.EnableSsl = true;
+            
 
             try
             {
@@ -46,14 +47,15 @@ namespace LMS.Mail
                 mail.From = new MailAddress(LeavON_Email);
                 //mail.From = new MailAddress(sender.Email);
                 mail.To.Add(new MailAddress(receiver.Email));
-
+                mail.CC.Add(new MailAddress("hrsupport@intechww.com"));
 
                 switch (MessageType)
                 {
                     case "LeaveRequest":
                         mail.Subject = sender.UserName + " posted a Leave request";
                         mail.Body = "Dear , " + receiver.UserName +
-                            Environment.NewLine + "I have sent you a leave request. kindly login to LeaveON account " + " for detail." +
+                            Environment.NewLine + "I have sent you a leave request. kindly follow the link " + 
+                            "https://lms.intechww.com:1001/?ReturnUrl=https://lms.intechww.com:1002/LeavesResponse/Edit/" + leave1.Id + " for detail." +
                             Environment.NewLine + leave1.LeaveType.Name +
                             Environment.NewLine + leave1.Reason +
                             Environment.NewLine + leave1.StartDate +
@@ -68,10 +70,10 @@ namespace LMS.Mail
 
                         mail.Subject = sender.UserName + " posted a Leave response";
                         mail.Body = "Dear " + receiver.UserName + "," +
-                            Environment.NewLine + "I have just sent you feed back regarding your leave request. kindly login to LeaveON account  " +
+                            Environment.NewLine + "I have just sent you feed back regarding your leave request. kindly follow the link " +
                             //"http://lms.intechww.com:1002/LeavesRequest/Index" + " for detail." +
                             //https://localhost:44339/?ReturnUrl=https://localhost:44380/LeavesResponse/Edit/60
-                            "http://lms.intechww.com:1001/?ReturnUrl=https://lms.intechww.com:1002/LeavesResponse/Edit/" + leave1.Id + " for detail." +
+                            "https://lms.intechww.com:1001/?ReturnUrl=https://lms.intechww.com:1002/LeavesRequest/Edit/" + leave1.Id + " for detail." +
                              Environment.NewLine + leave1.LeaveType.Name +
 
                             Environment.NewLine + leave1.Reason +

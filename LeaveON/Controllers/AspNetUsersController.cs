@@ -20,7 +20,7 @@ namespace LeaveON.Controllers
     // GET: AspNetUsers
     public async Task<ActionResult> Index()
     {
-      var aspNetUsers = db.AspNetUsers.Include(a => a.Department);
+      var aspNetUsers = db.AspNetUsers;//.Include(a => a.Department);
       return View(await aspNetUsers.ToListAsync());
     }
 
@@ -42,7 +42,7 @@ namespace LeaveON.Controllers
     // GET: AspNetUsers/Create
     public ActionResult Create()
     {
-      ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name");
+      ViewBag.DepartmentId = new SelectList(db.DepartmentNames, "Id", "Name");
       return View();
     }
 
@@ -60,7 +60,7 @@ namespace LeaveON.Controllers
         return RedirectToAction("Index");
       }
 
-      ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", aspNetUser.DepartmentId);
+      //ViewBag.DepartmentId = new SelectList(db.DepartmentNames, "Id", "Name", aspNetUser.DepartmentId);
       return View(aspNetUser);
     }
 
@@ -76,8 +76,8 @@ namespace LeaveON.Controllers
       {
         return HttpNotFound();
       }
-      ViewBag.CountryId = new SelectList(db.Countries, "Id", "Name", aspNetUser.CountryId);
-      ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", aspNetUser.DepartmentId);
+      //ViewBag.CountryId = new SelectList(db.CountryNames, "Id", "Name", aspNetUser.CountryId);
+      //ViewBag.DepartmentId = new SelectList(db.DepartmentNames, "Id", "Name", aspNetUser.DepartmentId);
       ViewBag.UserLeavePolicyId = new SelectList(db.UserLeavePolicies, "Id", "Description", aspNetUser.UserLeavePolicyId);
       return View(aspNetUser);
     }
@@ -100,8 +100,8 @@ namespace LeaveON.Controllers
         db.Entry(aspNetUser).Property(x => x.UserName).IsModified = true;
         db.Entry(aspNetUser).Property(x => x.DateModified).IsModified = true;
         db.Entry(aspNetUser).Property(x => x.Remarks).IsModified = true;
-        db.Entry(aspNetUser).Property(x => x.DepartmentId).IsModified = true;
-        db.Entry(aspNetUser).Property(x => x.CountryId).IsModified = true;
+        //db.Entry(aspNetUser).Property(x => x.DepartmentId).IsModified = true;
+        //db.Entry(aspNetUser).Property(x => x.CountryId).IsModified = true;
         db.Entry(aspNetUser).Property(x => x.UserLeavePolicyId).IsModified = true;
         db.Entry(aspNetUser).Property(x => x.BioStarEmpNum).IsModified = true;
         //UserLeavePolicyId
@@ -110,7 +110,7 @@ namespace LeaveON.Controllers
         await db.SaveChangesAsync();
         return RedirectToAction("Index");
       }
-      ViewBag.DepartmentId = new SelectList(db.Departments, "Id", "Name", aspNetUser.DepartmentId);
+      //ViewBag.DepartmentId = new SelectList(db.DepartmentNames, "Id", "Name", aspNetUser.DepartmentId);
       return View(aspNetUser);
     }
 

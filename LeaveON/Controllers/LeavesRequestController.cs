@@ -120,7 +120,7 @@ namespace LeaveON.Controllers
       }
       //List<AspNetUser> Seniors = GetSeniorStaff();
       //ViewBag.LineManagers = new SelectList(Seniors, "Id", "UserName");
-      ViewBag.LineManagers = new SelectList(db.AspNetUsers, "Id", "UserName");
+      ViewBag.LineManagers = new SelectList(db.AspNetUsers.OrderBy(x=>x.UserName), "Id", "UserName");
       ViewBag.UserName = User.Identity.Name;//"LoggedIn User";
       ViewBag.LeaveUserId =userId;
       //UserLeavePoliciesController UserLeavePolicies = new UserLeavePoliciesController();//.FileUploadMsgView("some string");
@@ -262,7 +262,7 @@ namespace LeaveON.Controllers
 
       var itmes = db.AspNetUsers.Include(x => x.AspNetRoles.Select(rl => rl.Name)).ToList();
 
-      ViewBag.LineManagers = new SelectList(db.AspNetUsers, "Id", "UserName");
+      ViewBag.LineManagers = new SelectList(db.AspNetUsers.OrderBy(x => x.UserName), "Id", "UserName");
       return View(leave);
     }
     // POST: Leaves/Create
@@ -277,6 +277,7 @@ namespace LeaveON.Controllers
       leave.DateCreated = DateTime.Now;
       leave.LeaveTypeId= CompensatoryLeaveTypeId;
       leave.LeaveType = db.LeaveTypes.FirstOrDefault(x => x.Id == CompensatoryLeaveTypeId);
+      
       leave.IsQuotaRequest = true;
       if (ModelState.IsValid)
       {
@@ -316,7 +317,7 @@ namespace LeaveON.Controllers
 
       var itmes = db.AspNetUsers.Include(x => x.AspNetRoles.Select(rl => rl.Name)).ToList();
 
-      ViewBag.LineManagers = new SelectList(db.AspNetUsers, "Id", "UserName");
+      ViewBag.LineManagers = new SelectList(db.AspNetUsers.OrderBy(x => x.UserName), "Id", "UserName");
       return View(leave);
     }
 
@@ -337,7 +338,8 @@ namespace LeaveON.Controllers
         return RedirectToAction("Index");
       }
         List<AspNetUser> Seniors = GetSeniorStaff();
-      ViewBag.LineManagers = new SelectList(Seniors, "Id", "UserName");
+      
+      ViewBag.LineManagers = new SelectList(db.AspNetUsers.OrderBy(x => x.UserName), "Id", "UserName");
       ViewBag.UserName = User.Identity.Name;//"LoggedIn User";
       //ViewBag.LeaveTypeId = new SelectList(db.LeaveTypes, "Id", "Name", leave.LeaveTypeId);
 
@@ -376,7 +378,7 @@ namespace LeaveON.Controllers
         return RedirectToAction("Index");
       }
       List<AspNetUser> Seniors = GetSeniorStaff();
-      ViewBag.LineManagers = new SelectList(Seniors, "Id", "UserName");
+      ViewBag.LineManagers = new SelectList(db.AspNetUsers.OrderBy(x => x.UserName), "Id", "UserName");
       ViewBag.UserName = User.Identity.Name;//"LoggedIn User";
       ViewBag.LeaveTypeId = new SelectList(db.LeaveTypes, "Id", "Name", leave.LeaveTypeId);
       //ViewBag.UserLeavePolicyId = new SelectList(db.UserLeavePolicies, "Id", "UserId", leave.UserLeavePolicyId);

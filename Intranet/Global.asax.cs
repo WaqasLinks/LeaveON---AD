@@ -18,8 +18,8 @@ namespace Intranet
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             //new ScheduledTasks().Experiment1();
-            //new ScheduledTasks().InitTimerForScheduleTasks();
-            new ScheduledTasks().SyncUsersWithAD();
+            new ScheduledTasks().InitTimerForScheduleTasks();
+            //new ScheduledTasks().SyncAppWithAD();
         }
     }
 }

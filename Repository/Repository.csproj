@@ -56,8 +56,6 @@
     <Compile Include="Models\AnnualOffDay.cs">
       <DependentUpon>LeaveOnDataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AspNetCountry_Metadata.cs" />
-    <Compile Include="Models\AspNetDepartment_Metadata.cs" />
     <Compile Include="Models\AspNetRole.cs">
       <DependentUpon>LeaveOnDataModel.tt</DependentUpon>
     </Compile>
@@ -72,10 +70,7 @@
       <DependentUpon>LeaveOnDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AspNetUser_Metadata.cs" />
-    <Compile Include="Models\Country.cs">
-      <DependentUpon>LeaveOnDataModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Department.cs">
+    <Compile Include="Models\CountryName.cs">
       <DependentUpon>LeaveOnDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DepartmentName.cs">

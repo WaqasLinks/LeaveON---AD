@@ -13,7 +13,7 @@ namespace LeaveON.Models
     public IQueryable<UserLeavePolicyDetail> userLeavePolicyDetail { get; set; }
     public IQueryable<AnnualOffDay> annualOffDays { get; set; }
     //public IQueryable<Department> departments { get; set; }
-    public IQueryable<Country> countries { get; set; }
+    public IQueryable<CountryName> countries { get; set; }
 
     //public IQueryable<AnnualLeaveModel> AnnualOffDays { get; set; }
 

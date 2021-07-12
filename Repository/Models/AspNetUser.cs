@@ -41,18 +41,16 @@ namespace Repository.Models
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
         public string Remarks { get; set; }
-        public Nullable<int> DepartmentId { get; set; }
         public Nullable<int> UserLeavePolicyId { get; set; }
-        public Nullable<int> CountryId { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public string DepartmentName { get; set; }
+        public string CntryName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual Country Country { get; set; }
-        public virtual Department Department { get; set; }
+        public virtual CountryName CountryName { get; set; }
         public virtual UserLeavePolicy UserLeavePolicy { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Leave> Leaves { get; set; }

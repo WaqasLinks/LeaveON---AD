@@ -298,7 +298,7 @@ namespace LeaveON.Controllers
         //user.DepartmentId;//User.Identity.GetUserId();//
         reqDate = DateTime.ParseExact(ReqMonthYear, "MM-yyyy",
                                  System.Globalization.CultureInfo.CurrentCulture);
-        reqDate = reqDate.AddYears(-2);
+        //reqDate = reqDate.AddYears(-2);
       }
       else
       {
@@ -330,7 +330,7 @@ namespace LeaveON.Controllers
         //if (claim is null) return null;
 
 
-        //reqDate = reqDate.AddYears(-1);
+        
         //string userId = User.Identity.GetUserId();
 
         //int bioStarEmpNum = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.Id == userId).BioStarEmpNum.Value;
@@ -408,7 +408,7 @@ namespace LeaveON.Controllers
         //user.DepartmentId;//User.Identity.GetUserId();//
         reqDate = DateTime.ParseExact(ReqMonthYear, "MM-yyyy",
                                  System.Globalization.CultureInfo.CurrentCulture);
-        reqDate = reqDate.AddYears(-2);
+        //reqDate = reqDate.AddYears(-2);
       }
       else
       {
@@ -433,7 +433,7 @@ namespace LeaveON.Controllers
         if (claim is null) return null;
 
 
-        //reqDate = reqDate.AddYears(-1);
+        
         //string userId = User.Identity.GetUserId();
 
         //int bioStarEmpNum = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.Id == userId).BioStarEmpNum.Value;
@@ -472,7 +472,7 @@ namespace LeaveON.Controllers
     }
     public async Task<ActionResult> WhoIsIn(string reqDate)
     {
-      reqDate = "12-06-2019";
+      //reqDate = "12-06-2019";
       DateTime from_Date = DateTime.ParseExact(reqDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
       DateTime to_Date = from_Date.AddDays(1);
       //ReqMonthYear = "06-2019";

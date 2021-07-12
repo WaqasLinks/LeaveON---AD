@@ -1,4 +1,4 @@
-@model IEnumerable<Repository.Models.Country>
+@model IEnumerable<Repository.Models.CountryName>
 
 @{
   ViewBag.Title = "Index";
@@ -26,7 +26,7 @@
 
 
         <div class="card-body">
-          @Html.ActionLink("Create New", "Create")
+          @*@Html.ActionLink("Create New", "Create")*@
           <div d="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <div class="row">
               <div class="col-sm-12 col-md-6">
@@ -65,9 +65,9 @@
                         @Html.DisplayFor(modelItem => item.DateModified)
                       </td>*@
                       <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) @*|*@
-                        @*@Html.ActionLink("Details", "Details", new { id = item.Id }) |*@
-                        @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+                        @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
                       </td>
                     </tr>
                   }

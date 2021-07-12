@@ -58,7 +58,7 @@ namespace LeaveON.Controllers
     {
       ViewBag.Employees = new SelectList(db.AspNetUsers.OrderBy(i => i.UserName), "Id", "UserName");
       //ViewBag.LeaveTypes = new SelectList(db.LeaveTypes, "Id", "Name");
-      ViewBag.Departments = new SelectList(db.Countries, "Id", "Name");
+      ViewBag.Departments = new SelectList(db.CountryNames, "Name", "Name");
       List<SelectListItem> AgreementTypes = new List<SelectListItem>()
       {
           new SelectListItem{Text = "Fiscal year", Value = "1"},
@@ -85,7 +85,7 @@ namespace LeaveON.Controllers
       int maxId = db.UserLeavePolicies.DefaultIfEmpty().Max(p => p == null ? 0 : p.Id);
       userLeavePolicy.WeeklyOffDays = userLeavePolicy.WeeklyOffDays;//"6,0";
       userLeavePolicy.Id = maxId;
-      userLeavePolicy.CountryId = 1;//from which user is Login. but admin who can view all coutries there we have to user a list of country so that he choose a country
+      userLeavePolicy.CountryId = 5;//from which user is Login. but admin who can view all coutries there we have to user a list of country so that he choose a country
       //userLeavePolicy.AnnualOffDays = string.Join(",", AnnualOffDays);
       userLeavePolicy.DepartmentPolicy = (PolicyFor == "1") ? true : false;
 
@@ -113,11 +113,12 @@ namespace LeaveON.Controllers
         db.UserLeavePolicies.Add(userLeavePolicy);
         if (PolicyFor == "1")//department
         {
-          int[] DepartmentsList = Array.ConvertAll(Departments, int.Parse);
-          Country dep;
-          foreach (int itm in DepartmentsList)
+          //int[] DepartmentsList = Array.ConvertAll(Departments, int.Parse);
+          
+          CountryName dep;
+          foreach (string itm in Departments)
           {
-            dep = db.Countries.FirstOrDefault(x => x.Id == itm);
+            dep = db.CountryNames.FirstOrDefault(x => x.Name == itm);
             foreach (AspNetUser user in dep.AspNetUsers)
             {
               user.UserLeavePolicyId = userLeavePolicy.Id;
@@ -176,7 +177,7 @@ namespace LeaveON.Controllers
       ViewBag.Employees = new SelectList(db.AspNetUsers.OrderBy(i=>i.UserName), "Id", "UserName");
       ViewBag.LeaveTypes = new SelectList(db.LeaveTypes, "Id", "Name");
       //always remember viewbag name should not be as model name. other wise probelm. if same multilist will not show selected values
-      ViewBag.Departments = new SelectList(db.Countries, "Id", "Name");
+      ViewBag.Departments = new SelectList(db.CountryNames, "Name", "Name");
 
       UserLeavePolicyViewModel userLeavePolicyViewModel = new UserLeavePolicyViewModel();
 
@@ -184,7 +185,7 @@ namespace LeaveON.Controllers
 
       userLeavePolicyViewModel.userLeavePolicy = userLeavePolicy;
       userLeavePolicyViewModel.userLeavePolicyDetail = userLeavePolicy.UserLeavePolicyDetails.AsQueryable<UserLeavePolicyDetail>();
-      userLeavePolicyViewModel.countries = db.Countries;//.Where(x => x.CountryId == 1).AsQueryable<Department>();//TODO Convert 1 to current user country variable
+      userLeavePolicyViewModel.countries = db.CountryNames;//.Where(x => x.CountryId == 1).AsQueryable<Department>();//TODO Convert 1 to current user country variable
                                                                                                                    //userLeavePolicyViewModel.departments= depFilterd;
       userLeavePolicyViewModel.annualOffDays = db.AnnualOffDays.Where(x => x.UserLeavePolicyId == userLeavePolicy.Id).AsQueryable();
 
@@ -198,7 +199,7 @@ namespace LeaveON.Controllers
       //List<int> SelectedDeps = new List<int>(new int[] { 1,2 });
       List<string> SelectedDeps = new List<string>();
       List<string> SelectedEmps = new List<string>();
-      SelectedDeps = usersFilterd.Select(p => p.CountryId.ToString()).Distinct<string>().ToList<string>();
+      SelectedDeps = usersFilterd.Select(p => p.CntryName).Distinct<string>().ToList<string>();
       SelectedEmps = usersFilterd.Select(p => p.Id).Distinct<string>().ToList<string>();
 
       ViewBag.SelectedDepartments = SelectedDeps;
@@ -316,14 +317,14 @@ namespace LeaveON.Controllers
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Edit([Bind(Prefix = "UserLeavePolicy", Include = "Id,UserId,Description,WeeklyOffDays,AgreementType,FiscalYearStart,FiscalYearEnd,FiscalYearPeriod,Remarks")] UserLeavePolicy userLeavePolicy,
-      [Bind(Prefix = "UserLeavePolicyDetail", Include = "LeaveTypeId,Allowed")] List<UserLeavePolicyDetail> userLeavePolicyDetail, [Bind(Prefix = "AnnualOffDay", Include = "Id,OffDay,Description")] List<AnnualOffDay> AnnualOffDays, List<int> DepartmentList, List<string> EmployeeList, string PolicyFor)
+      [Bind(Prefix = "UserLeavePolicyDetail", Include = "LeaveTypeId,Allowed")] List<UserLeavePolicyDetail> userLeavePolicyDetail, [Bind(Prefix = "AnnualOffDay", Include = "Id,OffDay,Description")] List<AnnualOffDay> AnnualOffDays, List<string> DepartmentList, List<string> EmployeeList, string PolicyFor)
     {
 
       //UserLeavePolicy userLeavePolicyOld = await db.UserLeavePolicies.FindAsync(userLeavePolicy.Id);
       //db.UserLeavePolicyDetails.RemoveRange(userLeavePolicyOld.UserLeavePolicyDetails);
       //await db.SaveChangesAsync();
       userLeavePolicy.WeeklyOffDays = userLeavePolicy.WeeklyOffDays;//"6,0";
-      userLeavePolicy.CountryId = 1;//from which user is Login. but admin who can view all coutries there we have to user a list of country so that he choose a country
+      userLeavePolicy.CountryId = 5;//from which user is Login. but admin who can view all coutries there we have to user a list of country so that he choose a country
       //userLeavePolicy.AnnualOffDays = string.Join(",", AnnualOffDays);
       userLeavePolicy.DepartmentPolicy = (PolicyFor == "1") ? true : false;
       foreach (UserLeavePolicyDetail item in userLeavePolicyDetail.ToList<UserLeavePolicyDetail>())
@@ -341,14 +342,14 @@ namespace LeaveON.Controllers
       {
         if (PolicyFor == "1")//department
         {
-          Country dep;
+          CountryName dep;
           IQueryable<AspNetUser> usersFilterd = db.AspNetUsers.Where(x => x.UserLeavePolicyId == userLeavePolicy.Id);
-          List<int> oldDeps = new List<int>();
-          oldDeps = usersFilterd.Select(p => p.CountryId.Value).Distinct<int>().ToList<int>();
+          List<string> oldDeps = new List<string>();
+          oldDeps = usersFilterd.Select(p => p.CntryName).Distinct<string>().ToList<string>();
 
-          foreach (int itm in oldDeps)//get all employees of the deps, selected from UI
+          foreach (string itm in oldDeps)//get all employees of the deps, selected from UI
           {
-            dep = db.Countries.FirstOrDefault(x => x.Id == itm);
+            dep = db.CountryNames.FirstOrDefault(x => x.Name == itm);
             foreach (AspNetUser aspNetUser in dep.AspNetUsers)
             {
               //EmployeeList.Add(aspNetUser.Id);
@@ -360,9 +361,9 @@ namespace LeaveON.Controllers
 
 
           EmployeeList = new List<string>();
-          foreach (int itm in DepartmentList)//get all employees of the deps, selected from UI
+          foreach (string itm in DepartmentList)//get all employees of the deps, selected from UI
           {
-            dep = db.Countries.FirstOrDefault(x => x.Id == itm);
+            dep = db.CountryNames.FirstOrDefault(x => x.Name == itm);
             foreach (AspNetUser aspNetUser in dep.AspNetUsers)
             {
               //EmployeeList.Add(aspNetUser.Id);

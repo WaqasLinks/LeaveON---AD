@@ -346,88 +346,8 @@
                   </ul>
                 </li>
               }
-              if (User.IsInRole("Admin") || User.IsInRole("Manager"))
-              {
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon fa fa-users"></i>
-                    <p>
-                      Users
-                      <i class="right fas fa-angle-left"></i>
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="/AspNetUsers/Index" class="nav-link">
-                        &nbsp; &nbsp;<i class="far fa fa-list"></i>
-                        <p>Users List</p>
-                      </a>
-                    </li>
-                    @*<li class="nav-item">
-                      <a href="/Account/Register" class="nav-link">
-                        &nbsp; &nbsp; <i class="far fa fa-edit"></i>
-                        <p>Register User</p>
-                      </a>
-                    </li>*@
-                  </ul>
-                </li>
-              }
-              if (User.IsInRole("Admin"))
-              {
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon fa fa-building"></i>
-                    <p>
-                      Departments
-                      <i class="right fas fa-angle-left"></i>
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      @*<a href="/Departments/Index" class="nav-link">
-                          &nbsp; &nbsp; <i class="far fa fa-list"></i>
-                          <p>Departments List</p>
-                        </a>*@
-                      <a href="/DepartmentNames/Index" class="nav-link">
-                        &nbsp; &nbsp; <i class="far fa fa-list"></i>
-                        <p>Departments List</p>
-                      </a>
-                    </li>
-                    @*<li class="nav-item">
-                        <a href="/Departments/Create" class="nav-link">
-                          &nbsp; &nbsp; <i class="far fa fa-edit"></i>
-                          <p>Add Department</p>
-                        </a>
-                      </li>*@
-                  </ul>
-                </li>
-              }
-              if (User.IsInRole("Admin"))
-              {
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <i class="nav-icon fa fa-flag"></i>
-                    <p>
-                      Countries
-                      <i class="right fas fa-angle-left"></i>
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="/Countries/Index" class="nav-link">
-                        &nbsp; &nbsp; <i class="far fa fa-list"></i>
-                        <p>Countries List</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="/Countries/Create" class="nav-link">
-                        &nbsp; &nbsp;  <i class="far fa fa-edit"></i>
-                        <p>Add Country</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              }
+
+
               if (User.IsInRole("Admin"))
               {
                 <li class="nav-item has-treeview">
@@ -499,11 +419,11 @@
                         </a>
                       </li>*@
                     @*<li class="nav-item">
-                      <a href="/AccessTimeData/UserData" class="nav-link">
-                        &nbsp; &nbsp;  <i class="far fa fa-history"></i>
-                        <p>User Data</p>
-                      </a>
-                    </li>*@
+                        <a href="/AccessTimeData/UserData" class="nav-link">
+                          &nbsp; &nbsp;  <i class="far fa fa-history"></i>
+                          <p>User Data</p>
+                        </a>
+                      </li>*@
                     <li class="nav-item">
                       <a href="/AccessBiostarAC/UserData" class="nav-link">
                         &nbsp; &nbsp;  <i class="far fa fa-history"></i>
@@ -514,11 +434,11 @@
                     @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                     {
                       @*<li class="nav-item">
-                        <a href="/AccessTimeData/DepartmentData" class="nav-link">
-                          &nbsp; &nbsp;  <i class="far fa fa-building"></i>
-                          <p>Department Data</p>
-                        </a>
-                      </li>*@
+                          <a href="/AccessTimeData/DepartmentData" class="nav-link">
+                            &nbsp; &nbsp;  <i class="far fa fa-building"></i>
+                            <p>Department Data</p>
+                          </a>
+                        </li>*@
                       <li class="nav-item">
                         <a href="/AccessBiostarAC/DepartmentData" class="nav-link">
                           &nbsp; &nbsp;  <i class="far fa fa-building"></i>
@@ -526,11 +446,11 @@
                         </a>
                       </li>
                       @*<li class="nav-item">
-                        <a href="/AccessTimeData/WhoIsIn" class="nav-link">
-                          &nbsp; &nbsp;  <i class="far fa fa-history"></i>
-                          <p>Who Is In</p>
-                        </a>
-                      </li>*@
+                          <a href="/AccessTimeData/WhoIsIn" class="nav-link">
+                            &nbsp; &nbsp;  <i class="far fa fa-history"></i>
+                            <p>Who Is In</p>
+                          </a>
+                        </li>*@
                       <li class="nav-item">
                         <a href="/AccessBiostarAC/WhoIsIn" class="nav-link">
                           &nbsp; &nbsp;  <i class="far fa fa-history"></i>
@@ -554,6 +474,28 @@
                   <a href="/Account/Index" class="nav-link">
                     &nbsp;&nbsp;<i class="far fa fa-edit"></i>
                     <p>Users Roles</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/AspNetUsers/Index" class="nav-link">
+                    &nbsp; &nbsp;<i class="far fa fa-list"></i>
+                    <p>Users List</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/Countries/Index" class="nav-link">
+                    &nbsp; &nbsp; <i class="far fa fa-list"></i>
+                    <p>Countries List</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  @*<a href="/Departments/Index" class="nav-link">
+                      &nbsp; &nbsp; <i class="far fa fa-list"></i>
+                      <p>Departments List</p>
+                    </a>*@
+                  <a href="/DepartmentNames/Index" class="nav-link">
+                    &nbsp; &nbsp; <i class="far fa fa-list"></i>
+                    <p>Departments List</p>
                   </a>
                 </li>
               }

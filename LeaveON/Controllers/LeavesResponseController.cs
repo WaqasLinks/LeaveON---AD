@@ -283,7 +283,7 @@ namespace LeaveON.Controllers
       decimal totalDays;
       if (leave.TotalDays == null)
       {
-        totalDays = (decimal)(endDate - startDate).TotalDays;
+        totalDays = (decimal)(endDate - startDate).TotalDays+1;
       }
       else
       {
@@ -303,7 +303,7 @@ namespace LeaveON.Controllers
       //--------------------------get old leave and put new values to it------------------------
       Leave leaveOld = db.Leaves.FirstOrDefault(x => x.Id == leave.Id);
       leave = leaveOld;
-
+      leave.TotalDays = totalDays;
       if (IsLineManager1 == "True")
       {
         leave.IsAccepted1 = IsAccepted1;

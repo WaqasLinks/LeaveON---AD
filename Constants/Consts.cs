@@ -8,6 +8,6 @@ namespace LMS.Constants
 {
     public class Consts
     {
-        public const int CompensatoryLeaveTypeId = 20;
+        public const int CompensatoryLeaveTypeId = 0;
     }
 }

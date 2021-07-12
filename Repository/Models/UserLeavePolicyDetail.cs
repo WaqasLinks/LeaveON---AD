@@ -20,7 +20,6 @@ namespace Repository.Models
         public Nullable<int> Allowed { get; set; }
         public Nullable<int> CountryId { get; set; }
     
-        public virtual Country Country { get; set; }
         public virtual LeaveType LeaveType { get; set; }
         public virtual UserLeavePolicy UserLeavePolicy { get; set; }
     }

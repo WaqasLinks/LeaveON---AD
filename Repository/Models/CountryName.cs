@@ -12,21 +12,21 @@ namespace Repository.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Department
+    public partial class CountryName
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Department()
+        public CountryName()
         {
             this.AspNetUsers = new HashSet<AspNetUser>();
+            this.UserLeavePolicies = new HashSet<UserLeavePolicy>();
         }
     
-        public int Id { get; set; }
+        public decimal Id { get; set; }
         public string Name { get; set; }
-        public Nullable<int> CountryId { get; set; }
-        public Nullable<System.DateTime> DateCreated { get; set; }
-        public Nullable<System.DateTime> DateModified { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUser> AspNetUsers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserLeavePolicy> UserLeavePolicies { get; set; }
     }
 }
