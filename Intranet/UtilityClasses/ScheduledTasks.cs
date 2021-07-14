@@ -68,26 +68,6 @@ namespace LeaveON.UtilityClasses
             }
         }
 
-        public void Experiment()
-        {
-            var context = new DirectoryContext(DirectoryContextType.Forest, "intechww.com");
-            List<string> Lstabc1 = new List<string>();
-            using (var schema = System.DirectoryServices.ActiveDirectory.ActiveDirectorySchema.GetSchema(context))
-            {
-                var userClass = schema.FindClass("user");
-
-                foreach (ActiveDirectorySchemaProperty property in userClass.GetAllProperties())
-                {
-                    var abc = property.Name;
-                    if (property.Name.ToLower().Contains("region"))
-                    {
-
-                        Lstabc1.Add(property.Name);
-                    }
-                    // property.Name is what you're looking for
-                }
-            }
-        }
         public void SyncAppWithAD()
         {
 
@@ -100,7 +80,7 @@ namespace LeaveON.UtilityClasses
                 int UpdatedEmp = 0;
                 //List<string> loginsList = new List<string>();
                 var path = @"D:\LeaveON - AD\Intranet\ADUserList.txt";
-                var goInto = false;
+              
                 using (var searcher = new PrincipalSearcher(new UserPrincipal(context)))
                 {
 
@@ -153,12 +133,7 @@ namespace LeaveON.UtilityClasses
                         //DateTime WhenCreated = DateTime.Parse(de.Properties["whenCreated"].Value.ToString().Trim());
                         //DateTime LastLogon = DateTime.ParseExact("01/01/2019", "dd/MM/yyyy", CultureInfo.InvariantCulture); //= DateTime.Parse(de.Properties["LastLogon"].Value.ToString().Trim());
                         auth = result as AuthenticablePrincipal;
-                        if (auth != null && auth.UserPrincipalName != null && auth.UserPrincipalName.ToLower().Contains("kashif.ali@intechww.com"))
-                        {
-                            //////loginsList.Add(auth.UserPrincipalName + "," + auth.Enabled);
-                            goInto = true;
-                            //////var abc = auth.UserPrincipalName;
-                        }
+                        
                         if (auth == null || auth.UserPrincipalName == null || string.IsNullOrEmpty(auth.UserPrincipalName) || auth.Enabled == false)
                         {
                             continue;//we dont need this. simply move to next
@@ -190,7 +165,7 @@ namespace LeaveON.UtilityClasses
                             departmentsList.Add(Convert.ToString(de.Properties["department"].Value));
                             countriesList.Add(Convert.ToString(de.Properties["co"].Value));
                             AspNetUser aspNetUser = LstAspNetUsers.FirstOrDefault(x => x.UserName.Replace(" ", "").ToUpper() == auth.UserPrincipalName.Replace(" ", "").ToUpper());
-                            goInto = false;
+                           
 
                             if (aspNetUser == null)
                             {//Insert
@@ -348,6 +323,26 @@ namespace LeaveON.UtilityClasses
             //db.Entry(emp).State = EntityState.Modified;
             //db.SaveChangesAsync();
 
+        }
+        public void Experiment()
+        {
+            var context = new DirectoryContext(DirectoryContextType.Forest, "intechww.com");
+            List<string> Lstabc1 = new List<string>();
+            using (var schema = System.DirectoryServices.ActiveDirectory.ActiveDirectorySchema.GetSchema(context))
+            {
+                var userClass = schema.FindClass("user");
+
+                foreach (ActiveDirectorySchemaProperty property in userClass.GetAllProperties())
+                {
+                    var abc = property.Name;
+                    if (property.Name.ToLower().Contains("region"))
+                    {
+
+                        Lstabc1.Add(property.Name);
+                    }
+                    // property.Name is what you're looking for
+                }
+            }
         }
     }
 }

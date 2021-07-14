@@ -235,6 +235,9 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeController.cs" />
     <Compile Include="Controllers\UserLeavePoliciesController.cs" />
+    <Compile Include="EmailSender\Class1.cs" />
+    <Compile Include="EmailSender\ReplaceValuesInTemplate.cs" />
+    <Compile Include="EmailSender\SendEmail.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2233,6 +2236,7 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\sammy-0.7.5.js" />
     <Content Include="Scripts\sammy-0.7.5.min.js" />
+    <Content Include="Templates\Email.html" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -2416,10 +2420,6 @@
     <ProjectReference Include="..\Constants\Constants.csproj">
       <Project>{3a03c4ca-8a13-4e4f-9c4f-7da8cc997973}</Project>
       <Name>Constants</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mail\Mail.csproj">
-      <Project>{f5a301c8-04f1-4c1f-a417-0e5a31a832e9}</Project>
-      <Name>Mail</Name>
     </ProjectReference>
     <ProjectReference Include="..\Repository\Repository.csproj">
       <Project>{e65cbc04-25ca-456c-ac4e-b22009b0773e}</Project>

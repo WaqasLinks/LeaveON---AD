@@ -15,7 +15,6 @@ using System.Web.Mvc;
 using Repository.Models;
 using Microsoft.AspNet.Identity;
 using LMS.Constants;
-using LMS.Mail;
 using LeaveON.Migrations;
 using System.Web.Configuration;
 using System.Timers;

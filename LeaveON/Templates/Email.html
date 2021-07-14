@@ -1,0 +1,124 @@
+<html>
+<head>
+  <style type="text/css">
+    <!--
+    .style3 {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px
+    }
+
+    .style5 {
+      color: #FF0000;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px
+    }
+    -->
+  </style>
+</head>
+<body>
+  <p>
+    Leave Application applied by <%EmpName%> is <%Status%>.
+    <br>
+    Click <a href="<%Link%>" target="_blank">here</a> to review Leave Application through INTECH Time Monitoring System.
+  </p>
+  <hr width="300px" align="left">
+  <table width="822" border="0">
+    <tr>
+      <td width="154">
+        <span class="style3">Employee Name :</span>
+      </td>
+      <td width="658">
+        <span class="style3">
+          <%EmpName%>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="style3">Employee# :</span>
+      </td>
+      <td>
+        <span class="style3">
+          <%EmpNo%>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="style3">Department :</span>
+      </td>
+      <td>
+        <span class="style3">
+          <%Dept%>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="style3">Purpose : </span>
+      </td>
+      <td>
+        <span class="style3">
+          <%Purpose%>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="style3">Line Manager : </span>
+      </td>
+      <td>
+        <span class="style3">
+          <%LineManager%>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="style3">Emergency Contact : </span>
+      </td>
+      <td>
+        <span class="style3">
+          <%EmergencyContact%>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="style3">Location : </span>
+      </td>
+      <td>
+        <span class="style3">
+          <%Location%>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="style3">From Date : </span>
+      </td>
+      <td>
+        <span class="style3">
+          <%FromDate%>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <span class="style3">To Date : </span>
+      </td>
+      <td>
+        <span class="style3">
+          <%ToDate%>
+        </span>
+      </td>
+    </tr>
+  </table>
+  <hr width="300px" align="left">
+  <p class="style3">
+    Note: This record is created by
+    <%LoggedInUser%>
+    . This is a system generated email, please donot reply to this message.
+  </p>
+</body>
+</html>

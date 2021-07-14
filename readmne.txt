@@ -1,0 +1,2 @@
+before release
+1. remove any hardcoded username (for test purpose)

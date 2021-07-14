@@ -183,7 +183,7 @@
 
     $.get('@Url.Action("Edit","UserLeavePolicies")?id=' + "@ViewBag.UserLeavePolicyId" + '&Caller=' + "LeaveRequest" + "&leaveUserId=" + "@ViewBag.LeaveUserId" , function (data) {
         $("#UserLeavePolicyData").append(data);
-      });
+    });
 
 
     $(document).ready(function () {
@@ -195,7 +195,14 @@
       // $('#datepickerEnd').change(function () {
       //   alert('e');
       // });
-        var message = "@ViewBag.PolicyAlert";
+
+      $("#LineManager1Id").change(function () {
+        $('#LineManager2Id').val($('#LineManager1Id').val());
+      });
+      //01/07/2021 00:00:00
+     
+      //alert(new Date());
+      var message = "@ViewBag.PolicyAlert";
       if (message != "") {
          $("#Create :input").prop("disabled", true);
          alert(message);
@@ -257,6 +264,12 @@
           $("#datepickerEnd").val("");
           return false;
         }
+        //if (start > fiscalYearEnd || end > fiscalYearEnd || start < fiscalYearStart || end < fiscalYearEnd) {
+        //  alert("You can claim leave of current fiscal year only.");
+        //  $("#datepickerStart").val("");
+        //  $("#datepickerEnd").val("");
+        //  return false;
+        //}
          //alert(days);
         $('#diff').val(days);
         return true;

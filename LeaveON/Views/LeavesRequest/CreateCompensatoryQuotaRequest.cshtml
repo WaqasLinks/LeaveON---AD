@@ -181,7 +181,7 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
     $(function () {
-      
+
       @*$.get('@Url.Action("Edit", "UserLeavePolicies")?id=' + "@ViewBag.UserLeavePolicyId" + '&Caller=' + "LeaveRequest", function (data) {
         $("#UserLeavePolicyData").append(data);
       });*@
@@ -192,14 +192,11 @@
 
     $(document).ready(function () {
 
-      //$('#datepickerStart').change(function () {
-      //   alert('s');
-      //});
 
-      // $('#datepickerEnd').change(function () {
-      //   alert('e');
-      // });
-
+      $("#LineManager1Id").change(function () {
+        $('#LineManager2Id').val($('#LineManager1Id').val());
+      });
+      
       var message = "@ViewBag.PolicyAlert";
       if (message != "") {
          $("#CompQuota :input").prop("disabled", true);
@@ -262,6 +259,25 @@
           $("#datepickerEnd").val("");
           return false;
         }
+        var TodayDate = new Date();
+        if (start > TodayDate || end > TodayDate) {
+          alert("You can claim compensatory leave quota of past dates only.");
+          $("#datepickerStart").val("");
+          $("#datepickerEnd").val("");
+          return false;
+        }
+        //if (start > fiscalYearEnd || end > fiscalYearEnd || start < fiscalYearStart || end < fiscalYearEnd) {
+        //  alert("You can claim compensatory leave quota of current fiscal year only.");
+        //  $("#datepickerStart").val("");
+        //  $("#datepickerEnd").val("");
+        //  return false;
+        //}
+
+        //if (end > TodayDate) {
+        //  alert("You can not take composatory leave qouta of future. Please select previous end date");
+        //  $("#datepickerEnd").val("");
+        //  return false;
+        //}
         //alert(days);
         $('#diff').val(days);
         return true;

@@ -457,18 +457,21 @@
                           <p>Who Is In</p>
                         </a>
                       </li>
+                      if (User.IsInRole("Admin"))
+                      {
                       <li class="nav-item">
                         <a href="/AspNetUserClaims/Index" class="nav-link">
                           &nbsp; &nbsp;  <i class="far fa fa-history"></i>
                           <p>Access Rights</p>
                         </a>
                       </li>
+                      }
                     }
                   </ul>
                 </li>
               }
 
-              if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+              if (User.IsInRole("Admin"))
               {
                 <li class="nav-item">
                   <a href="/Account/Index" class="nav-link">

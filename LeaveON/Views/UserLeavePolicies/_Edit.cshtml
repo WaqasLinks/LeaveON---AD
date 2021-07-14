@@ -3,7 +3,9 @@
 <!-- general form elements -->
 <div id="EditPage" class="card card-warning">
   <div class="card-header">
-    <h3 class="card-title">Edit User Leave Policy</h3>
+    
+    <h3 class="card-title">User Leave Policy</h3>
+    
   </div>
   <!-- /.card-header -->
   <!-- form start -->
@@ -75,11 +77,11 @@
                         <thead>
                           <tr>
 
-                            <th>Leave Type</th>
-                            <th>Allowed</th>
-                            <th class="DontShowInPolicy">Taken</th>
-                            <th class="DontShowInPolicy">Balance</th>
-                            <th class="DontShowInLeave"> </th>
+                            <th style="width:32%;">Leave Type</th>
+                            <th style="width:17%;">Allowed</th>
+                            <th style="width:17%;" class="DontShowInPolicy">Taken</th>
+                            <th style="width:17%;" class="DontShowInPolicy">Balance</th>
+                            <th style="width:17%;" class="DontShowInLeave"> </th>
 
                           </tr>
                         </thead>
@@ -107,7 +109,7 @@
                                   </td>
                                   <td><input name="UserLeavePolicyDetail[@sNo].Allowed" value="@(item.Allowed)" class="form-control" placeholder="Allowed"> </td>
                                   <td class="DontShowInPolicy"><input name="UserLeavePolicyDetail[@sNo].Taken" value="@(leaveBalance != null ? leaveBalance.Taken.ToString() : "")" class="form-control" placeholder="Taken"> </td>
-                                  <td class="DontShowInPolicy"><input name="UserLeavePolicyDetail[@sNo].Balance" value="@(leaveBalance != null ? leaveBalance.Balance.ToString() : "")" class="form-control" placeholder="Balance" style="width: 50px;"> </td>
+                                  <td class="DontShowInPolicy"><input name="UserLeavePolicyDetail[@sNo].Balance" value="@(leaveBalance != null ? leaveBalance.Balance.ToString() : "")" class="form-control" placeholder="Balance"> </td>
                                   <td class="DontShowInLeave"><a href="javascript:void(0);" class=" btn btn-danger remLeaveType">x</a></td>
                                 </tr>
                                 sNo += 1;
@@ -133,7 +135,7 @@
                                   </td>
                                   <td><input name="UserLeavePolicyDetail[@sNo].Allowed" value="@(Allowed)" class="form-control" placeholder="Allowed"> </td>
                                   <td class="DontShowInPolicy"><input name="UserLeavePolicyDetail[@sNo].Taken" value="@(leaveBalance != null ? leaveBalance.Taken.ToString() : "")" class="form-control" placeholder="Taken"> </td>
-                                  <td class="DontShowInPolicy"><input name="UserLeavePolicyDetail[@sNo].Balance" value="@(leaveBalance != null ? leaveBalance.Balance.ToString() : "")" class="form-control" placeholder="Balance" style="width: 50px;"> </td>
+                                  <td class="DontShowInPolicy"><input name="UserLeavePolicyDetail[@sNo].Balance" value="@(leaveBalance != null ? leaveBalance.Balance.ToString() : "")" class="form-control" placeholder="Balance"> </td>
                                   <td class="DontShowInPolicy DontShowInLeave"><a href="javascript:void(0);" class=" btn btn-danger remLeaveType">x</a></td>
                                 </tr>
                               }

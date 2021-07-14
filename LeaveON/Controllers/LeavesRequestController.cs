@@ -10,8 +10,9 @@ using System.Web.Mvc;
 using Repository.Models;
 using Microsoft.AspNet.Identity;
 using LMS.Constants;
-using LMS.Mail;
+
 using LeaveON.Migrations;
+using LeaveON.EmailSender;
 
 namespace LeaveON.Controllers
 {
@@ -83,6 +84,8 @@ namespace LeaveON.Controllers
       ViewBag.LineManagers = new SelectList(db.AspNetUsers.OrderBy(x=>x.UserName), "Id", "UserName");
       ViewBag.UserName = User.Identity.Name;//"LoggedIn User";
       ViewBag.LeaveUserId = userId;
+      ViewBag.FiscalYearStart = db.UserLeavePolicies.FirstOrDefault(x => x.Id == policyId).FiscalYearStart;
+      ViewBag.FiscalYearEnd = db.UserLeavePolicies.FirstOrDefault(x => x.Id == policyId).FiscalYearEnd;
       //UserLeavePoliciesController UserLeavePolicies = new UserLeavePoliciesController();//.FileUploadMsgView("some string");
       //var result= UserLeavePolicies.Edit(7);
       //ViewBag.UserLeavePolicy= UserLeavePolicies.Edit(7);
@@ -251,8 +254,9 @@ namespace LeaveON.Controllers
         await db.SaveChangesAsync();
         AspNetUser admin1 = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager1Id);
         SendEmail.SendEmailUsingLeavON(leave, SendEmail.LeavON_Email, SendEmail.LeavON_Password, leave.AspNetUser, admin1, "LeaveRequest");
+        
         AspNetUser admin2 = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager2Id);
-        SendEmail.SendEmailUsingLeavON(leave, SendEmail.LeavON_Email, SendEmail.LeavON_Password, leave.AspNetUser, admin2, "LeaveRequest");
+        if (admin1.UserName != admin2.UserName) SendEmail.SendEmailUsingLeavON(leave, SendEmail.LeavON_Email, SendEmail.LeavON_Password, leave.AspNetUser, admin2, "LeaveRequest");
         return RedirectToAction("Index");
       }
 

@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using Repository.Models;
 using Microsoft.AspNet.Identity;
-using LMS.Mail;
+using LeaveON.EmailSender;
 
 namespace LeaveON.Controllers
 {
@@ -53,15 +53,7 @@ namespace LeaveON.Controllers
     }
 
     // GET: Leaves/Create
-    public ActionResult Create()
-    {
-      //ViewBag.UserId = "d0c9d0b1-d0e8-4d56-a410-72e74af3ced8";
-      ViewBag.LeaveTypeId = new SelectList(db.LeaveTypes, "Id", "Name");
-      ViewBag.UserLeavePolicyId = new SelectList(db.UserLeavePolicies, "Id", "UserId");
-      ViewBag.LineManagers = new SelectList(db.AspNetUsers, "Id", "UserName");
-      ViewBag.UserName = "LoggedIn User";
-      return View();
-    }
+    
     public List<AspNetUser> GetSeniorStaff()
     {
       List<AspNetUser> Seniors = new List<AspNetUser>();
@@ -81,27 +73,7 @@ namespace LeaveON.Controllers
       }
       return Seniors;
     }
-    // POST: Leaves/Create
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-    // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Create([Bind(Include = "Id,UserId,LeaveTypeId,Reason,StartDate,EndDate,TotalDays,EmergencyContact,LineManager1Id,LineManager2Id")] Leave leave)
-    {
-      leave.DateCreated = DateTime.Now;
-      if (ModelState.IsValid)
-      {
-        db.Leaves.Add(leave);
-        await db.SaveChangesAsync();
-        return RedirectToAction("Index");
-      }
-
-      ViewBag.LeaveTypeId = new SelectList(db.LeaveTypes, "Id", "Name", leave.LeaveTypeId);
-      //ViewBag.UserLeavePolicyId = new SelectList(db.UserLeavePolicies, "Id", "UserId", leave.UserLeavePolicyId);
-      ViewBag.LineManagers = new SelectList(db.AspNetUsers, "Id", "UserName");
-      return View(leave);
-    }
-
+    
     // GET: Leaves/Edit/5
     public async Task<ActionResult> Edit(decimal id)
     {

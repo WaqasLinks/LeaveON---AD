@@ -1,6 +1,7 @@
 using Repository.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -11,8 +12,8 @@ namespace LMS.Mail
     public static class SendEmail
     {
 
-        public const string LeavON_Email = "ITMS-System@intechprocess.com";//"leaveon.nuces@gmail.com";
-        public const string LeavON_Password = "Nokia3310";//"Pakistan12345678*";
+        public const string LeavON_Email = "LMS@intechww.com";
+        public const string LeavON_Password = "Pakistan12345678*";
         /// <summary>
         /// Function will send email.
         /// </summary>
@@ -24,35 +25,48 @@ namespace LMS.Mail
         /// <remarks>Text put here will not display in a Visual Studio summary box.  
         /// It is meant to add in further detail for anyone who might read this  
         /// code in the future </remarks>
-        public static void SendEmailUsingLeavON(string LeavON_Email, string LeavON_Password, AspNetUser sender, AspNetUser receiver, String MessageType)
+        public static void SendEmailUsingLeavON(Leave leave1, string LeavON_Email, string LeavON_Password, AspNetUser sender, AspNetUser receiver, String MessageType)
         {
 
+            MailMessage mail = new MailMessage();
 
+            SmtpClient smtpServer = new SmtpClient("mail.smtp2go.com");
+            // SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+            // SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+            // mail.smtp2go.com
+            smtpServer.UseDefaultCredentials = false;
 
-            SmtpClient smtpClient = new SmtpClient("smtpcorp.com", 2525);//("smtp.gmail.com");
-                                                                         //smtpClient.UseDefaultCredentials = false;
-
-            smtpClient.Credentials = new System.Net.NetworkCredential(LeavON_Email, LeavON_Password);
+            smtpServer.Credentials = new System.Net.NetworkCredential(LeavON_Email, LeavON_Password);
             //smtpServer.Host = "smtp.gmail.com"; not neccesry now. as mention above
-            //smtpClient.Port = 2525;//587; //465;//587; // Gmail works on this port // not neccesry , given above.
-            //smtpClient.EnableSsl = true;
-
+            smtpServer.Port = 587; //465;//587; // Gmail works on this port
+            smtpServer.EnableSsl = true;
+            
 
             try
             {
-                MailMessage mail = new MailMessage();
+
                 mail.From = new MailAddress(LeavON_Email);
                 //mail.From = new MailAddress(sender.Email);
                 mail.To.Add(new MailAddress(receiver.Email));
-                
+                mail.CC.Add(new MailAddress("hrsupport@intechww.com"));
+
+                //KeyValuePair<string,string> keyValuePair = new KeyValuePair<string, string>();
+                List<string> phoneList = System.IO.File.ReadAllLines(Path.Combine(HttpContext.Current.Server.MapPath("~/App_Data/Uploads"), FileName)).ToList<string>();
+
+                //string path = HttpContext.Current.Server.MapPath("~/files/sample.html");
+                //string content = System.IO.File.ReadAllText(path);
 
                 switch (MessageType)
                 {
                     case "LeaveRequest":
                         mail.Subject = sender.UserName + " posted a Leave request";
                         mail.Body = "Dear , " + receiver.UserName +
-                            Environment.NewLine + "I have sent you a leave request. kindly login to LeaveON account " + "https://localhost:44380/LeavesResponse/Index" + " for detail." +
-                            Environment.NewLine +
+                            Environment.NewLine + "I have sent you a leave request. kindly follow the link " + 
+                            "https://lms.intechww.com:1001/?ReturnUrl=https://lms.intechww.com:1002/LeavesResponse/Edit/" + leave1.Id + " for detail." +
+                            Environment.NewLine + leave1.LeaveType.Name +
+                            Environment.NewLine + leave1.Reason +
+                            Environment.NewLine + leave1.StartDate +
+                            Environment.NewLine + leave1.EndDate +
                             Environment.NewLine + "Best Regards " +
                             Environment.NewLine +
                             sender.UserName +  //string.Format(body, model.FromName, model.FromEmail, model.Message);
@@ -63,8 +77,15 @@ namespace LMS.Mail
 
                         mail.Subject = sender.UserName + " posted a Leave response";
                         mail.Body = "Dear " + receiver.UserName + "," +
-                            Environment.NewLine + "I have just sent you feed back regarding your leave request. kindly login to LeaveON account  " + "https://localhost:44380/LeavesRequest/Index" + " for detail." +
-                            Environment.NewLine +
+                            Environment.NewLine + "I have just sent you feed back regarding your leave request. kindly follow the link " +
+                            //"http://lms.intechww.com:1002/LeavesRequest/Index" + " for detail." +
+                            //https://localhost:44339/?ReturnUrl=https://localhost:44380/LeavesResponse/Edit/60
+                            "https://lms.intechww.com:1001/?ReturnUrl=https://lms.intechww.com:1002/LeavesRequest/Edit/" + leave1.Id + " for detail." +
+                             Environment.NewLine + leave1.LeaveType.Name +
+
+                            Environment.NewLine + leave1.Reason +
+                            Environment.NewLine + leave1.StartDate +
+                            Environment.NewLine + leave1.EndDate +
                             Environment.NewLine + "Best Regards " +
                             Environment.NewLine +
                             sender.UserName +  //string.Format(body, model.FromName, model.FromEmail, model.Message);
@@ -85,7 +106,7 @@ namespace LMS.Mail
 
 
 
-                smtpClient.Send(mail);
+                smtpServer.Send(mail);
             }
             catch (Exception ex)
             {
@@ -93,7 +114,7 @@ namespace LMS.Mail
                 switch (ex.HResult)
                 {
                     case -2146233088://sender email is wrong
-                                     //return quitely                  
+                        //return quitely                  
                         break;
                     default:
                         //return quitely
@@ -107,7 +128,7 @@ namespace LMS.Mail
 
             MailMessage mail = new MailMessage();
 
-            SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+            SmtpClient smtpServer = new SmtpClient("mail.smtp2go.com");
             //smtpServer.UseDefaultCredentials = false;
             smtpServer.Credentials = new System.Net.NetworkCredential(senderEmail, senderPassword);
             //smtpServer.Host = "smtp.gmail.com"; not neccesry now. as mention above
@@ -131,7 +152,7 @@ namespace LMS.Mail
                 switch (ex.HResult)
                 {
                     case -2146233088://sender email is wrong
-                                     //return quitely                  
+                        //return quitely                  
                         break;
                     default:
                         //return quitely
