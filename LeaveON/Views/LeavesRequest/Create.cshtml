@@ -188,19 +188,33 @@
 
     $(document).ready(function () {
 
-      //$('#datepickerStart').change(function () {
-      //   alert('s');
-      //});
+      $('#btnApply').click(function () {
+        if (IsDatesCorrect() == false) {
+          //alert('false');
+          return false;
+        }
+        else {
+          //alert('true');
+          return true;
+        }
 
-      // $('#datepickerEnd').change(function () {
-      //   alert('e');
-      // });
+      });
+
+      //alert('@ViewBag.FiscalYearStart');
+      var momentDate = moment('@ViewBag.FiscalYearStart', 'DD-MM-YYYY HH:mm:ss');
+      //alert(momentDate);
+      var fiscalYearStart = momentDate.toDate();
+      //alert(fiscalYearStart);
+      momentDate = moment('@ViewBag.FiscalYearEnd', 'DD-MM-YYYY HH:mm:ss');
+      var fiscalYearEnd = momentDate.toDate();
+      //alert(momentDate);
+
 
       $("#LineManager1Id").change(function () {
         $('#LineManager2Id').val($('#LineManager1Id').val());
       });
       //01/07/2021 00:00:00
-     
+
       //alert(new Date());
       var message = "@ViewBag.PolicyAlert";
       if (message != "") {
@@ -264,12 +278,12 @@
           $("#datepickerEnd").val("");
           return false;
         }
-        //if (start > fiscalYearEnd || end > fiscalYearEnd || start < fiscalYearStart || end < fiscalYearEnd) {
-        //  alert("You can claim leave of current fiscal year only.");
-        //  $("#datepickerStart").val("");
-        //  $("#datepickerEnd").val("");
-        //  return false;
-        //}
+        if (start > fiscalYearEnd || end > fiscalYearEnd || start < fiscalYearStart || end < fiscalYearEnd) {
+          alert("You can claim leave of current fiscal year only.");
+          $("#datepickerStart").val("");
+          $("#datepickerEnd").val("");
+          return false;
+        }
          //alert(days);
         $('#diff').val(days);
         return true;

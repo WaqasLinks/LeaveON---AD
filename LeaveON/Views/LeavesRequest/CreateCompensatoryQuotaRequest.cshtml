@@ -1,8 +1,8 @@
 @model Repository.Models.Leave
 
 @{
-    ViewBag.Title = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+  ViewBag.Title = "Create";
+  Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!-- left column -->
@@ -82,7 +82,7 @@
         <div class="form-group">
           @Html.LabelFor(model => model.StartDate, "Start Date", htmlAttributes: new { @class = " " })<b style="color:red">*</b>
 
-          @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @id = "datepickerStart", required = "required "} })
+          @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @id = "datepickerStart", required = "required " } })
           @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
 
         </div>
@@ -90,7 +90,7 @@
         <div class="form-group">
           @Html.LabelFor(model => model.EndDate, "End Date", htmlAttributes: new { @class = " " })<b style="color:red">*</b>
 
-          @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @id = "datepickerEnd", required = "required "} })
+          @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @id = "datepickerEnd", required = "required " } })
           @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
 
         </div>
@@ -141,7 +141,7 @@
 
         <div class="form-group">
           <div class="class=" card-footer">
-            <input type="submit" value="Apply" class="btn btn-primary" id="btnApply" style = "width: 180px; margin-left:auto;margin-right:auto;display:block;margin-top:auto;margin-bottom:0%" />
+            <input type="submit" value="Apply" class="btn btn-primary" id="btnApply" style="width: 180px; margin-left:auto;margin-right:auto;display:block;margin-top:auto;margin-bottom:0%" />
 
           </div>
         </div>
@@ -160,13 +160,13 @@
 
 <!-- right column -->
 @{
-    //Html.RenderPartial("Edit1");
-    //Html.RenderAction("Edit","UserLeavePolicies",new { id = 7});
-    //Html.RenderPartial("Edit", Repository.Models., new { id = 7 });
-    //Html.Action("Edit", "UserLeavePolicies", new { id = 7 });
+  //Html.RenderPartial("Edit1");
+  //Html.RenderAction("Edit","UserLeavePolicies",new { id = 7});
+  //Html.RenderPartial("Edit", Repository.Models., new { id = 7 });
+  //Html.Action("Edit", "UserLeavePolicies", new { id = 7 });
 
-    //Html.Partial("../UserLeavePolicies/Edit",)
-    //Html.RenderPartial("_Edit", ViewBag.UserLeavePolicy);
+  //Html.Partial("../UserLeavePolicies/Edit",)
+  //Html.RenderPartial("_Edit", ViewBag.UserLeavePolicy);
 
 }
 <div id="UserLeavePolicyData" class="col-md-6"></div>
@@ -175,11 +175,11 @@
 
 
 
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  @*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>*@
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+@*<script src="https://code.jquery.com/jquery-1.12.4.js"></script>*@
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
     $(function () {
 
       @*$.get('@Url.Action("Edit", "UserLeavePolicies")?id=' + "@ViewBag.UserLeavePolicyId" + '&Caller=' + "LeaveRequest", function (data) {
@@ -190,13 +190,33 @@
         $("#UserLeavePolicyData").append(data);
       })
 
-    $(document).ready(function () {
+      $(document).ready(function () {
 
+        $('#btnApply').click(function () {
+          if (IsDatesCorrect() == false) {
+            //alert('false');
+            return false;
+          }
+          else {
+            //alert('true');
+            return true;
+          }
+          
+        });
+
+      //alert('@ViewBag.FiscalYearStart');
+      var momentDate = moment('@ViewBag.FiscalYearStart', 'DD-MM-YYYY HH:mm:ss');
+      //alert(momentDate);
+      var fiscalYearStart = momentDate.toDate();
+      //alert(fiscalYearStart);
+      momentDate = moment('@ViewBag.FiscalYearEnd', 'DD-MM-YYYY HH:mm:ss');
+      var fiscalYearEnd = momentDate.toDate();
+      //alert(momentDate);
 
       $("#LineManager1Id").change(function () {
         $('#LineManager2Id').val($('#LineManager1Id').val());
       });
-      
+
       var message = "@ViewBag.PolicyAlert";
       if (message != "") {
          $("#CompQuota :input").prop("disabled", true);
@@ -266,12 +286,12 @@
           $("#datepickerEnd").val("");
           return false;
         }
-        //if (start > fiscalYearEnd || end > fiscalYearEnd || start < fiscalYearStart || end < fiscalYearEnd) {
-        //  alert("You can claim compensatory leave quota of current fiscal year only.");
-        //  $("#datepickerStart").val("");
-        //  $("#datepickerEnd").val("");
-        //  return false;
-        //}
+        if (start > fiscalYearEnd || end > fiscalYearEnd || start < fiscalYearStart || end < fiscalYearEnd) {
+          alert("You can claim compensatory leave quota of current fiscal year only.");
+          $("#datepickerStart").val("");
+          $("#datepickerEnd").val("");
+          return false;
+        }
 
         //if (end > TodayDate) {
         //  alert("You can not take composatory leave qouta of future. Please select previous end date");
@@ -282,6 +302,9 @@
         $('#diff').val(days);
         return true;
       }
+
+     
+
 
       //showButtonPanel: true
 
@@ -296,9 +319,9 @@
     });
 
   });
-  </script>
+</script>
 
-  @*@section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }*@
+@*@section Scripts {
+      @Scripts.Render("~/bundles/jqueryval")
+  }*@
 
