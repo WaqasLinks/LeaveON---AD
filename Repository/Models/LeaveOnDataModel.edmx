@@ -80,6 +80,7 @@
           </Key>
           <Property Name="Id" Type="decimal" Precision="10" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="TimeZone" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="DepartmentNames">
           <Key>
@@ -590,6 +591,7 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUsers" Relationship="LeaveONModels.FK_AspNetUsers_CountryNames" FromRole="CountryName" ToRole="AspNetUser" />
           <NavigationProperty Name="UserLeavePolicies" Relationship="LeaveONModels.FK_UserLeavePolicy_CountryNames" FromRole="CountryName" ToRole="UserLeavePolicy" />
+          <Property Name="TimeZone" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DepartmentName">
           <Key>
@@ -935,6 +937,7 @@
           <EntitySetMapping Name="CountryNames">
             <EntityTypeMapping TypeName="LeaveONModels.CountryName">
               <MappingFragment StoreEntitySet="CountryNames">
+                <ScalarProperty Name="TimeZone" ColumnName="TimeZone" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

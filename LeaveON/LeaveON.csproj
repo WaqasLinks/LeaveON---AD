@@ -221,6 +221,7 @@
     <Compile Include="Controllers\AccessTimeDataController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AspNetUserClaimsController.cs" />
+    <Compile Include="Controllers\CountryNamesController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DepartmentNamesController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -2338,6 +2339,12 @@
     <Content Include="Views\AccessBiostarAC\DepartmentData.cshtml" />
     <Content Include="Views\AccessBiostarAC\_UserDataToday.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\Countries\Edit.cshtml" />
+    <Content Include="Views\CountryNames\Create.cshtml" />
+    <Content Include="Views\CountryNames\Delete.cshtml" />
+    <Content Include="Views\CountryNames\Details.cshtml" />
+    <Content Include="Views\CountryNames\Edit.cshtml" />
+    <Content Include="Views\CountryNames\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
