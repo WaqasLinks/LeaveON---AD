@@ -589,9 +589,9 @@
           </Key>
           <Property Name="Id" Type="Decimal" Nullable="false" Precision="10" Scale="0" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TimeZone" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUsers" Relationship="LeaveONModels.FK_AspNetUsers_CountryNames" FromRole="CountryName" ToRole="AspNetUser" />
           <NavigationProperty Name="UserLeavePolicies" Relationship="LeaveONModels.FK_UserLeavePolicy_CountryNames" FromRole="CountryName" ToRole="UserLeavePolicy" />
-          <Property Name="TimeZone" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DepartmentName">
           <Key>
@@ -645,7 +645,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Leaves" Relationship="LeaveONModels.FK_Leave_LeaveType" FromRole="LeaveType" ToRole="Leave" />
           <NavigationProperty Name="LeaveBalances" Relationship="LeaveONModels.FK_LeaveBalance_LeaveType" FromRole="LeaveType" ToRole="LeaveBalance" />

@@ -7,7 +7,7 @@ using System.Web;
 
 namespace LeaveON.UtilityClasses
 {
-  public class Attendance
+  public class TimeData
   {
     [Key]
     public int Sr { get; set; }

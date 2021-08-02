@@ -1,4 +1,4 @@
-@model IEnumerable<LeaveON.UtilityClasses.Attendance>
+@model IEnumerable<LeaveON.UtilityClasses.TimeData>
 @{
 
   <div id="NewData">
@@ -83,30 +83,53 @@
                               <td>
                                 @Html.DisplayFor(modelItem => item.Day)
                               </td>
-                              <td>
-                                @Html.DisplayFor(modelItem => item.TimeIn)
-                              </td>
-                              <td>
-                                @Html.DisplayFor(modelItem => item.TimeOut)
-                              </td>
-                              <td>
-                                @Html.DisplayFor(modelItem => item.WorkingHours)
-                              </td>
-                              <td>
-                                @Html.DisplayFor(modelItem => item.TotalTime)
-                              </td>
+                              @{ TimeSpan offDayTime = TimeSpan.Parse("00.00:00");
+
+                                if (item.WorkingHours != offDayTime)
+                                {
+                                  <td>
+                                    @Html.DisplayFor(modelItem => item.TimeIn)
+                                  </td>
+                                  <td>
+                                    @Html.DisplayFor(modelItem => item.TimeOut)
+                                  </td>
+                                  <td>
+                                    @Html.DisplayFor(modelItem => item.WorkingHours)
+                                  </td>
+                                  <td>
+                                    @Html.DisplayFor(modelItem => item.TotalTime)
+                                  </td>
+                                }
+                                else
+                                {
+                                  <td>
+                                    <text>-</text>
+                                  </td>
+                                  <td>
+                                    <text>-</text>
+                                  </td>
+                                  <td>
+                                    <text>-</text>
+                                  </td>
+                                  <td>
+                                    <text>-</text>
+                                  </td>
+                                }
+
+                              }
+
                               <td>
 
-                                @{ 
-                                    if (String.IsNullOrEmpty(item.Status))
-                                    {
-                                      @Html.ActionLink("Detail", "ConnectToDBandReturnOffHours", new { reqDate = item.Date.ToString("dd-MM-yyyy"), UserId = item.EmployeeNumber}, new { target = "_blank" }) 
-                                    }
+                                @{
+                                  if (String.IsNullOrEmpty(item.Status))
+                                  {
+                                    @Html.ActionLink("Detail", "ConnectToDBandReturnOffHours", new { reqDate = item.Date.ToString("dd-MM-yyyy"), UserId = item.EmployeeNumber }, new { target = "_blank" })
+                                  }
                                   else
-                                    {
-                                      @Html.DisplayFor(modelItem => item.Status) 
-                                    } 
-                                 }
+                                  {
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                  }
+                                }
 
 
                               </td>

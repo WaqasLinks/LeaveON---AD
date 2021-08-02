@@ -311,7 +311,7 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="UtilityClasses\Attendance.cs" />
+    <Compile Include="UtilityClasses\TimeData.cs" />
     <Compile Include="UtilityClasses\LoginFilter.cs" />
     <Compile Include="UtilityClasses\ScheduledTasks.cs" />
   </ItemGroup>

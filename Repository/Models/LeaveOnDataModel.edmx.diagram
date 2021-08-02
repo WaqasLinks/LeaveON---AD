@@ -6,15 +6,15 @@
     <edmx:Diagrams>
       <Diagram DiagramId="41b3342e1acf4fda99c28be56ef0d5bf" Name="Diagram1" ZoomLevel="73">
         <EntityTypeShape EntityType="LeaveONModels.AnnualOffDay" Width="1.5" PointX="5.25" PointY="21" />
-        <EntityTypeShape EntityType="LeaveONModels.AspNetRole" Width="1.5" PointX="3" PointY="14.25" />
-        <EntityTypeShape EntityType="LeaveONModels.AspNetUserClaim" Width="1.5" PointX="7.5" PointY="21.5" />
-        <EntityTypeShape EntityType="LeaveONModels.AspNetUserLogin" Width="1.5" PointX="7.5" PointY="26" />
+        <EntityTypeShape EntityType="LeaveONModels.AspNetRole" Width="1.5" PointX="3" PointY="14.125" />
+        <EntityTypeShape EntityType="LeaveONModels.AspNetUserClaim" Width="1.5" PointX="7.5" PointY="25.75" />
+        <EntityTypeShape EntityType="LeaveONModels.AspNetUserLogin" Width="1.5" PointX="7.5" PointY="14.375" />
         <EntityTypeShape EntityType="LeaveONModels.AspNetUser" Width="1.5" PointX="5.25" PointY="12.75" />
-        <EntityTypeShape EntityType="LeaveONModels.CountryName" Width="1.5" PointX="0.75" PointY="10.875" />
+        <EntityTypeShape EntityType="LeaveONModels.CountryName" Width="1.5" PointX="0.75" PointY="10.75" />
         <EntityTypeShape EntityType="LeaveONModels.DepartmentName" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="LeaveONModels.Leave" Width="1.5" PointX="7.5" PointY="11.5" />
+        <EntityTypeShape EntityType="LeaveONModels.Leave" Width="1.5" PointX="10.5" PointY="9.375" />
         <EntityTypeShape EntityType="LeaveONModels.LeaveBalance" Width="1.5" PointX="10.5" PointY="15.5" />
-        <EntityTypeShape EntityType="LeaveONModels.LeaveType" Width="1.5" PointX="5.25" PointY="10" />
+        <EntityTypeShape EntityType="LeaveONModels.LeaveType" Width="1.5" PointX="8.25" PointY="11" />
         <EntityTypeShape EntityType="LeaveONModels.UserLeavePolicy" Width="1.5" PointX="3" PointY="16.625" />
         <EntityTypeShape EntityType="LeaveONModels.UserLeavePolicyDetail" Width="1.5" PointX="8.25" PointY="17.75" />
         <AssociationConnector Association="LeaveONModels.FK_AnnualOffDays_UserLeavePolicy" />
