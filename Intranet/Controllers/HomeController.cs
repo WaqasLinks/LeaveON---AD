@@ -13,7 +13,7 @@ namespace Intranet.Controllers
         private LeaveONEntities db = new LeaveONEntities();
         public ActionResult Index(string ReturnUrl)
         {
-            //Experiment1();
+            //GetLog();
             List<string> loginsList = new List<string>();
             //string id1 = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             //string id4 = Request.LogonUserIdentity.Name;
@@ -60,7 +60,7 @@ namespace Intranet.Controllers
             //return Redirect("https://localhost:44380/Account/Login?ReturnUrl=" + ReturnUrl + "&ADUser=" + ADUserValue);//this for production
 
         }
-        public void Experiment1()
+        public void GetLog()
         {
             var path = Server.MapPath(@"~/UsersAndProperties.txt");
             //List<User> users = new List<User>();

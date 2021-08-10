@@ -138,8 +138,14 @@ namespace LeaveON.UtilityClasses
                         {
                             continue;//we dont need this. simply move to next
                         }
+                        if (auth.UserPrincipalName.ToLower().Contains("muzammil.riaz"))
+                        {
+                            var abc = "";
+                            var abbb = de.Properties["EmployeeId"].Value;
+                        }
                         counter += 1;
                         object adsLargeInteger = de.Properties["lastLogon"].Value;
+                        
                         if (adsLargeInteger == null)
                         {
                             continue;
@@ -179,7 +185,7 @@ namespace LeaveON.UtilityClasses
                             }
                             else
                             {//Update
-                                if (aspNetUser.IsActive != IsActive(de) || string.IsNullOrEmpty(aspNetUser.DepartmentName))
+                                if (aspNetUser.IsActive != IsActive(de) || string.IsNullOrEmpty(aspNetUser.DepartmentName) || aspNetUser.BioStarEmpNum ==0)
                                 {
                                     UpdateEmployee(aspNetUser, de);
                                 }
@@ -279,7 +285,7 @@ namespace LeaveON.UtilityClasses
             emp.UserName = Convert.ToString(de.Properties["userPrincipalName"].Value);
             emp.Email = Convert.ToString(de.Properties["userPrincipalName"].Value);
             emp.Id = Guid.NewGuid().ToString();
-            emp.BioStarEmpNum = Convert.ToInt32(de.Properties["EmployeeId"].Value);//null; //0000;
+            emp.BioStarEmpNum = Convert.ToInt32(de.Properties["facsimileTelephoneNumber"].Value);//null; //0000;
             emp.EmailConfirmed = false;
             emp.PasswordHash = "ABaTT1CcvSEzwTzDXHnXFm+9cJ3Zaa65Z6QMZ4ZygNVyX8TIvSevNuJGKX7k81VQVQ==";
             emp.SecurityStamp = "e93564e2-08f0-47cd-a822-4b99ca4c08d2";
@@ -313,11 +319,13 @@ namespace LeaveON.UtilityClasses
             //emp.IsActive = IsActive(de);
             oldEmp.IsActive = IsActive(de);
             oldEmp.DepartmentName = Convert.ToString(de.Properties["department"].Value);
+            oldEmp.BioStarEmpNum = Convert.ToInt32(de.Properties["facsimileTelephoneNumber"].Value);
             db.AspNetUsers.Attach(oldEmp);
 
             db.Entry(oldEmp).Property(x => x.IsActive).IsModified = true;
             db.Entry(oldEmp).Property(x => x.DepartmentName).IsModified = true;
             db.Entry(oldEmp).Property(x => x.CntryName).IsModified = true;
+            db.Entry(oldEmp).Property(x => x.BioStarEmpNum).IsModified = true;
             //db.SaveChangesAsync();
             db.SaveChanges();
             //db.Entry(emp).State = EntityState.Modified;

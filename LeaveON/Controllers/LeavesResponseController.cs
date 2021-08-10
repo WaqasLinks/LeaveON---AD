@@ -10,10 +10,11 @@ using System.Web.Mvc;
 using Repository.Models;
 using Microsoft.AspNet.Identity;
 using LeaveON.EmailSender;
+using LMS.Constants;
 
 namespace LeaveON.Controllers
 {
-  
+
   [Authorize(Roles = "Admin,Manager")]
   public class LeavesResponseController : Controller
   {
@@ -33,7 +34,7 @@ namespace LeaveON.Controllers
       //var leaves = db.Leaves.Include(l => l.LeaveType).Include(l => l.UserLeavePolicy);
       //var leaves = db.Leaves.Include(l => l.LeaveType);
       string LoggedInUserId = User.Identity.GetUserId();
-      var leaves = db.Leaves.Where(x => x.IsQuotaRequest==true && ( x.LineManager1Id == LoggedInUserId || x.LineManager2Id == LoggedInUserId));
+      var leaves = db.Leaves.Where(x => x.IsQuotaRequest == true && (x.LineManager1Id == LoggedInUserId || x.LineManager2Id == LoggedInUserId));
       return View(await leaves.ToListAsync());
     }
 
@@ -53,7 +54,7 @@ namespace LeaveON.Controllers
     }
 
     // GET: Leaves/Create
-    
+
     public List<AspNetUser> GetSeniorStaff()
     {
       List<AspNetUser> Seniors = new List<AspNetUser>();
@@ -73,7 +74,7 @@ namespace LeaveON.Controllers
       }
       return Seniors;
     }
-    
+
     // GET: Leaves/Edit/5
     public async Task<ActionResult> Edit(decimal id)
     {
@@ -127,7 +128,7 @@ namespace LeaveON.Controllers
       {
         IsAccepted1 = leave.IsAccepted1;
         Remarks1 = leave.Remarks1;
-        
+
       }
       else
       {
@@ -143,34 +144,36 @@ namespace LeaveON.Controllers
         leave.IsAccepted1 = IsAccepted1;
         leave.Remarks1 = Remarks1;
         leave.ResponseDate1 = DateTime.Now;
-        
-        if (IsAccepted1 == 2)
+
+        if (IsAccepted1 == Consts.ApprovedWithComments)
         {
           leave.Remarks1 = string.Empty;
           leave.TotalDays = decimal.Parse(Remarks1);
         }
-        
+
         if (leave.LineManager1Id == leave.LineManager2Id)
         {
           leave.IsAccepted2 = IsAccepted1;
           leave.Remarks2 = leave.Remarks1;
           leave.ResponseDate2 = DateTime.Now;
-          if (leave.IsAccepted2 > 0) CalculateAndChangeLeaveBalance(ref leave);
+          if (leave.IsAccepted2 > Consts.Rejected) CalculateAndChangeLeaveBalance(ref leave);
         }
+
+
       }
       else
       {
         leave.IsAccepted2 = IsAccepted2;
         leave.Remarks2 = Remarks2;
         leave.ResponseDate2 = DateTime.Now;
-        if (IsAccepted2 == 2)
+        if (IsAccepted2 == Consts.ApprovedWithComments)
         {
           leave.Remarks2 = string.Empty;
           leave.TotalDays = decimal.Parse(Remarks2);
         }
-        if (leave.IsAccepted2 > 0) CalculateAndChangeLeaveBalance(ref leave);
+        if (leave.IsAccepted2 > Consts.Rejected) CalculateAndChangeLeaveBalance(ref leave);
       }
-
+      //---------------------save and send emails------------------------------------------------
       if (ModelState.IsValid)
       {
         db.Entry(leave).State = EntityState.Modified;
@@ -178,14 +181,22 @@ namespace LeaveON.Controllers
         await db.SaveChangesAsync();
         if (IsLineManager1 == "True")
         {
-          AspNetUser admin = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager1Id);
-          SendEmail.SendEmailUsingLeavON(leave, SendEmail.LeavON_Email, SendEmail.LeavON_Password, admin, leave.AspNetUser , "LeaveResponse");
-
-          if (leave.LineManager1Id == leave.LineManager2Id)
+          if (leave.IsAccepted1 > Consts.Rejected && leave.LineManager1Id != leave.LineManager2Id)
           {
-            admin = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager2Id);
-            SendEmail.SendEmailUsingLeavON(leave, SendEmail.LeavON_Email, SendEmail.LeavON_Password, admin, leave.AspNetUser, "LeaveResponse");
+            //sending email to 2nd admin for request of second acceptance
+            AspNetUser admin2 = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager2Id);
+            SendEmail.SendEmailUsingLeavON(leave, SendEmail.LeavON_Email, SendEmail.LeavON_Password, leave.AspNetUser, admin2, "LeaveRequest");
           }
+
+          //sending eamil to employee from first admin //approved or disapproved
+          AspNetUser admin = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager1Id);
+          SendEmail.SendEmailUsingLeavON(leave, SendEmail.LeavON_Email, SendEmail.LeavON_Password, admin, leave.AspNetUser, "LeaveResponse");
+
+          //if (leave.LineManager1Id == leave.LineManager2Id)
+          //{
+          //  admin = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager2Id);
+          //  SendEmail.SendEmailUsingLeavON(leave, SendEmail.LeavON_Email, SendEmail.LeavON_Password, admin, leave.AspNetUser, "LeaveResponse");
+          //}
 
         }
         else
@@ -193,7 +204,7 @@ namespace LeaveON.Controllers
           AspNetUser admin = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager2Id);
           SendEmail.SendEmailUsingLeavON(leave, SendEmail.LeavON_Email, SendEmail.LeavON_Password, admin, leave.AspNetUser, "LeaveResponse");
         }
-        
+
         //AspNetUser admin2 = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager2Id);
         //SendEmail.SendEmailUsingLeavON(SendEmail.LeavON_Email, SendEmail.LeavON_Password, leave.AspNetUser, admin2, "LeaveRequest");
 
@@ -250,27 +261,27 @@ namespace LeaveON.Controllers
       Nullable<int> IsAccepted2 = null;
       string Remarks1 = string.Empty;
       string Remarks2 = string.Empty;
-      DateTime startDate= leave.StartDate;
-      DateTime endDate= leave.EndDate;
+      DateTime startDate = leave.StartDate;
+      DateTime endDate = leave.EndDate;
       decimal totalDays;
       if (leave.TotalDays == null)
       {
-        totalDays = (decimal)(endDate - startDate).TotalDays+1;
+        totalDays = (decimal)(endDate - startDate).TotalDays + 1;
       }
       else
       {
         totalDays = leave.TotalDays.Value;
       }
-      
+
       if (IsLineManager1 == "True")
       {
         IsAccepted1 = leave.IsAccepted1;
-        if (IsAccepted1==2) Remarks1 = (leave.Remarks1 == null) ? string.Empty : leave.Remarks1.Trim();
+        if (IsAccepted1 == Consts.ApprovedWithComments) Remarks1 = (leave.Remarks1 == null) ? string.Empty : leave.Remarks1.Trim();
       }
       else
       {
         IsAccepted2 = leave.IsAccepted2;
-        if (IsAccepted2 == 2) Remarks2 = (leave.Remarks2 == null) ? string.Empty : leave.Remarks2.Trim();
+        if (IsAccepted2 == Consts.ApprovedWithComments) Remarks2 = (leave.Remarks2 == null) ? string.Empty : leave.Remarks2.Trim();
       }
       //--------------------------get old leave and put new values to it------------------------
       Leave leaveOld = db.Leaves.FirstOrDefault(x => x.Id == leave.Id);
@@ -282,7 +293,7 @@ namespace LeaveON.Controllers
         leave.Remarks1 = Remarks1;
         //if (!(string.IsNullOrEmpty(Remarks1))) leave.TotalDays = decimal.Parse(Remarks1);
         leave.ResponseDate1 = DateTime.Now;
-        if (IsAccepted1 == 2)
+        if (IsAccepted1 == Consts.ApprovedWithComments)
         {
           //leave.Remarks1 = string.Empty;
           //if (!(string.IsNullOrEmpty(Remarks1))) leave.TotalDays = decimal.Parse(Remarks1);
@@ -290,23 +301,23 @@ namespace LeaveON.Controllers
           leave.EndDate = endDate;
           leave.TotalDays = totalDays;
         }
-        
+
         if (leave.LineManager1Id == leave.LineManager2Id)
         {
           leave.IsAccepted2 = IsAccepted1;
           leave.Remarks2 = leave.Remarks1;
           leave.ResponseDate2 = DateTime.Now;
           // calculatin will perform when linemanager 2 will aprove so it is in if condition
-          if (leave.IsAccepted2 > 0) CalculateAndChangeLeaveBalanceQuota(ref leave);
+          if (leave.IsAccepted2 > Consts.Rejected) CalculateAndChangeLeaveBalanceQuota(ref leave);
         }
-        
+
       }
       else
       {
         leave.IsAccepted2 = IsAccepted2;
         leave.Remarks2 = Remarks2;
         leave.ResponseDate2 = DateTime.Now;
-        if (IsAccepted2 == 2)
+        if (IsAccepted2 == Consts.ApprovedWithComments)
         {
           //leave.Remarks2 = string.Empty;
           //if (!(string.IsNullOrEmpty(Remarks2))) leave.TotalDays = decimal.Parse(Remarks2);
@@ -314,7 +325,7 @@ namespace LeaveON.Controllers
           leave.EndDate = endDate;
           leave.TotalDays = totalDays;
         }
-        if (leave.IsAccepted2>0) CalculateAndChangeLeaveBalanceQuota(ref leave);
+        if (leave.IsAccepted2 > Consts.Rejected) CalculateAndChangeLeaveBalanceQuota(ref leave);
 
       }
 
@@ -326,13 +337,20 @@ namespace LeaveON.Controllers
         //------------------------------sending mail----------------------------------------------
         if (IsLineManager1 == "True")
         {
+          if (leave.IsAccepted1 > Consts.Rejected && leave.LineManager1Id != leave.LineManager2Id)
+          {
+            //sending email to 2nd admin for request of second acceptance
+            AspNetUser admin2 = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager2Id);
+            SendEmail.SendEmailUsingLeavON(leave, SendEmail.LeavON_Email, SendEmail.LeavON_Password, leave.AspNetUser, admin2, "LeaveRequest");
+          }
+          //sending eamil to employee from first admin //approved or disapproved
           AspNetUser admin = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager1Id);
           SendEmail.SendEmailUsingLeavON(leave, SendEmail.LeavON_Email, SendEmail.LeavON_Password, admin, leave.AspNetUser, "LeaveResponse");
-          if (leave.LineManager1Id == leave.LineManager2Id)
-          {
-            admin = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager2Id);
-            SendEmail.SendEmailUsingLeavON(leave, SendEmail.LeavON_Email, SendEmail.LeavON_Password, admin, leave.AspNetUser, "LeaveResponse");
-          }
+          //if (leave.LineManager1Id == leave.LineManager2Id)
+          //{
+          //  admin = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager2Id);
+          //  SendEmail.SendEmailUsingLeavON(leave, SendEmail.LeavON_Email, SendEmail.LeavON_Password, admin, leave.AspNetUser, "LeaveResponse");
+          //}
         }
         else
         {

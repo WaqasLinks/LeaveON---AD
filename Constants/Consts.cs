@@ -9,5 +9,7 @@ namespace LMS.Constants
     public class Consts
     {
         public const int CompensatoryLeaveTypeId = 0;
+        public const int ApprovedWithComments = 2;
+        public const int Rejected = 0;
     }
 }

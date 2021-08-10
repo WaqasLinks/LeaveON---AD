@@ -286,7 +286,7 @@
           $("#datepickerEnd").val("");
           return false;
         }
-        if (start > fiscalYearEnd || end > fiscalYearEnd || start < fiscalYearStart || end < fiscalYearEnd) {
+        if (start < fiscalYearStart || end > fiscalYearEnd || start > fiscalYearEnd || end < fiscalYearStart) {
           alert("You can claim compensatory leave quota of current fiscal year only.");
           $("#datepickerStart").val("");
           $("#datepickerEnd").val("");

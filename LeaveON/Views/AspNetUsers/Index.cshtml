@@ -45,6 +45,10 @@
                       @*<th class="sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" aria-sort="descending">
                         @Html.DisplayNameFor(model => model.Email)
                       </th>*@
+                      <th>
+                        @*@Html.DisplayNameFor(model => model.Department.Country.Name)*@
+                        Emp. Id
+                      </th>
                       <th class="sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="UserName: activate to sort column ascending" aria-sort="descending">
                         @Html.DisplayNameFor(model => model.UserName)
                       </th>
@@ -80,7 +84,10 @@
                   @*<td>
                     @Html.DisplayFor(modelItem => item.Email)
                   </td>*@
-              
+                  <td>
+                    @Html.DisplayFor(modelItem => item.BioStarEmpNum)
+                  </td>
+ 
                   <td>
                     @Html.DisplayFor(modelItem => item.UserName)
                   </td>
@@ -159,6 +166,7 @@
       "info": false,
       "autoWidth": false,
       "responsive": true,
+      "order": [[1, "asc"]]
     });
   });
 </script>

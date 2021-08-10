@@ -168,7 +168,8 @@ namespace LeaveON.Controllers
     {
       //ADUser = "bsserviceaccount@intechww.com";
       //ADUser = "Ahsan.Ahmad@intechww.com";
-      //ADUser = "muzammil.riaz@intechww.com";
+      ADUser = "muzammil.riaz@intechww.com";
+      //ADUser = "asrar.ahmed@intechww.com";
       //ADUser = "Khaleel.khan@intechww.com";
       //ADUser = "Usman.Javed@intechww.com";
       //ADUser = "kashif.ali@intechww.com";
@@ -178,7 +179,7 @@ namespace LeaveON.Controllers
       //ADUser = "testing@intechww.com";
       //ADUser = "kashif.ali@intechww.com";
       //ali.raza@intechww.com
-      //ADUser = "asrar.ahmed@intechww.com";
+
       //var path = System.Web.HttpContext.Current.Server.MapPath(@"~/myLog.txt");
       //var identityName = HttpContext.User.Identity.Name;
       //using (HostingEnvironment.Impersonate())

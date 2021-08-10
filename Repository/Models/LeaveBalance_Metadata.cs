@@ -33,7 +33,14 @@ namespace Repository.Models
                 decimal UserLeavePolicyId = leave.AspNetUser.UserLeavePolicyId.Value;
                 //LeaveBalance leaveBalance= leave.AspNetUser.LeaveBalances.FirstOrDefault(x => x.LeaveTypeId == LeaveTypeId && x.UserId == UserId);
                 UserLeavePolicyDetail userLeavePolicyDetail = leave.AspNetUser.UserLeavePolicy.UserLeavePolicyDetails.FirstOrDefault(x => x.UserLeavePolicyId == UserLeavePolicyId && x.LeaveTypeId == leaveTypeId);
-                Balance = userLeavePolicyDetail.Allowed;
+                if (userLeavePolicyDetail==null)
+                {
+                    Balance = 0;
+                }
+                else
+                {
+                    Balance = userLeavePolicyDetail.Allowed;
+                }
                 Taken = 0;
                 Description = string.Empty;
             }

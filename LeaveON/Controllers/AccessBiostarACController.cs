@@ -44,7 +44,7 @@ namespace LeaveON.Controllers
         int UserId = Id;
         //cmd = new SqlCommand("select * from T_LG202106 where USRID = '9919' and SRVDT>= '2021-06-01' AND SRVDT<= '2021-06-30' order by EVTLGUID", con);
         //cmd = new SqlCommand("select * from T_LG201901 where USRID = '2205' order by EVTLGUID", con);
-        cmd = new SqlCommand("select * from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' and TNAKEY <> 0 order by EVTLGUID", con);
+        cmd = new SqlCommand("select USRID,SRVDT,DEVDT,TNAKEY from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' and TNAKEY <> 0 order by DEVDT", con);
         dr = cmd.ExecuteReader();
         DataTable dt = new DataTable();
         dt.Load(dr);
@@ -96,8 +96,11 @@ namespace LeaveON.Controllers
             }
 
             //------reIntiallize variables to next date calculations
+            firsTimeIn = DateTime.ParseExact("2001-01-01 01:01:01", "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);//firstDateTime;//DateTime.Today;
+            lastTimeOut = DateTime.ParseExact("2001-01-01 01:01:01", "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);//lastDateTime;//DateTime.Today;
             ThidDayWorkingHours = new TimeSpan();
             IsCardIn = false; IsCardOut = false;
+
             //--- this loop is to cater empty days. for example time data started from 7th days. so to cater fist 6 days this loop is required
             //for (int k = dayCounter; k < firstDay; k++)
             //{
@@ -109,31 +112,32 @@ namespace LeaveON.Controllers
 
 
           }
-          if (IsCardIn == false && (int)dt.Rows[j]["TNAKEY"] == 1)
-          {//get first time in
-            firsTimeIn = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
-            IsCardIn = true;
-            UserId = Convert.ToInt32(dt.Rows[j]["USRID"]);
-          }
-          if ((int)dt.Rows[j]["TNAKEY"] == 2)
-          {//get last time out
-            IsCardOut = true;
-            lastTimeOut = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
-          }
-
+          
           //------get actual working hour of this date--------
-          //if ((j + 1 <= rowsCount - 1) && (int)dt.Rows[j]["TNAKEY"] == 1 && (int)dt.Rows[j + 1]["TNAKEY"] == 2 &&
-          //  Convert.ToDateTime((DateTime)dt.Rows[j]["SRVDT"]).Day == thisDay && Convert.ToDateTime((DateTime)dt.Rows[j + 1]["SRVDT"]).Day == thisDay)
           if ((j + 1 <= rowsCount - 1) && (int)dt.Rows[j]["TNAKEY"] == 1 && (int)dt.Rows[j + 1]["TNAKEY"] == 2 &&
             Convert.ToDateTime(ConvertToCountryTimeZone(dt, j, timeZone)).Day == firstDay && Convert.ToDateTime(ConvertToCountryTimeZone(dt, j + 1, timeZone)).Day == firstDay)
           {
+            if (IsCardIn == false)
+            {//get first time in
+              firsTimeIn = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
+              lastTimeOut = ConvertToCountryTimeZone(dt, j+1, timeZone);
+              IsCardIn = true;
+              UserId = Convert.ToInt32(dt.Rows[j]["USRID"]);
+            }
+
             timeIn = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
             timeOut = ConvertToCountryTimeZone(dt, j + 1, timeZone);//(DateTime)dt.Rows[j + 1]["SRVDT"];
             TimeSpan workingHour = (timeOut - timeIn);
             ThidDayWorkingHours = ThidDayWorkingHours.Add(workingHour);
-            IsCardIn = true; IsCardOut = true;
+            
+            //IsCardIn = true; IsCardOut = true;
 
           }
+          //if (IsCardIn == true && (int)dt.Rows[j]["TNAKEY"] == 2)
+          //{//get last time out
+          //  IsCardOut = true;
+          //  lastTimeOut = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
+          //}
 
         }
         //add last date to list here as loop ended
@@ -273,7 +277,7 @@ namespace LeaveON.Controllers
       //to avaid showing current month all data which is not happend yet
       foreach (var itm in LstTimeData.ToList())
       {
-        if (itm.Date> DateTime.Now.Date)
+        if (itm.Date > DateTime.Now.Date)
         {
           LstTimeData.Remove(itm);
         }
@@ -304,6 +308,7 @@ namespace LeaveON.Controllers
     private DateTime ConvertToCountryTimeZone(DataTable dt, int rowNo, string timeZone)
     {
       //(DateTime)dt.Rows[rowsCount - 1]["DEVDT"];
+      DateTime ConvertedDateTime;
       try
       {
         if (timeZone == "")
@@ -311,15 +316,16 @@ namespace LeaveON.Controllers
           int unixTimeStamp = (int)dt.Rows[rowNo]["DEVDT"];
           DateTimeOffset utcDateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimeStamp);
           TimeZoneInfo customeTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time");
-          return TimeZoneInfo.ConvertTimeFromUtc(utcDateTime.DateTime, customeTimeZone);
+          ConvertedDateTime= TimeZoneInfo.ConvertTimeFromUtc(utcDateTime.DateTime, customeTimeZone);
         }
         else
         {
           int unixTimeStamp = (int)dt.Rows[rowNo]["DEVDT"];
           DateTimeOffset utcDateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimeStamp);
           TimeZoneInfo customeTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);//"Pakistan Standard Time");
-          return TimeZoneInfo.ConvertTimeFromUtc(utcDateTime.DateTime, customeTimeZone);
+          ConvertedDateTime= TimeZoneInfo.ConvertTimeFromUtc(utcDateTime.DateTime, customeTimeZone);
         }
+        return ConvertedDateTime;
       }
       catch (Exception ex)
       {
@@ -351,7 +357,7 @@ namespace LeaveON.Controllers
       //cmd = new SqlCommand("select * from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' and SRVDT>='#" +reqDate + "#' and  SRVDT<='#" + reqDate + "#' order by EVTLGUID", con);
       //cmd = new SqlCommand("select * from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' and SRVDT between @fromDate and @toDate order by EVTLGUID", con);
       //cmd = new SqlCommand("select * from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' and SRVDT>='" + from_Date.ToString("yyyy-MM-dd HH:mm:ss.fffffff") + "' and  SRVDT<='" + to_Date.ToString("yyyy-MM-dd HH:mm:ss.fffffff") + "'  order by EVTLGUID", con);
-      cmd = new SqlCommand("select * from T_LG" + from_Date.Year + from_Date.Month.ToString("00") + " where USRID ='" + UserId + "' and SRVDT between @fromDate and @toDate order by EVTLGUID", con);
+      cmd = new SqlCommand("select * from T_LG" + from_Date.Year + from_Date.Month.ToString("00") + " where USRID ='" + UserId + "'  AND TNAKEY <> 0 and SRVDT between @fromDate and @toDate order by DEVDT", con);
       //cmd.Parameters.AddWithValue("@fromDate", from_Date.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
       //cmd.Parameters.AddWithValue("@toDate", to_Date.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
       cmd.Parameters.AddWithValue("@fromDate", from_Date);
