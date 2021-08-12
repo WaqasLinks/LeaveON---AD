@@ -21,6 +21,10 @@ namespace LeaveON.Controllers
   {
     private BioStarEntities dbBioStar = new BioStarEntities();
     LeaveONEntities dbLeaveOn = new LeaveONEntities();
+    //enum ReadersIn {538600343, 38677, 538595648, 35816,540093375,540093369,540093374 , 547241993  ,540133115 , 538848767 }
+
+    List<int> LstCardReadersIn = new List<int> { 538600343, 38677, 538595648, 35816, 540093375, 540093369, 540093374, 547241993, 540133115, 538848767 };
+
     private Task<List<TimeData>> ConnectToDBandReturnWorkingHours(string ReqMonthYear, List<int> UserIds)
     {
       //ReqMonthYear = "07-2019";
@@ -44,7 +48,7 @@ namespace LeaveON.Controllers
         int UserId = Id;
         //cmd = new SqlCommand("select * from T_LG202106 where USRID = '9919' and SRVDT>= '2021-06-01' AND SRVDT<= '2021-06-30' order by EVTLGUID", con);
         //cmd = new SqlCommand("select * from T_LG201901 where USRID = '2205' order by EVTLGUID", con);
-        cmd = new SqlCommand("select USRID,SRVDT,DEVDT,TNAKEY from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' and TNAKEY <> 0 order by DEVDT", con);
+        cmd = new SqlCommand("select USRID,SRVDT,DEVDT,DEVUID from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' order by DEVDT", con);
         dr = cmd.ExecuteReader();
         DataTable dt = new DataTable();
         dt.Load(dr);
@@ -88,8 +92,14 @@ namespace LeaveON.Controllers
               TotalTime = TotalTime.Add(lastTimeOut - firsTimeIn);
               //UserName = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId).UserName;
               //UserName = UserName.Substring(0, UserName.IndexOf('@')).Replace(".", " ");
-
-              attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, Date = firsTimeIn.Date, Day = firsTimeIn.DayOfWeek.ToString(), TimeIn = firsTimeIn, TimeOut = lastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (lastTimeOut - firsTimeIn) };
+              if (aspNetUser.UserLeavePolicy != null)
+              {
+                attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Policy = aspNetUser.UserLeavePolicy.Description, Date = firsTimeIn.Date, Day = firsTimeIn.DayOfWeek.ToString(), TimeIn = firsTimeIn, TimeOut = lastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (lastTimeOut - firsTimeIn) };
+              }
+              else
+              {
+                attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Date = firsTimeIn.Date, Day = firsTimeIn.DayOfWeek.ToString(), TimeIn = firsTimeIn, TimeOut = lastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (lastTimeOut - firsTimeIn) };
+              }
               LstTimeData.Add(attendance);
               TotalWorkingHours = TotalWorkingHours.Add(ThidDayWorkingHours);
 
@@ -112,32 +122,34 @@ namespace LeaveON.Controllers
 
 
           }
-          
+
           //------get actual working hour of this date--------
-          if ((j + 1 <= rowsCount - 1) && (int)dt.Rows[j]["TNAKEY"] == 1 && (int)dt.Rows[j + 1]["TNAKEY"] == 2 &&
+          //if ((j + 1 <= rowsCount - 1) && (int)dt.Rows[j]["TNAKEY"] == 1 && (int)dt.Rows[j + 1]["TNAKEY"] == 2 &&
+          if ((j + 1 <= rowsCount - 1) && LstCardReadersIn.Contains((int)dt.Rows[j]["DEVUID"]) && !LstCardReadersIn.Contains((int)dt.Rows[j + 1]["DEVUID"]) &&
             Convert.ToDateTime(ConvertToCountryTimeZone(dt, j, timeZone)).Day == firstDay && Convert.ToDateTime(ConvertToCountryTimeZone(dt, j + 1, timeZone)).Day == firstDay)
           {
             if (IsCardIn == false)
             {//get first time in
               firsTimeIn = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
-              lastTimeOut = ConvertToCountryTimeZone(dt, j+1, timeZone);
+              lastTimeOut = ConvertToCountryTimeZone(dt, j + 1, timeZone);
               IsCardIn = true;
-              UserId = Convert.ToInt32(dt.Rows[j]["USRID"]);
+              //UserId = Convert.ToInt32(dt.Rows[j]["USRID"]);
             }
 
             timeIn = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
             timeOut = ConvertToCountryTimeZone(dt, j + 1, timeZone);//(DateTime)dt.Rows[j + 1]["SRVDT"];
             TimeSpan workingHour = (timeOut - timeIn);
             ThidDayWorkingHours = ThidDayWorkingHours.Add(workingHour);
-            
+
             //IsCardIn = true; IsCardOut = true;
 
           }
           //if (IsCardIn == true && (int)dt.Rows[j]["TNAKEY"] == 2)
-          //{//get last time out
-          //  IsCardOut = true;
-          //  lastTimeOut = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
-          //}
+          if (IsCardIn == true && !LstCardReadersIn.Contains((int)dt.Rows[j]["DEVUID"]))
+          {//get last time out
+            IsCardOut = true;
+            lastTimeOut = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
+          }
 
         }
         //add last date to list here as loop ended
@@ -145,7 +157,15 @@ namespace LeaveON.Controllers
         if (firsTimeIn.Year != 2001 && lastTimeOut.Year != 2001)//(IsCardIn == true && IsCardOut == true)
         {
           TotalTime = TotalTime.Add(lastTimeOut - firsTimeIn);
-          attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, Date = firsTimeIn.Date, Day = firsTimeIn.DayOfWeek.ToString(), TimeIn = firsTimeIn, TimeOut = lastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (lastTimeOut - firsTimeIn) };
+          if(aspNetUser.UserLeavePolicy != null)
+          {
+            attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Policy = aspNetUser.UserLeavePolicy.Description, Date = firsTimeIn.Date, Day = firsTimeIn.DayOfWeek.ToString(), TimeIn = firsTimeIn, TimeOut = lastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (lastTimeOut - firsTimeIn) };
+          }
+          else
+          {
+            attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Date = firsTimeIn.Date, Day = firsTimeIn.DayOfWeek.ToString(), TimeIn = firsTimeIn, TimeOut = lastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (lastTimeOut - firsTimeIn) };
+          }
+          
           LstTimeData.Add(attendance);
           TotalWorkingHours = TotalWorkingHours.Add(ThidDayWorkingHours);
         }
@@ -179,6 +199,8 @@ namespace LeaveON.Controllers
               {
                 EmployeeName = UserName,
                 EmployeeNumber = leave.AspNetUser.BioStarEmpNum.Value,
+                TimeZone = timeZone,
+                Policy = aspNetUser.UserLeavePolicy.Description,
                 Date = leave.StartDate.AddDays(i),
                 Day = leave.StartDate.AddDays(i).ToString("dddd"),
                 Status = leave.Reason
@@ -194,6 +216,8 @@ namespace LeaveON.Controllers
             {
               EmployeeName = UserName,
               EmployeeNumber = iEmpNum,
+              TimeZone = timeZone,
+              Policy = aspNetUser.UserLeavePolicy.Description,
               Date = annualHoliday.OffDay.Value,
               Day = annualHoliday.OffDay.Value.ToString("dddd"),
               Status = annualHoliday.Description
@@ -236,7 +260,7 @@ namespace LeaveON.Controllers
         {
           LstThisMonthsWeekEnds = GetWeekEndList(int.Parse(dateAttr[1]), int.Parse(dateAttr[0]), aspNetUser.UserLeavePolicy.WeeklyOffDays);
         }
-        
+
 
         foreach (int weekEndDay in LstThisMonthsWeekEnds)
         {
@@ -253,6 +277,8 @@ namespace LeaveON.Controllers
             {
               EmployeeName = UserName,
               EmployeeNumber = iEmpNum,
+              TimeZone = timeZone,
+              Policy = aspNetUser.UserLeavePolicy.Description,
               Date = weekEndDate,
               Day = weekEndDate.ToString("dddd"),
               Status = "Holiday"
@@ -268,7 +294,7 @@ namespace LeaveON.Controllers
           if (LstTimeData.FirstOrDefault(x => x.Date.Day == absentDay) == null)
           {
             blankDateTime = DateTime.ParseExact(dateAttr[1] + "/" + dateAttr[0] + "/" + absentDay.ToString("00"), "yyyy/MM/dd", CultureInfo.InvariantCulture);
-            attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, Date = blankDateTime, Day = blankDateTime.DayOfWeek.ToString(), Status = "Absent" };
+            attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Policy = aspNetUser.UserLeavePolicy.Description, Date = blankDateTime, Day = blankDateTime.DayOfWeek.ToString(), Status = "Absent" };
             LstTimeData.Add(attendance);
           }
           //LstEmptyDays.Add(k);
@@ -316,14 +342,14 @@ namespace LeaveON.Controllers
           int unixTimeStamp = (int)dt.Rows[rowNo]["DEVDT"];
           DateTimeOffset utcDateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimeStamp);
           TimeZoneInfo customeTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time");
-          ConvertedDateTime= TimeZoneInfo.ConvertTimeFromUtc(utcDateTime.DateTime, customeTimeZone);
+          ConvertedDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime.DateTime, customeTimeZone);
         }
         else
         {
           int unixTimeStamp = (int)dt.Rows[rowNo]["DEVDT"];
           DateTimeOffset utcDateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimeStamp);
           TimeZoneInfo customeTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);//"Pakistan Standard Time");
-          ConvertedDateTime= TimeZoneInfo.ConvertTimeFromUtc(utcDateTime.DateTime, customeTimeZone);
+          ConvertedDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime.DateTime, customeTimeZone);
         }
         return ConvertedDateTime;
       }
@@ -357,7 +383,7 @@ namespace LeaveON.Controllers
       //cmd = new SqlCommand("select * from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' and SRVDT>='#" +reqDate + "#' and  SRVDT<='#" + reqDate + "#' order by EVTLGUID", con);
       //cmd = new SqlCommand("select * from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' and SRVDT between @fromDate and @toDate order by EVTLGUID", con);
       //cmd = new SqlCommand("select * from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' and SRVDT>='" + from_Date.ToString("yyyy-MM-dd HH:mm:ss.fffffff") + "' and  SRVDT<='" + to_Date.ToString("yyyy-MM-dd HH:mm:ss.fffffff") + "'  order by EVTLGUID", con);
-      cmd = new SqlCommand("select * from T_LG" + from_Date.Year + from_Date.Month.ToString("00") + " where USRID ='" + UserId + "'  AND TNAKEY <> 0 and SRVDT between @fromDate and @toDate order by DEVDT", con);
+      cmd = new SqlCommand("select * from T_LG" + from_Date.Year + from_Date.Month.ToString("00") + " where USRID ='" + UserId + "' and SRVDT between @fromDate and @toDate order by DEVDT", con);
       //cmd.Parameters.AddWithValue("@fromDate", from_Date.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
       //cmd.Parameters.AddWithValue("@toDate", to_Date.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
       cmd.Parameters.AddWithValue("@fromDate", from_Date);
@@ -391,8 +417,9 @@ namespace LeaveON.Controllers
       {
 
         //------get actual off hour of this date--------
-
-        if ((j + 1 <= rowsCount - 1) && (int)dt.Rows[j]["TNAKEY"] == 2 && (int)dt.Rows[j + 1]["TNAKEY"] == 1)
+        //&& LstInCardReaders.Contains((int)dt.Rows[j]["DEVUID"]) && !LstInCardReaders.Contains((int)dt.Rows[j + 1]["DEVUID"])
+        //if ((j + 1 <= rowsCount - 1) && (int)dt.Rows[j]["TNAKEY"] == 2 && (int)dt.Rows[j + 1]["TNAKEY"] == 1)
+        if ((j + 1 <= rowsCount - 1) && !LstCardReadersIn.Contains((int)dt.Rows[j]["DEVUID"]) && LstCardReadersIn.Contains((int)dt.Rows[j + 1]["DEVUID"]))
         {
           timeOut = ConvertToCountryTimeZone(dt, j, "");//(DateTime)dt.Rows[j]["SRVDT"];
           timeIn = ConvertToCountryTimeZone(dt, j + 1, "");//(DateTime)dt.Rows[j + 1]["SRVDT"];
@@ -623,7 +650,7 @@ namespace LeaveON.Controllers
       //cmd = new SqlCommand("select * from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' and SRVDT>='#" +reqDate + "#' and  SRVDT<='#" + reqDate + "#' order by EVTLGUID", con);
       //cmd = new SqlCommand("select * from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' and SRVDT between @fromDate and @toDate order by EVTLGUID", con);
       //cmd = new SqlCommand("select * from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' and SRVDT>='" + from_Date.ToString("yyyy-MM-dd HH:mm:ss.fffffff") + "' and  SRVDT<='" + to_Date.ToString("yyyy-MM-dd HH:mm:ss.fffffff") + "'  order by EVTLGUID", con);
-      cmd = new SqlCommand("SELECT USRID, MIN(DEVDT) DEVDT from T_LG" + from_Date.Year + from_Date.Month.ToString("00") + " where SRVDT between @fromDate and @toDate AND TNAKEY=1 GROUP BY USRID order by DEVDT asc", con);
+      cmd = new SqlCommand("SELECT USRID, MIN(DEVDT) DEVDT from T_LG" + from_Date.Year + from_Date.Month.ToString("00") + " where SRVDT between @fromDate and @toDate GROUP BY USRID order by DEVDT asc", con);
       //cmd.Parameters.AddWithValue("@fromDate", from_Date.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
       //cmd.Parameters.AddWithValue("@toDate", to_Date.ToString("yyyy-MM-dd HH:mm:ss.fffffff"));
       cmd.Parameters.AddWithValue("@fromDate", from_Date);
@@ -652,7 +679,17 @@ namespace LeaveON.Controllers
 
         //------get actual off hour of this date--------
         //thisDateTime = (DateTime)dt.Rows[j]["SRVDT"];
-        UserId = Convert.ToInt32(dt.Rows[j]["USRID"]);
+
+        if (!string.IsNullOrEmpty(Convert.ToString(dt.Rows[j]["USRID"])))
+        {
+
+          UserId = Convert.ToInt32(dt.Rows[j]["USRID"]);
+        }
+        else
+        {
+          continue;
+        }
+
         if (dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId) != null)
         {
           timeZone = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId).CountryName.TimeZone;
@@ -669,7 +706,15 @@ namespace LeaveON.Controllers
         {
           UserName = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId).UserName;
           UserName = UserName.Substring(0, UserName.IndexOf('@')).Replace(".", " ");
-          attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, Date = FirsTimeIn.Date, Day = FirsTimeIn.DayOfWeek.ToString(), TimeIn = FirsTimeIn };
+          if (user.UserLeavePolicy!= null)
+          {
+            attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Policy = user.UserLeavePolicy.Description, Date = FirsTimeIn.Date, Day = FirsTimeIn.DayOfWeek.ToString(), TimeIn = FirsTimeIn };
+          }
+          else
+          {
+            attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Date = FirsTimeIn.Date, Day = FirsTimeIn.DayOfWeek.ToString(), TimeIn = FirsTimeIn };
+          }
+          
           LstAttendances.Add(attendance);
 
         }

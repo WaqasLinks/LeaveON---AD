@@ -68,11 +68,11 @@
                         @*@Html.DisplayNameFor(model => model.IsAccepted1)*@
                         Line Manager 1
                       </th>
+
                       <th class="sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="IsAccepted2: activate to sort column ascending" aria-sort="descending">
                         @*@Html.DisplayNameFor(model => model.IsAccepted2)*@
                         Line Manager 2
                       </th>
-
 
 
                       <th></th>
@@ -113,41 +113,42 @@
                         @*@Html.DisplayFor(modelItem => item.IsAccepted1)*@
                         @if (item.IsAccepted1 != null && item.IsAccepted1 > 0)
                         {
-                          <p style="color:green"> Accepted </p>
+                          <p style="color:green"><b> Accepted </b></p>
+                          <p style="color:green;font-size:80%;">@item.Remarks1</p>
                         }
                         @if (item.IsAccepted1 != null && item.IsAccepted1 == 0)
                         {
-                          <p style="color:red"> Rejected </p>
+                          <p style="color:red"><b> Rejected </b></p>
+                          <p style="color:red;font-size:80%;">@item.Remarks1</p>
                         }
-
-
                       </td>
+
                       <td>
                         @*@Html.DisplayFor(modelItem => item.IsAccepted2)*@
                         @if (item.IsAccepted2 != null && item.IsAccepted2 > 0)
                         {
-                          <p style="color:green"> Accepted </p>
+                          <p style="color:green"><b> Accepted </b></p>
+                          <p style="color:green;font-size:80%;">@item.Remarks2</p>
                         }
                         @if (item.IsAccepted2 != null && item.IsAccepted2 == 0)
                         {
-                          <p style="color:red"> Rejected </p>
+                          <p style="color:red"><b> Rejected </b></p>
+                          <p style="color:red;font-size:80%;">@item.Remarks2</p>
                         }
-
                       </td>
 
 
-
                       <td>
-                        
-                          
-                          @if (item.IsAccepted2 == null)
-                          {
-                            @Html.ActionLink("Approve", "Edit", new { id = item.Id })
-                          }
-                          @*@Html.ActionLink("Details", "Details", new { id = item.Id }) |*@
-                          @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
-                          @*}*@
-                        
+
+
+                        @if ((item.IsAccepted1 == null || item.IsAccepted2 == 1) && item.IsAccepted2 == null)
+                        {
+                          @Html.ActionLink("Approve", "Edit", new { id = item.Id })
+                        }
+                        @*@Html.ActionLink("Details", "Details", new { id = item.Id }) |*@
+                        @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+                        @*}*@
+
                       </td>
                     </tr>
 

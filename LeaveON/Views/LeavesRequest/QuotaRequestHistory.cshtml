@@ -83,59 +83,64 @@
 
                   @foreach (var item in Model)
                   {
-                    <tr role="row" class="odd">
-                      <td>
-                        @Html.DisplayFor(modelItem => item.DateCreated)
-                      </td>
-                      <td>
-                        @Html.DisplayFor(modelItem => item.StartDate)
-                      </td>
-                      <td>
-                        @Html.DisplayFor(modelItem => item.EndDate)
-                      </td>
-                      <td>
-                        @Html.DisplayFor(modelItem => item.LeaveType.Name)
-                      </td>
-                      <td>
-                        @Html.DisplayFor(modelItem => item.TotalDays)
-                      </td>
-                      <td>
-                        @Html.DisplayFor(modelItem => item.Reason)
-                      </td>
+                <tr role="row" class="odd">
+                  <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                  </td>
+                  <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                  </td>
+                  <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                  </td>
+                  <td>
+                    @Html.DisplayFor(modelItem => item.LeaveType.Name)
+                  </td>
+                  <td>
+                    @Html.DisplayFor(modelItem => item.TotalDays)
+                  </td>
+                  <td>
+                    @Html.DisplayFor(modelItem => item.Reason)
+                  </td>
 
 
 
-                      <td>
-                        @*@Html.DisplayFor(modelItem => item.IsAccepted1)*@
-                        @if (item.IsAccepted1 != null && item.IsAccepted1 > 0)
-                        {
-                          <p style="color:green"> Accepted </p>
-                        }
-                        @if (item.IsAccepted1 != null && item.IsAccepted1 == 0)
-                        {
-                          <p style="color:red"> Rejected </p>
-                        }
-                      </td>
-                      <td>
-                        @*@Html.DisplayFor(modelItem => item.IsAccepted2)*@
-                        @if (item.IsAccepted2 != null && item.IsAccepted2 > 0)
-                        {
-                          <p style="color:green"> Accepted </p>
-                        }
-                        @if (item.IsAccepted2 != null && item.IsAccepted2 == 0)
-                        {
-                          <p style="color:red"> Rejected </p>
-                        }
-                      </td>
+                  <td>
+                    @*@Html.DisplayFor(modelItem => item.IsAccepted1)*@
+                    @if (item.IsAccepted1 != null && item.IsAccepted1 > 0)
+                    {
+                      <p style="color:green"><b> Accepted </b></p>
+                      <p style="color:green;font-size:80%;">@item.Remarks1</p>
+                    }
+                    @if (item.IsAccepted1 != null && item.IsAccepted1 == 0)
+                    {
+                      <p style="color:red"><b> Rejected </b></p>
+                      <p style="color:red;font-size:80%;">@item.Remarks1</p>
+                    }
+                  </td>
 
-                      <td>
-                        @*@if ((item.IsAccepted1 == null && item.IsAccepted2 == null))
-                        {
-                          @Html.ActionLink("Edit", "EditCompensatoryQuotaRequest", new { id = item.Id }); <span> | </span>
-                          Html.ActionLink("Delete", "Delete", new { id = item.Id });
-                        }*@
-                      </td>
-                    </tr>
+                  <td>
+                    @*@Html.DisplayFor(modelItem => item.IsAccepted2)*@
+                    @if (item.IsAccepted2 != null && item.IsAccepted2 > 0)
+                    {
+                      <p style="color:green"><b> Accepted </b></p>
+                      <p style="color:green;font-size:80%;">@item.Remarks2</p>
+                    }
+                    @if (item.IsAccepted2 != null && item.IsAccepted2 == 0)
+                    {
+                      <p style="color:red"><b> Rejected </b></p>
+                      <p style="color:red;font-size:80%;">@item.Remarks2</p>
+                    }
+                  </td>
+
+                  <td>
+                    @*@if ((item.IsAccepted1 == null && item.IsAccepted2 == null))
+      {
+        @Html.ActionLink("Edit", "EditCompensatoryQuotaRequest", new { id = item.Id }); <span> | </span>
+        Html.ActionLink("Delete", "Delete", new { id = item.Id });
+      }*@
+                  </td>
+                </tr>
 
                   }
                   @*<tfoot>

@@ -110,20 +110,21 @@
           <div class="form-group">
             @*@Html.LabelFor(model => model.IsAccepted1, "Status Line Manager 1", htmlAttributes: new { @class = " " })
 
-              @Html.EditorFor(model => model.IsAccepted1, new { htmlAttributes = new { @class = "form-control" } })
-              @Html.ValidationMessageFor(model => model.IsAccepted1, "", new { @class = "text-danger" })*@
+    @Html.EditorFor(model => model.IsAccepted1, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(model => model.IsAccepted1, "", new { @class = "text-danger" })*@
 
             <input type="radio" name="IsAccepted1" id="rdoAccepted1" value="1" checked> Approved |
-            <input type="radio" name="IsAccepted1" id="rdoAcceptedWithComments1" value="2" checked="@(ViewBag.AcceptStatus1)"> Approved With Comments |
+            @*<input type="radio" name="IsAccepted1" id="rdoAcceptedWithComments1" value="2" checked="@(ViewBag.AcceptStatus1)"> Approved With Comments |*@
             <input type="radio" name="IsAccepted1" id="rdoRejected1" value="0" checked="@(ViewBag.AcceptStatus1)"> Rejected
 
 
           </div>
 
-          <div class="form-group" id="divRemarks1" style="display: none">
+          @*<div class="form-group" id="divRemarks1" style="display: none">*@
+          <div class="form-group" id="divRemarks1">
             @Html.LabelFor(model => model.Remarks1, "Remarks", htmlAttributes: new { @class = " " })
 
-            @Html.EditorFor(model => model.Remarks1, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter numaric value" } })
+            @Html.EditorFor(model => model.Remarks1, new { htmlAttributes = new { @class = "form-control", placeholder = "Remarks..." } })
             @Html.ValidationMessageFor(model => model.Remarks1, "", new { @class = "text-danger" })
 
           </div>
@@ -145,20 +146,21 @@
 
             @*@Html.LabelFor(model => model.IsAccepted2, "Status Line Manager 2", htmlAttributes: new { @class = " " })
 
-              @Html.EditorFor(model => model.IsAccepted2, new { htmlAttributes = new { @class = "form-control" } })
-              @Html.ValidationMessageFor(model => model.IsAccepted2, "", new { @class = "text-danger" })*@
+    @Html.EditorFor(model => model.IsAccepted2, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(model => model.IsAccepted2, "", new { @class = "text-danger" })*@
 
             <input type="radio" name="IsAccepted2" id="rdoAccepted2" value="1" checked">Approved
-            <input type="radio" name="IsAccepted2" id="rdoAcceptedWithComments2" value="2" checked="@(ViewBag.AcceptStatus2)">Approved With Comments
+            @*<input type="radio" name="IsAccepted2" id="rdoAcceptedWithComments2" value="2" checked="@(ViewBag.AcceptStatus2)">Approved With Comments |*@
             <input type="radio" name="IsAccepted2" id="rdoRejected2" value="0" checked="@(ViewBag.AcceptStatus2)">Rejected
 
           </div>
 
 
-          <div class="form-group" id="divRemarks2" style="display: none">
+          @*<div class="form-group" id="divRemarks2" style="display: none">*@
+          <div class="form-group" id="divRemarks2">
             @Html.LabelFor(model => model.Remarks2, "Remarks", htmlAttributes: new { @class = " " })
 
-            @Html.EditorFor(model => model.Remarks2, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter numaric value" } })
+            @Html.EditorFor(model => model.Remarks2, new { htmlAttributes = new { @class = "form-control", placeholder = "Remarks..." } })
             @Html.ValidationMessageFor(model => model.Remarks2, "", new { @class = "text-danger" })
 
           </div>
@@ -198,37 +200,37 @@
 
   $(document).ready(function () {
 
-    $("#Remarks1,#Remarks2").keypress(function (e) {
-      var charCode = (e.which) ? e.which : e.keyCode;
-      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        return false;
-      }
-    });
+    //$("#Remarks1,#Remarks2").keypress(function (e) {
+    //  var charCode = (e.which) ? e.which : e.keyCode;
+    //  if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+    //    return false;
+    //  }
+    //});
 
 
-    $('input[name="IsAccepted1"]').on('click', function () {
-      //alert('1');
-      if ($(this).val() == '2') {
-        //alert('2');
-        $('#divRemarks1').show();
-      }
-      else {
-        //alert('3');
-        $('#divRemarks1').hide();
-      }
-    });
+    //$('input[name="IsAccepted1"]').on('click', function () {
+    //  //alert('1');
+    //  if ($(this).val() == '2') {
+    //    //alert('2');
+    //    $('#divRemarks1').show();
+    //  }
+    //  else {
+    //    //alert('3');
+    //    $('#divRemarks1').hide();
+    //  }
+    //});
 
-    $('input[name="IsAccepted2"]').on('click', function () {
-      //alert('1');
-      if ($(this).val() == '2') {
-        //alert('2');
-        $('#divRemarks2').show();
-      }
-      else {
-        //alert('3');
-        $('#divRemarks2').hide();
-      }
-    });
+    //$('input[name="IsAccepted2"]').on('click', function () {
+    //  //alert('1');
+    //  if ($(this).val() == '2') {
+    //    //alert('2');
+    //    $('#divRemarks2').show();
+    //  }
+    //  else {
+    //    //alert('3');
+    //    $('#divRemarks2').hide();
+    //  }
+    //});
   });
 </script>
 

@@ -43,6 +43,9 @@
                   <table id="example2" class="table table-bordered table-hover dataTable dtr-inline" role="grid" aria-describedby="example2_info">
                     <thead>
                       <tr role="row">
+                        <th style="display:none">
+                          No.
+                        </th>
                         <th class="sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="StartDate: activate to sort column ascending" aria-sort="descending">
                           Request Date
                         </th>
@@ -68,12 +71,11 @@
                           @*@Html.DisplayNameFor(model => model.IsAccepted1)*@
                           Line Manager 1
                         </th>
+
                         <th class="sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="IsAccepted2: activate to sort column ascending" aria-sort="descending">
                           @*@Html.DisplayNameFor(model => model.IsAccepted2)*@
                           Line Manager 2
                         </th>
-
-
 
                         <th></th>
                       </tr>
@@ -82,6 +84,9 @@
                     @foreach (var item in Model)
                     {
                       <tr role="row" class="odd">
+                        <td style="display:none">
+                          @Html.DisplayFor(modelItem => item.Id)
+                        </td>
                         <td>
                           @Html.DisplayFor(modelItem => item.DateCreated)
                         </td>
@@ -107,25 +112,32 @@
                           @*@Html.DisplayFor(modelItem => item.IsAccepted1)*@
                           @if (item.IsAccepted1 != null && item.IsAccepted1 > 0)
                           {
-                            <p style="color:green"> Accepted </p>
+                            <p style="color:green"><b> Accepted </b></p>
+                            <p style="color:green;font-size:80%;">@item.Remarks1</p>
+                            
                           }
                           @if (item.IsAccepted1 != null && item.IsAccepted1 == 0)
                           {
-                            <p style="color:red"> Rejected </p>
+                            <p style="color:red"><b> Rejected </b></p>
+                            <p style="color:red;font-size:80%;">@item.Remarks1</p>
                           }
                         </td>
+
                         <td>
                           @*@Html.DisplayFor(modelItem => item.IsAccepted2)*@
                           @if (item.IsAccepted2 != null && item.IsAccepted2 > 0)
                           {
-                            <p style="color:green"> Accepted </p>
+                            <p style="color:green"><b> Accepted </b></p>
+                            <p style="color:green;font-size:80%;">@item.Remarks2</p>
+
                           }
                           @if (item.IsAccepted2 != null && item.IsAccepted2 == 0)
                           {
-                            <p style="color:red"> Rejected </p>
+                            <p style="color:red"><b> Rejected </b></p>
+                            <p style="color:red;font-size:80%;">@item.Remarks2</p>
+
                           }
                         </td>
-
 
 
                         <td>
@@ -160,20 +172,20 @@
 
 </form>
 
-  <!-- page script -->
-  <script>
-    $(function () {
+<!-- page script -->
+<script>
+  $(function () {
 
-      $('#example2').DataTable({
-        "paging": false,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": false,
-        "autoWidth": false,
-        "responsive": true,
-        "order": [[0, "desc"]]
-      });
+    $('#example2').DataTable({
+      "paging": false,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": false,
+      "autoWidth": false,
+      "responsive": true,
+      "order": [[0, "desc"]]
     });
-  </script>
+  });
+</script>
 

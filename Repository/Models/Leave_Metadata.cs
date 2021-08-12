@@ -32,9 +32,9 @@ namespace Repository.Models
         [DisplayName("Leave Type")]
         LeaveType LeaveType { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Please enter valid numaric Number")]
+        //[Range(0, int.MaxValue, ErrorMessage = "Please enter valid numaric Number")]
         string Remarks1 { get; set; }
-        [Range(0, int.MaxValue, ErrorMessage = "Please enter valid numaric Number")]
+        //[Range(0, int.MaxValue, ErrorMessage = "Please enter valid numaric Number")]
         string Remarks2 { get; set; }
 
     }

@@ -11,8 +11,12 @@ namespace LeaveON.UtilityClasses
   {
     [Key]
     public int Sr { get; set; }
+    [DisplayName("Name")]
     public string EmployeeName { get; set; }
+    [DisplayName("Emp.No.")]
     public int EmployeeNumber { get; set; }
+    public string TimeZone { get; set; }
+    public string Policy { get; set; }
 
     [DisplayFormat(DataFormatString = "{0: dd/MM/yyyy}")]
     public DateTime Date { get; set; }
@@ -25,6 +29,7 @@ namespace LeaveON.UtilityClasses
     [DisplayName("Time Out")]
     [DisplayFormat(DataFormatString = "{0:hh:mm:ss tt}")]
     public DateTime TimeOut { get; set; }
+    [DisplayName("Working Hours")]
     public TimeSpan WorkingHours { get; set; }
     public TimeSpan TotalTime { get; set; }
     public string Status { get; set; }

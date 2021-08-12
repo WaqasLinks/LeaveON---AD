@@ -8,9 +8,10 @@
 
     <ul class="nav navbar-nav navbar-right">
       <li>
-        @User.Identity.GetUserName()
+        @User.Identity.GetUserName() |
         @*@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })*@
         @*@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "ChangePassword", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })*@
+        @Html.ActionLink("SignOut", "SignOut", "Account", routeValues: new { area = "" }, htmlAttributes: new { title = "Account" })
       </li>
       @*<li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">

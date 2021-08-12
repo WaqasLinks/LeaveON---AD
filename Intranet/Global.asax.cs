@@ -19,7 +19,7 @@ namespace Intranet
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             //new ScheduledTasks().Experiment1();
             new ScheduledTasks().InitTimerForScheduleTasks();
-            new ScheduledTasks().SyncAppWithAD();
+            //new ScheduledTasks().SyncAppWithAD();
         }
     }
 }

@@ -44,6 +44,12 @@
                               @Html.DisplayNameFor(model => model.EmployeeNumber)
                             </th>
                             <th>
+                              Time Zone
+                            </th>
+                            <th>
+                              Policy
+                            </th>
+                            <th>
                               @Html.DisplayNameFor(model => model.Date)
                             </th>
                             <th>
@@ -68,6 +74,12 @@
                               </td>
                               <td>
                                 @Html.DisplayFor(modelItem => item.EmployeeNumber)
+                              </td>
+                              <td>
+                                @Html.DisplayFor(modelItem => item.TimeZone)
+                              </td>
+                              <td>
+                                @Html.DisplayFor(modelItem => item.Policy)
                               </td>
                               <td>
                                 @Html.DisplayFor(modelItem => item.Date)

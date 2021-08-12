@@ -114,31 +114,32 @@
               @Html.ValidationMessageFor(model => model.IsAccepted1, "", new { @class = "text-danger" })*@
 
             <input type="radio" name="IsAccepted1" id="rdoAccepted1" value="1" checked> Approved |
-            <input type="radio" name="IsAccepted1" id="rdoAcceptedWithComments1" value="2" checked="@(ViewBag.AcceptStatus1)"> Approved With Comments |
+            @*<input type="radio" name="IsAccepted1" id="rdoAcceptedWithComments1" value="2" checked="@(ViewBag.AcceptStatus1)"> Approved With Comments |*@
             <input type="radio" name="IsAccepted1" id="rdoRejected1" value="0" checked="@(ViewBag.AcceptStatus1)"> Rejected
 
 
           </div>
 
-          <div class="form-group" id="divRemarks1" style="display: none">
-            <div class="form-group">
-              @Html.LabelFor(model => model.StartDate, "Start Date", htmlAttributes: new { @class = " " })
+          @*<div class="form-group" id="divRemarks1" style="display: none">*@
+          <div class="form-group" id="divRemarks1">
+            @*<div class="form-group">
+                @Html.LabelFor(model => model.StartDate, "Start Date", htmlAttributes: new { @class = " " })
 
-              @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datepickerStart", @id = "datepickerStart1", @readonly = "readonly"  } })
-              @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datepickerStart", @id = "datepickerStart1", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
 
-            </div>
+              </div>*@
 
-            <div class="form-group">
-              @Html.LabelFor(model => model.EndDate, "End Date", htmlAttributes: new { @class = " " })
+            @*<div class="form-group">
+                @Html.LabelFor(model => model.EndDate, "End Date", htmlAttributes: new { @class = " " })
 
-              @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control datepickerEnd", @id = "datepickerEnd1", @readonly = "readonly"  } })
-              @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control datepickerEnd", @id = "datepickerEnd1", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
 
-            </div>
+              </div>*@
 
             @Html.LabelFor(model => model.Remarks1, "Remarks", htmlAttributes: new { @class = " " })
-            @Html.EditorFor(model => model.Remarks1, new { htmlAttributes = new { @class = "form-control diff", @id = "diff1", placeholder = "Enter numaric value" } })
+            @Html.EditorFor(model => model.Remarks1, new { htmlAttributes = new { @class = "form-control diff", @id = "diff1", placeholder = "Remarks..." } })
             @Html.ValidationMessageFor(model => model.Remarks1, "", new { @class = "text-danger" })
           </div>
 
@@ -163,32 +164,34 @@
               @Html.ValidationMessageFor(model => model.IsAccepted2, "", new { @class = "text-danger" })*@
 
             <input type="radio" name="IsAccepted2" id="rdoAccepted2" value="1" checked>Approved
-            <input type="radio" name="IsAccepted2" id="rdoAcceptedWithComments2" value="2" checked="@(ViewBag.AcceptStatus2)">Approved With Comments
+            @*<input type="radio" name="IsAccepted2" id="rdoAcceptedWithComments2" value="2" checked="@(ViewBag.AcceptStatus2)">Approved With Comments |*@
             <input type="radio" name="IsAccepted2" id="rdoRejected2" value="0" checked="@(ViewBag.AcceptStatus2)">Rejected
 
           </div>
 
 
-          <div class="form-group" id="divRemarks2" style="display: none">
-            <div class="form-group">
-              @Html.LabelFor(model => model.StartDate, "Start Date", htmlAttributes: new { @class = " " })
+          @*<div class="form-group" id="divRemarks2" style="display: none">*@
+          <div class="form-group" id="divRemarks2">
 
-              @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datepickerStart", @id = "datepickerStart2", @readonly = "readonly"  } })
-              @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+            @*<div class="form-group">
+                @Html.LabelFor(model => model.StartDate, "Start Date", htmlAttributes: new { @class = " " })
 
-            </div>
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datepickerStart", @id = "datepickerStart2", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
 
-            <div class="form-group">
-              @Html.LabelFor(model => model.EndDate, "End Date", htmlAttributes: new { @class = " " })
+              </div>*@
 
-              @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control datepickerEnd", @id = "datepickerEnd2", @readonly = "readonly"  } })
-              @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+            @*<div class="form-group">
+                @Html.LabelFor(model => model.EndDate, "End Date", htmlAttributes: new { @class = " " })
 
-            </div>
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control datepickerEnd", @id = "datepickerEnd2", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+
+              </div>*@
 
             @Html.LabelFor(model => model.Remarks2, "Remarks", htmlAttributes: new { @class = " " })
 
-            @Html.EditorFor(model => model.Remarks2, new { htmlAttributes = new { @class = "form-control diff", @id = "diff2", placeholder = "Enter numaric value" } })
+            @Html.EditorFor(model => model.Remarks2, new { htmlAttributes = new { @class = "form-control diff", @id = "diff2", placeholder = "Remarks..." } })
             @Html.ValidationMessageFor(model => model.Remarks2, "", new { @class = "text-danger" })
 
           </div>
@@ -231,48 +234,50 @@
 
   $(document).ready(function () {
 
-    $("#Remarks1,#Remarks2").keypress(function (e) {
-      var charCode = (e.which) ? e.which : e.keyCode;
-      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        return false;
-      }
-    });
+    //$("#Remarks1,#Remarks2").keypress(function (e) {
+    //  var charCode = (e.which) ? e.which : e.keyCode;
+    //  if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+    //    return false;
+    //  }
+    //});
 
-    //$(".diff").numeric();
-    $(".diff").keypress(function (e){
-      var charCode = (e.which) ? e.which : e.keyCode;
-      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        return false;
-      }
-    });
-     $(".diff").change(function(){
-        $('#TotalDays').val($(this).val());
-    });
-    $('#diff1').val(@Model.TotalDays);
-    $('#diff2').val(@Model.TotalDays);
-    $('input[name="IsAccepted1"]').on('click', function () {
-      //alert('1');
-      if ($(this).val() == '2') {
-        //alert('2');
-        $('#divRemarks1').show();
-      }
-      else {
-        //alert('3');
-        $('#divRemarks1').hide();
-      }
-    });
+    //$(".diff").keypress(function (e){
+    //  var charCode = (e.which) ? e.which : e.keyCode;
+    //  if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+    //    return false;
+    //  }
+    //});
 
-    $('input[name="IsAccepted2"]').on('click', function () {
-      //alert('1');
-      if ($(this).val() == '2') {
-        //alert('2');
-        $('#divRemarks2').show();
-      }
-      else {
-        //alert('3');
-        $('#divRemarks2').hide();
-      }
-    });
+     //$(".diff").change(function(){
+     //   $('#TotalDays').val($(this).val());
+     //});
+
+    @*$('#diff1').val(@Model.TotalDays);
+    $('#diff2').val(@Model.TotalDays);*@
+
+    //$('input[name="IsAccepted1"]').on('click', function () {
+    //  //alert('1');
+    //  if ($(this).val() == '2') {
+    //    //alert('2');
+    //    $('#divRemarks1').show();
+    //  }
+    //  else {
+    //    //alert('3');
+    //    $('#divRemarks1').hide();
+    //  }
+    //});
+
+    //$('input[name="IsAccepted2"]').on('click', function () {
+    //  //alert('1');
+    //  if ($(this).val() == '2') {
+    //    //alert('2');
+    //    $('#divRemarks2').show();
+    //  }
+    //  else {
+    //    //alert('3');
+    //    $('#divRemarks2').hide();
+    //  }
+    //});
 
     $(".datepickerStart").datepicker({
         showOtherMonths: true,
@@ -287,7 +292,7 @@
       }
         //showButtonPanel: true
 
-      
+
         //buttonImage: "images/calendar.gif",
         //buttonImageOnly: true,
         //buttonText: "Select date",
@@ -309,7 +314,7 @@
 
       }
     });
-    
+
     function myfunc() {
       var start = $(".datepickerStart").datepicker("getDate");
       var end = $(".datepickerEnd").datepicker("getDate");
@@ -320,10 +325,10 @@
       $('#diff1').val(days);
       $('#diff2').val(days);
       $('#TotalDays').val(days);
-      
+
     }
 
-    
+
 
   });
 </script>

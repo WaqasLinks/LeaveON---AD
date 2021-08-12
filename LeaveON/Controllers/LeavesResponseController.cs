@@ -145,11 +145,11 @@ namespace LeaveON.Controllers
         leave.Remarks1 = Remarks1;
         leave.ResponseDate1 = DateTime.Now;
 
-        if (IsAccepted1 == Consts.ApprovedWithComments)
-        {
-          leave.Remarks1 = string.Empty;
-          leave.TotalDays = decimal.Parse(Remarks1);
-        }
+        //if (IsAccepted1 == Consts.ApprovedWithComments)
+        //{
+        //  leave.Remarks1 = string.Empty;
+        //  leave.TotalDays = decimal.Parse(Remarks1);
+        //}
 
         if (leave.LineManager1Id == leave.LineManager2Id)
         {
@@ -166,11 +166,11 @@ namespace LeaveON.Controllers
         leave.IsAccepted2 = IsAccepted2;
         leave.Remarks2 = Remarks2;
         leave.ResponseDate2 = DateTime.Now;
-        if (IsAccepted2 == Consts.ApprovedWithComments)
-        {
-          leave.Remarks2 = string.Empty;
-          leave.TotalDays = decimal.Parse(Remarks2);
-        }
+        //if (IsAccepted2 == Consts.ApprovedWithComments)
+        //{
+        //  leave.Remarks2 = string.Empty;
+        //  leave.TotalDays = decimal.Parse(Remarks2);
+        //}
         if (leave.IsAccepted2 > Consts.Rejected) CalculateAndChangeLeaveBalance(ref leave);
       }
       //---------------------save and send emails------------------------------------------------
@@ -261,46 +261,47 @@ namespace LeaveON.Controllers
       Nullable<int> IsAccepted2 = null;
       string Remarks1 = string.Empty;
       string Remarks2 = string.Empty;
-      DateTime startDate = leave.StartDate;
-      DateTime endDate = leave.EndDate;
-      decimal totalDays;
-      if (leave.TotalDays == null)
-      {
-        totalDays = (decimal)(endDate - startDate).TotalDays + 1;
-      }
-      else
-      {
-        totalDays = leave.TotalDays.Value;
-      }
+      //DateTime startDate = leave.StartDate;
+      //DateTime endDate = leave.EndDate;
+      //decimal totalDays;
+      //if (leave.TotalDays == null)
+      //{
+      //  totalDays = (decimal)(endDate - startDate).TotalDays + 1;
+      //}
+      //else
+      //{
+      //  totalDays = leave.TotalDays.Value;
+      //}
 
       if (IsLineManager1 == "True")
       {
         IsAccepted1 = leave.IsAccepted1;
-        if (IsAccepted1 == Consts.ApprovedWithComments) Remarks1 = (leave.Remarks1 == null) ? string.Empty : leave.Remarks1.Trim();
+        //if (IsAccepted1 == Consts.ApprovedWithComments) Remarks1 = (leave.Remarks1 == null) ? string.Empty : leave.Remarks1.Trim();
+        Remarks1 = leave.Remarks1;
       }
       else
       {
         IsAccepted2 = leave.IsAccepted2;
-        if (IsAccepted2 == Consts.ApprovedWithComments) Remarks2 = (leave.Remarks2 == null) ? string.Empty : leave.Remarks2.Trim();
+        //if (IsAccepted2 == Consts.ApprovedWithComments) Remarks2 = (leave.Remarks2 == null) ? string.Empty : leave.Remarks2.Trim();
+        Remarks2 = leave.Remarks2;
       }
       //--------------------------get old leave and put new values to it------------------------
       Leave leaveOld = db.Leaves.FirstOrDefault(x => x.Id == leave.Id);
       leave = leaveOld;
-      leave.TotalDays = totalDays;
+      //leave.TotalDays = totalDays;
+      leave.TotalDays = (decimal)(leave.EndDate - leave.StartDate).TotalDays + 1;
       if (IsLineManager1 == "True")
       {
         leave.IsAccepted1 = IsAccepted1;
         leave.Remarks1 = Remarks1;
         //if (!(string.IsNullOrEmpty(Remarks1))) leave.TotalDays = decimal.Parse(Remarks1);
         leave.ResponseDate1 = DateTime.Now;
-        if (IsAccepted1 == Consts.ApprovedWithComments)
-        {
-          //leave.Remarks1 = string.Empty;
-          //if (!(string.IsNullOrEmpty(Remarks1))) leave.TotalDays = decimal.Parse(Remarks1);
-          leave.StartDate = startDate;
-          leave.EndDate = endDate;
-          leave.TotalDays = totalDays;
-        }
+        //if (IsAccepted1 == Consts.ApprovedWithComments)
+        //{
+        //  leave.StartDate = startDate;
+        //  leave.EndDate = endDate;
+        //  leave.TotalDays = totalDays;
+        //}
 
         if (leave.LineManager1Id == leave.LineManager2Id)
         {
@@ -317,14 +318,12 @@ namespace LeaveON.Controllers
         leave.IsAccepted2 = IsAccepted2;
         leave.Remarks2 = Remarks2;
         leave.ResponseDate2 = DateTime.Now;
-        if (IsAccepted2 == Consts.ApprovedWithComments)
-        {
-          //leave.Remarks2 = string.Empty;
-          //if (!(string.IsNullOrEmpty(Remarks2))) leave.TotalDays = decimal.Parse(Remarks2);
-          leave.StartDate = startDate;
-          leave.EndDate = endDate;
-          leave.TotalDays = totalDays;
-        }
+        //if (IsAccepted2 == Consts.ApprovedWithComments)
+        //{
+        //  leave.StartDate = startDate;
+        //  leave.EndDate = endDate;
+        //  leave.TotalDays = totalDays;
+        //}
         if (leave.IsAccepted2 > Consts.Rejected) CalculateAndChangeLeaveBalanceQuota(ref leave);
 
       }

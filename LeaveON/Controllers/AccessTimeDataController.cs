@@ -167,7 +167,7 @@ namespace LeaveON.Controllers
         //user.DepartmentId;//User.Identity.GetUserId();//
         reqDate = DateTime.ParseExact(ReqMonthYear, "MM-yyyy",
                                  System.Globalization.CultureInfo.CurrentCulture);
-        reqDate=reqDate.AddYears(-2);
+        //reqDate=reqDate.AddYears(-2);
       }
       else
       {
