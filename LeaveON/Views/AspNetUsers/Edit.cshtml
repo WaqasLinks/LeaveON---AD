@@ -10,7 +10,7 @@
   <!-- general form elements -->
   <div class="card card-primary">
     <div class="card-header">
-      <h3 class="card-title">Updage User</h3>
+      <h3 class="card-title">Update User</h3>
     </div>
     <!-- /.card-header -->
     <!-- form start -->
@@ -162,10 +162,24 @@
         </div>
 
         <div class="form-group">
-          @Html.LabelFor(model => model.CountryId, "Country", htmlAttributes: new { @class = " " })
+          @Html.LabelFor(model => model.CountryName, "Country", htmlAttributes: new { @class = " " })
 
-          @Html.DropDownList("CountryId", null, htmlAttributes: new { @class = "form-control" })
-          @Html.ValidationMessageFor(model => model.CountryId, "", new { @class = "text-danger" })
+          @*@Html.DropDownList("CntryName", new MultiSelectList(ViewBag.CountryNames, "Value", "Text"), htmlAttributes: new { @class = "form-control", @disabled = "disabled" })*@
+          @Html.EditorFor(model => model.CntryName, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+          @Html.ValidationMessageFor(model => model.CountryName, "", new { @class = "text-danger" })
+
+        </div>
+
+        <div class="form-group">
+          @*@Html.LabelFor(model => model.CountryName, "Country", htmlAttributes: new { @class = " " })*@
+
+          @*@Html.EditorFor(model => model.CountryName.TempName, new { htmlAttributes = new { @class = "form-control", @id = "tempName" } })*@
+
+          @Html.Label("If Employee is temporarily relocated to some other country please check and select that to show correct attendance data", htmlAttributes: new { @class = " " })
+          @Html.CheckBoxFor(model => model.IsRelocated, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.DropDownList("CntryNameTemp", new MultiSelectList(ViewBag.CountryNames, "Value", "Text"), htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+          @*@Html.EditorFor(model => model.CntryName, new { htmlAttributes = new { @class = "form-control" } })*@
+          @Html.ValidationMessageFor(model => model.CntryNameTemp, "", new { @class = "text-danger" })
 
         </div>
 
@@ -182,7 +196,7 @@
         <div class="form-group">
           @Html.LabelFor(model => model.BioStarEmpNum, "BioStarEmpNum", htmlAttributes: new { @class = " " })
 
-          @Html.EditorFor(model => model.BioStarEmpNum, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.EditorFor(model => model.BioStarEmpNum, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
           @Html.ValidationMessageFor(model => model.BioStarEmpNum, "", new { @class = "text-danger" })
 
         </div>
@@ -215,6 +229,28 @@
 
   </div>
 </div>
+<script>
+  $(document).ready(function () {
+    
+    if ($("#IsRelocated").prop('checked')) {
+      $('#CntryNameTemp').removeAttr('disabled');
+    }
+    //else {
+    //  $('#CntryNameTemp').val($('#CntryName').val());
+    //}
+
+    $("#IsRelocated").click(function () {
+
+      if ($(this).prop('checked')) {
+        $('#CntryNameTemp').removeAttr('disabled');
+      } else {
+        $('#CntryNameTemp').attr('disabled', 'disabled');
+      }
+    });
+  });
+</script>
+
+
 @*@section Scripts {
       @Scripts.Render("~/bundles/jqueryval")
   }*@

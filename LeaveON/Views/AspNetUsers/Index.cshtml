@@ -43,8 +43,8 @@
                     <tr role="row">
 
                       @*<th class="sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" aria-sort="descending">
-                        @Html.DisplayNameFor(model => model.Email)
-                      </th>*@
+      @Html.DisplayNameFor(model => model.Email)
+    </th>*@
                       <th>
                         @*@Html.DisplayNameFor(model => model.Department.Country.Name)*@
                         Emp. Id
@@ -60,6 +60,9 @@
                       <th>
                         @*@Html.DisplayNameFor(model => model.Department.Country.Name)*@
                         Country
+                      </th>
+                      <th>
+                        Relocated Country
                       </th>
                       <th>
                         Leave Policy
@@ -101,9 +104,12 @@
                   <td>
                     @*@if (item.Country != null)
                     {*@
-                      @Html.DisplayFor(modelItem => item.CountryName.Name)
+                      @Html.DisplayFor(modelItem => item.CntryName)
                     @*}*@
                     </td>
+                  <td>
+                    @Html.DisplayFor(modelItem => item.CntryNameTemp)
+                  </td>
                   <td>
                     @if (item.UserLeavePolicy != null)
                     {
@@ -120,6 +126,7 @@
                     @Html.DisplayFor(modelItem => item.Remarks)
                   </td>
                   <td>
+                    @Html.ActionLink("Update", "Edit", new { id = item.Id })
                     @*@Html.ActionLink("Update", "Edit", new { id = item.Id })*@ @*|*@
                     @*@Html.ActionLink("Details", "Details", new { id = item.Id }) |*@
                     @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@

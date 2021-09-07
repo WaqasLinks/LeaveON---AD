@@ -298,6 +298,10 @@
     <Compile Include="Migrations\202107091221098_Delete CounntryId and DepartmentId.Designer.cs">
       <DependentUpon>202107091221098_Delete CounntryId and DepartmentId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202109070818377_CntryNameTemp IsRelocated.cs" />
+    <Compile Include="Migrations\202109070818377_CntryNameTemp IsRelocated.Designer.cs">
+      <DependentUpon>202109070818377_CntryNameTemp IsRelocated.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AnnualLeaveModel.cs" />
@@ -311,6 +315,7 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="UtilityClasses\Dashboard.cs" />
     <Compile Include="UtilityClasses\TimeData.cs" />
     <Compile Include="UtilityClasses\LoginFilter.cs" />
     <Compile Include="UtilityClasses\ScheduledTasks.cs" />
@@ -2345,6 +2350,9 @@
     <Content Include="Views\CountryNames\Details.cshtml" />
     <Content Include="Views\CountryNames\Edit.cshtml" />
     <Content Include="Views\CountryNames\Index.cshtml" />
+    <Content Include="Views\AspNetUsers\Edit.cshtml" />
+    <Content Include="Views\Account\Logout.cshtml" />
+    <Content Include="Views\Account\Logout2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2421,6 +2429,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202107091221098_Delete CounntryId and DepartmentId.resx">
       <DependentUpon>202107091221098_Delete CounntryId and DepartmentId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202109070818377_CntryNameTemp IsRelocated.resx">
+      <DependentUpon>202109070818377_CntryNameTemp IsRelocated.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -11,6 +11,7 @@ using Repository.Models;
 using System.IO;
 using LeaveON.Models;
 using Microsoft.AspNet.Identity;
+using LMS.Constants;
 
 namespace LeaveON.Controllers
 {
@@ -48,7 +49,7 @@ namespace LeaveON.Controllers
     [HttpGet]
     public ActionResult AddNewRow(string IndexId)
     {
-      ViewBag.LeaveTypes = new SelectList(db.LeaveTypes, "Id", "Name");
+      ViewBag.LeaveTypes = new SelectList(db.LeaveTypes.Where(x=>x.Id != Consts.CompensatoryLeaveTypeId), "Id", "Name");
       ViewBag.LockAndHide = "False";
       return PartialView("_newRow", IndexId);
     }
@@ -175,7 +176,7 @@ namespace LeaveON.Controllers
       //  return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
       //}
       ViewBag.Employees = new SelectList(db.AspNetUsers.OrderBy(i=>i.UserName), "Id", "UserName");
-      ViewBag.LeaveTypes = new SelectList(db.LeaveTypes, "Id", "Name");
+      ViewBag.LeaveTypes = new SelectList(db.LeaveTypes.Where(x => x.Id != Consts.CompensatoryLeaveTypeId), "Id", "Name");
       //always remember viewbag name should not be as model name. other wise probelm. if same multilist will not show selected values
       ViewBag.Departments = new SelectList(db.CountryNames, "Name", "Name");
 
@@ -244,11 +245,14 @@ namespace LeaveON.Controllers
 
 
       List<string> DaysSelected = new List<string>();
+      if(userLeavePolicy.WeeklyOffDays != null)
+      { 
       foreach (string day in userLeavePolicy.WeeklyOffDays.Split(','))
       {
         //int intDay = int.Parse(day);
         DaysSelected.Add(day);
         //DaysSelected.Add()
+      }
       }
       ViewBag.DaysSelected = DaysSelected;
       //List<AnnualOffDay> AnnualOffDaysList = new List<AnnualOffDay>();

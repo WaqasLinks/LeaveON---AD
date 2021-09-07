@@ -76,7 +76,7 @@ namespace LeaveON.Controllers
       {
         return HttpNotFound();
       }
-      //ViewBag.CountryId = new SelectList(db.CountryNames, "Id", "Name", aspNetUser.CountryId);
+      ViewBag.CountryNames = new SelectList(db.CountryNames, "Name", "Name", aspNetUser.CountryName);
       //ViewBag.DepartmentId = new SelectList(db.DepartmentNames, "Id", "Name", aspNetUser.DepartmentId);
       ViewBag.UserLeavePolicyId = new SelectList(db.UserLeavePolicies, "Id", "Description", aspNetUser.UserLeavePolicyId);
       return View(aspNetUser);
@@ -87,7 +87,7 @@ namespace LeaveON.Controllers
     // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit([Bind(Include = "Id,Hometown,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,DateCreated,DateModified,Remarks,DepartmentId,CountryId,UserLeavePolicyId,BioStarEmpNum")] AspNetUser aspNetUser)//,int CountryId)
+    public async Task<ActionResult> Edit([Bind(Include = "Id,Hometown,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,DateCreated,DateModified,Remarks,DepartmentId,CountryId,UserLeavePolicyId,BioStarEmpNum,CntryName,CntryNameTemp,IsRelocated")] AspNetUser aspNetUser)//,int CountryId)
     {
       aspNetUser.DateModified = DateTime.Now;
 
@@ -96,15 +96,21 @@ namespace LeaveON.Controllers
         //db.Entry(aspNetUser).State = EntityState.Modified;
         db.AspNetUsers.Attach(aspNetUser);
 
-        db.Entry(aspNetUser).Property(x => x.Email).IsModified = true;
-        db.Entry(aspNetUser).Property(x => x.UserName).IsModified = true;
+        //db.Entry(aspNetUser).Property(x => x.Email).IsModified = true;
+        //db.Entry(aspNetUser).Property(x => x.UserName).IsModified = true;
         db.Entry(aspNetUser).Property(x => x.DateModified).IsModified = true;
         db.Entry(aspNetUser).Property(x => x.Remarks).IsModified = true;
         //db.Entry(aspNetUser).Property(x => x.DepartmentId).IsModified = true;
         //db.Entry(aspNetUser).Property(x => x.CountryId).IsModified = true;
+        //db.Entry(aspNetUser).Property(x => x.CntryName).IsModified = true;
         db.Entry(aspNetUser).Property(x => x.UserLeavePolicyId).IsModified = true;
-        db.Entry(aspNetUser).Property(x => x.BioStarEmpNum).IsModified = true;
+        //db.Entry(aspNetUser).Property(x => x.BioStarEmpNum).IsModified = true;
+        db.Entry(aspNetUser).Property(x => x.CntryNameTemp).IsModified = true;
+        db.Entry(aspNetUser).Property(x => x.IsRelocated).IsModified = true;
         //UserLeavePolicyId
+
+        //payment.PaymentMethod = collection.Get("TempName");//"Cash"; //cash//other
+        //payment.Remarks = collection.Get("CountryName.IsRelocated.HasValue");
 
 
         await db.SaveChangesAsync();

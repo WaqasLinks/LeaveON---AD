@@ -38,7 +38,7 @@ namespace LeaveON.Controllers
       List<TimeData> LstTimeData = new List<TimeData>();
       TimeSpan TotalTime = new TimeSpan();
       TimeSpan TotalWorkingHours = new TimeSpan();
-      string UserName = string.Empty;
+     
       DateTime reqDate = DateTime.ParseExact(dateAttr[1] + "/" + dateAttr[0] + "/01", "yyyy/MM/dd", CultureInfo.InvariantCulture);
 
       int ThisMonthTotalDays = DateTime.DaysInMonth(int.Parse(dateAttr[1]), int.Parse(dateAttr[0]));
@@ -54,7 +54,27 @@ namespace LeaveON.Controllers
         dt.Load(dr);
         int rowsCount = dt.Rows.Count;
         if (rowsCount <= 0) continue;
+        //------
+        string UserName = string.Empty;
         string timeZone = string.Empty;
+        string countryName = string.Empty;
+        AspNetUser aspNetUser = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId);
+        UserName = aspNetUser.UserName.Substring(0, aspNetUser.UserName.IndexOf('@')).Replace(".", " ");
+        string userLeavePolicyDescription = string.Empty;
+        if (aspNetUser.UserLeavePolicy != null) userLeavePolicyDescription = aspNetUser.UserLeavePolicy.Description;
+        if (aspNetUser.IsRelocated == true)
+        {
+          //in case relocate
+          timeZone = dbLeaveOn.CountryNames.FirstOrDefault(x=>x.Name==aspNetUser.CntryNameTemp).TimeZone;
+          countryName = aspNetUser.CntryNameTemp;
+        }
+        else
+        {
+          timeZone = aspNetUser.CountryName.TimeZone;
+          countryName = aspNetUser.CntryName;
+        }
+        //---------
+
         DateTime firstDateTime = ConvertToCountryTimeZone(dt, 0, timeZone);//(DateTime)dt.Rows[0]["SRVDT"];
         DateTime lastDateTime = ConvertToCountryTimeZone(dt, rowsCount - 1, timeZone);//(DateTime)dt.Rows[rowsCount - 1]["SRVDT"];
         int firstDay = firstDateTime.Day;
@@ -76,9 +96,7 @@ namespace LeaveON.Controllers
         //{
         //  LstEmptyDays.Add(k);
         //}
-        AspNetUser aspNetUser = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId);
-        UserName = aspNetUser.UserName.Substring(0, aspNetUser.UserName.IndexOf('@')).Replace(".", " ");
-        timeZone = aspNetUser.CountryName.TimeZone;
+
         for (int j = 0; j <= rowsCount - 1; j++)
         {
 
@@ -92,14 +110,9 @@ namespace LeaveON.Controllers
               TotalTime = TotalTime.Add(lastTimeOut - firsTimeIn);
               //UserName = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId).UserName;
               //UserName = UserName.Substring(0, UserName.IndexOf('@')).Replace(".", " ");
-              if (aspNetUser.UserLeavePolicy != null)
-              {
-                attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Policy = aspNetUser.UserLeavePolicy.Description, Date = firsTimeIn.Date, Day = firsTimeIn.DayOfWeek.ToString(), TimeIn = firsTimeIn, TimeOut = lastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (lastTimeOut - firsTimeIn) };
-              }
-              else
-              {
-                attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Date = firsTimeIn.Date, Day = firsTimeIn.DayOfWeek.ToString(), TimeIn = firsTimeIn, TimeOut = lastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (lastTimeOut - firsTimeIn) };
-              }
+
+              attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = countryName, Policy = userLeavePolicyDescription, Date = firsTimeIn.Date, Day = firsTimeIn.DayOfWeek.ToString(), TimeIn = firsTimeIn, TimeOut = lastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (lastTimeOut - firsTimeIn) };
+
               LstTimeData.Add(attendance);
               TotalWorkingHours = TotalWorkingHours.Add(ThidDayWorkingHours);
 
@@ -157,15 +170,9 @@ namespace LeaveON.Controllers
         if (firsTimeIn.Year != 2001 && lastTimeOut.Year != 2001)//(IsCardIn == true && IsCardOut == true)
         {
           TotalTime = TotalTime.Add(lastTimeOut - firsTimeIn);
-          if(aspNetUser.UserLeavePolicy != null)
-          {
-            attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Policy = aspNetUser.UserLeavePolicy.Description, Date = firsTimeIn.Date, Day = firsTimeIn.DayOfWeek.ToString(), TimeIn = firsTimeIn, TimeOut = lastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (lastTimeOut - firsTimeIn) };
-          }
-          else
-          {
-            attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Date = firsTimeIn.Date, Day = firsTimeIn.DayOfWeek.ToString(), TimeIn = firsTimeIn, TimeOut = lastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (lastTimeOut - firsTimeIn) };
-          }
-          
+
+          attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = countryName, Policy = userLeavePolicyDescription, Date = firsTimeIn.Date, Day = firsTimeIn.DayOfWeek.ToString(), TimeIn = firsTimeIn, TimeOut = lastTimeOut, WorkingHours = ThidDayWorkingHours, TotalTime = (lastTimeOut - firsTimeIn) };
+
           LstTimeData.Add(attendance);
           TotalWorkingHours = TotalWorkingHours.Add(ThidDayWorkingHours);
         }
@@ -199,8 +206,8 @@ namespace LeaveON.Controllers
               {
                 EmployeeName = UserName,
                 EmployeeNumber = leave.AspNetUser.BioStarEmpNum.Value,
-                TimeZone = timeZone,
-                Policy = aspNetUser.UserLeavePolicy.Description,
+                TimeZone = countryName,
+                Policy = userLeavePolicyDescription,
                 Date = leave.StartDate.AddDays(i),
                 Day = leave.StartDate.AddDays(i).ToString("dddd"),
                 Status = leave.Reason
@@ -216,8 +223,8 @@ namespace LeaveON.Controllers
             {
               EmployeeName = UserName,
               EmployeeNumber = iEmpNum,
-              TimeZone = timeZone,
-              Policy = aspNetUser.UserLeavePolicy.Description,
+              TimeZone = countryName,
+              Policy = userLeavePolicyDescription,
               Date = annualHoliday.OffDay.Value,
               Day = annualHoliday.OffDay.Value.ToString("dddd"),
               Status = annualHoliday.Description
@@ -277,8 +284,8 @@ namespace LeaveON.Controllers
             {
               EmployeeName = UserName,
               EmployeeNumber = iEmpNum,
-              TimeZone = timeZone,
-              Policy = aspNetUser.UserLeavePolicy.Description,
+              TimeZone = countryName,
+              Policy = userLeavePolicyDescription,
               Date = weekEndDate,
               Day = weekEndDate.ToString("dddd"),
               Status = "Holiday"
@@ -294,7 +301,7 @@ namespace LeaveON.Controllers
           if (LstTimeData.FirstOrDefault(x => x.Date.Day == absentDay) == null)
           {
             blankDateTime = DateTime.ParseExact(dateAttr[1] + "/" + dateAttr[0] + "/" + absentDay.ToString("00"), "yyyy/MM/dd", CultureInfo.InvariantCulture);
-            attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Policy = aspNetUser.UserLeavePolicy.Description, Date = blankDateTime, Day = blankDateTime.DayOfWeek.ToString(), Status = "Absent" };
+            attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = countryName, Policy = userLeavePolicyDescription, Date = blankDateTime, Day = blankDateTime.DayOfWeek.ToString(), Status = "Absent" };
             LstTimeData.Add(attendance);
           }
           //LstEmptyDays.Add(k);
@@ -393,8 +400,30 @@ namespace LeaveON.Controllers
       dt.Load(dr);
       //con.Close();
       int rowsCount = dt.Rows.Count;
-      DateTime LastDate = ConvertToCountryTimeZone(dt, rowsCount - 1, "");//(DateTime)dt.Rows[rowsCount - 1]["SRVDT"];
-      DateTime thisDateTime = ConvertToCountryTimeZone(dt, 0, "");//(DateTime)dt.Rows[0]["SRVDT"];
+      //--------
+      string UserName = string.Empty;
+      string timeZone = string.Empty;
+      string countryName = string.Empty;
+      AspNetUser aspNetUser = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == int.Parse(UserId));
+      UserName = aspNetUser.UserName.Substring(0, aspNetUser.UserName.IndexOf('@')).Replace(".", " ");
+      string userLeavePolicyDescription = string.Empty;
+      if (aspNetUser.UserLeavePolicy != null) userLeavePolicyDescription = aspNetUser.UserLeavePolicy.Description;
+      if (aspNetUser.IsRelocated == true)
+      {
+        //in case relocate
+        timeZone = dbLeaveOn.CountryNames.FirstOrDefault(x => x.Name == aspNetUser.CntryNameTemp).TimeZone;
+        countryName = aspNetUser.CntryNameTemp;
+      }
+      else
+      {
+        timeZone = aspNetUser.CountryName.TimeZone;
+        countryName = aspNetUser.CntryName;
+      }
+      //----------
+
+
+      DateTime LastDate = ConvertToCountryTimeZone(dt, rowsCount - 1, timeZone);//(DateTime)dt.Rows[rowsCount - 1]["SRVDT"];
+      DateTime thisDateTime = ConvertToCountryTimeZone(dt, 0, timeZone);//(DateTime)dt.Rows[0]["SRVDT"];
       int thisDay = thisDateTime.Day;
 
       int LastDay = LastDate.Day;
@@ -421,8 +450,8 @@ namespace LeaveON.Controllers
         //if ((j + 1 <= rowsCount - 1) && (int)dt.Rows[j]["TNAKEY"] == 2 && (int)dt.Rows[j + 1]["TNAKEY"] == 1)
         if ((j + 1 <= rowsCount - 1) && !LstCardReadersIn.Contains((int)dt.Rows[j]["DEVUID"]) && LstCardReadersIn.Contains((int)dt.Rows[j + 1]["DEVUID"]))
         {
-          timeOut = ConvertToCountryTimeZone(dt, j, "");//(DateTime)dt.Rows[j]["SRVDT"];
-          timeIn = ConvertToCountryTimeZone(dt, j + 1, "");//(DateTime)dt.Rows[j + 1]["SRVDT"];
+          timeOut = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
+          timeIn = ConvertToCountryTimeZone(dt, j + 1, timeZone);//(DateTime)dt.Rows[j + 1]["SRVDT"];
 
           TimeSpan offHour = (timeIn - timeOut);
 
@@ -449,6 +478,7 @@ namespace LeaveON.Controllers
       //ViewBag.SelectedMonth = monthSelectList[0];
       DateTime reqDate;
       int dEmpNum;
+
       List<TimeData> LstAttendances = new List<TimeData>();
       if (!string.IsNullOrEmpty(ReqMonthYear))
       {
@@ -589,7 +619,7 @@ namespace LeaveON.Controllers
         IEnumerable<Claim> claims = identity.Claims;
         Claim claim = claims.Where(x => x.Value == DepartmentName).FirstOrDefault();
 
-        //if (claim is null) return null;
+        if (claim is null) return null;
 
 
 
@@ -660,20 +690,15 @@ namespace LeaveON.Controllers
       dt.Load(dr);
       con.Close();
       int rowsCount = dt.Rows.Count;
-      DateTime LastDate = ConvertToCountryTimeZone(dt, rowsCount - 1, "");//(DateTime)dt.Rows[rowsCount - 1]["SRVDT"];
-      DateTime thisDateTime = ConvertToCountryTimeZone(dt, 0, "");//(DateTime)dt.Rows[0]["SRVDT"];
-      int thisDay = thisDateTime.Day;
 
-      int LastDay = LastDate.Day;
 
       List<TimeData> LstAttendances = new List<TimeData>();
 
       TimeData attendance;
       DateTime FirsTimeIn = DateTime.Today;
       DateTime LastTimeOut = DateTime.Today;
-      string UserName = string.Empty;
-      string timeZone = string.Empty;
-      int UserId;
+      
+      long UserId;
       for (int j = 0; j <= rowsCount - 1; j++)
       {
 
@@ -682,39 +707,70 @@ namespace LeaveON.Controllers
 
         if (!string.IsNullOrEmpty(Convert.ToString(dt.Rows[j]["USRID"])))
         {
+          try
+          {
+            UserId = Convert.ToInt64(dt.Rows[j]["USRID"]);
+          }
+          catch (Exception ex)
+          {
 
-          UserId = Convert.ToInt32(dt.Rows[j]["USRID"]);
+            throw ex;
+          }
+          
         }
         else
         {
           continue;
         }
 
-        if (dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId) != null)
-        {
-          timeZone = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId).CountryName.TimeZone;
+        //--------
+        string UserName = string.Empty;
+        string timeZone = string.Empty;
+        string countryName = string.Empty;
+        string userLeavePolicyDescription = string.Empty;
+        AspNetUser aspNetUser = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId);
+        if (aspNetUser!=null)
+        { 
+          UserName = aspNetUser.UserName.Substring(0, aspNetUser.UserName.IndexOf('@')).Replace(".", " ");
+          
+          if (aspNetUser.UserLeavePolicy != null) userLeavePolicyDescription = aspNetUser.UserLeavePolicy.Description;
+          if (aspNetUser.IsRelocated == true)
+          {
+            //in case relocate
+            timeZone = dbLeaveOn.CountryNames.FirstOrDefault(x => x.Name == aspNetUser.CntryNameTemp).TimeZone;
+            countryName = aspNetUser.CntryNameTemp;
+          }
+          else
+          {
+            timeZone = aspNetUser.CountryName.TimeZone;
+            countryName = aspNetUser.CntryName;
+          }
         }
-        else
-        {
-          timeZone = string.Empty;
-        }
+
+        //----------
+
+
+        //if (dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId) != null)
+        //{
+        //  timeZone = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId).CountryName.TimeZone;
+        //  countryName = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId).CountryName.Name;
+        //}
+        //else
+        //{
+        //  timeZone = string.Empty;
+        //}
 
 
         FirsTimeIn = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)(dt.Rows[j]["SRVDT"]);
         AspNetUser user = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId);
-        if (user != null)
+        if (aspNetUser != null)
         {
+          if (aspNetUser.UserLeavePolicy != null) userLeavePolicyDescription = aspNetUser.UserLeavePolicy.Description;
           UserName = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == UserId).UserName;
           UserName = UserName.Substring(0, UserName.IndexOf('@')).Replace(".", " ");
-          if (user.UserLeavePolicy!= null)
-          {
-            attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Policy = user.UserLeavePolicy.Description, Date = FirsTimeIn.Date, Day = FirsTimeIn.DayOfWeek.ToString(), TimeIn = FirsTimeIn };
-          }
-          else
-          {
-            attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = UserId, TimeZone = timeZone, Date = FirsTimeIn.Date, Day = FirsTimeIn.DayOfWeek.ToString(), TimeIn = FirsTimeIn };
-          }
-          
+
+          attendance = new TimeData() { EmployeeName = UserName, EmployeeNumber = Convert.ToInt32(UserId), TimeZone = countryName, Policy = userLeavePolicyDescription, Date = FirsTimeIn.Date, Day = FirsTimeIn.DayOfWeek.ToString(), TimeIn = FirsTimeIn };
+
           LstAttendances.Add(attendance);
 
         }

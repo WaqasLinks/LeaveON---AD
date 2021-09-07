@@ -421,9 +421,17 @@ namespace LeaveON.Controllers
 
       //add sbubtract leave and add or update to leaveBalnce table
 
-
-      List<int> weeklyOffDays = leave.AspNetUser.UserLeavePolicy.WeeklyOffDays.Split(',').Select(int.Parse).ToList();
-      List<AnnualOffDay> AnnualOffDays = leave.AspNetUser.UserLeavePolicy.AnnualOffDays.ToList<AnnualOffDay>();
+      List<int> weeklyOffDays = new List<int>();
+      if (leave.AspNetUser.UserLeavePolicy != null && leave.AspNetUser.UserLeavePolicy.WeeklyOffDays != null)
+      {
+        weeklyOffDays = leave.AspNetUser.UserLeavePolicy.WeeklyOffDays.Split(',').Select(int.Parse).ToList();
+      }
+      List<AnnualOffDay> AnnualOffDays = new List<AnnualOffDay>();
+      if (leave.AspNetUser.UserLeavePolicy != null && leave.AspNetUser.UserLeavePolicy.AnnualOffDays != null)
+      {
+        AnnualOffDays = leave.AspNetUser.UserLeavePolicy.AnnualOffDays.ToList<AnnualOffDay>();
+      }
+      
 
       double TotalOffDays = (leave.EndDate - leave.StartDate).TotalDays + 1;
       double NaturalOffDays = 0;

@@ -19,6 +19,8 @@ namespace LeaveON.Models
         public bool? IsActive { get; set; }
         public string DepartmentName { get; set; }
         public string CntryName { get; set; }
+        public string CntryNameTemp { get; set; }
+        public bool IsRelocated { get; set; }
     public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

@@ -73,6 +73,8 @@
           <Property Name="IsActive" Type="bit" />
           <Property Name="DepartmentName" Type="nvarchar(max)" />
           <Property Name="CntryName" Type="nvarchar" MaxLength="100" />
+          <Property Name="CntryNameTemp" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsRelocated" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="CountryNames">
           <Key>
@@ -81,6 +83,8 @@
           <Property Name="Id" Type="decimal" Precision="10" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="TimeZone" Type="nvarchar" MaxLength="500" />
+          <Property Name="TempName" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsRelocated" Type="bit" />
         </EntityType>
         <EntityType Name="DepartmentNames">
           <Key>
@@ -582,7 +586,9 @@
           <NavigationProperty Name="Leaves" Relationship="LeaveONModels.FK_Leave_AspNetUsers" FromRole="AspNetUser" ToRole="Leave" />
           <NavigationProperty Name="LeaveBalances" Relationship="LeaveONModels.FK_LeaveBalance_AspNetUsers" FromRole="AspNetUser" ToRole="LeaveBalance" />
           <NavigationProperty Name="AspNetRoles" Relationship="LeaveONModels.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
-        </EntityType>
+          <Property Name="CntryNameTemp" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsRelocated" Type="Boolean" Nullable="false" />
+          </EntityType>
         <EntityType Name="CountryName">
           <Key>
             <PropertyRef Name="Name" />
@@ -910,6 +916,8 @@
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="LeaveONModels.AspNetUser">
               <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="IsRelocated" ColumnName="IsRelocated" />
+                <ScalarProperty Name="CntryNameTemp" ColumnName="CntryNameTemp" />
                 <ScalarProperty Name="CntryName" ColumnName="CntryName" />
                 <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />

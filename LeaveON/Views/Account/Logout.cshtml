@@ -1,0 +1,32 @@
+@*@model System.Web.Mvc.HandleErrorInfo*@
+@{
+  ViewBag.Title = "Log Out";
+  //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<form id="Error" action="login.cgi" method="post" autocomplete="off">
+  <div class="list-header clearfix">
+    <span>Log Out</span>
+  </div>
+  <div class="list-sfs-holder">
+    <div class="alert alert-error">
+      You Have Successfully Logged Out Of Your INTECH-LMS Account
+    </div>
+    @*@if (Model != null && HttpContext.Current.IsDebuggingEnabled)
+      {*@
+    <div>
+      <p>
+        @*<b>Exception:</b> @Model.Exception.Message<br />
+    <b>Controller:</b> @Model.ControllerName<br />
+    <b>Action:</b> @Model.ActionName*@
+        
+      </p>
+      @*<div style="overflow:scroll">
+        <pre>
+             @Model.Exception.StackTrace
+        </pre>
+      </div>*@
+    </div>
+    @*}*@
+  </div>
+
+</form>

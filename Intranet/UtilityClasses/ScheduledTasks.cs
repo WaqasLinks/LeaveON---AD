@@ -185,7 +185,9 @@ namespace LeaveON.UtilityClasses
                             }
                             else
                             {//Update
-                                if (aspNetUser.IsActive != IsActive(de) || string.IsNullOrEmpty(aspNetUser.DepartmentName) || aspNetUser.BioStarEmpNum ==0)
+                                if (aspNetUser.IsActive != IsActive(de) || string.IsNullOrEmpty(aspNetUser.DepartmentName) || 
+                                    aspNetUser.DepartmentName != Convert.ToString(de.Properties["department"].Value) || 
+                                    aspNetUser.CntryName != Convert.ToString(de.Properties["co"].Value) || aspNetUser.BioStarEmpNum ==0)
                                 {
                                     UpdateEmployee(aspNetUser, de);
                                 }
@@ -318,6 +320,7 @@ namespace LeaveON.UtilityClasses
             //emp = new AspNetUser();
             //emp.IsActive = IsActive(de);
             oldEmp.IsActive = IsActive(de);
+            oldEmp.CntryName = Convert.ToString(de.Properties["co"].Value);
             oldEmp.DepartmentName = Convert.ToString(de.Properties["department"].Value);
             oldEmp.BioStarEmpNum = Convert.ToInt32(de.Properties["facsimileTelephoneNumber"].Value);
             db.AspNetUsers.Attach(oldEmp);

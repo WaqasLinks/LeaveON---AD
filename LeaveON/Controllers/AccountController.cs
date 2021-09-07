@@ -168,7 +168,7 @@ namespace LeaveON.Controllers
     {
       //ADUser = "bsserviceaccount@intechww.com";
       //ADUser = "Ahsan.Ahmad@intechww.com";
-      //ADUser = "muzammil.riaz@intechww.com";
+      ADUser = "muzammil.riaz@intechww.com";
       //ADUser = "asrar.ahmed@intechww.com";
       //ADUser = "Khaleel.khan@intechww.com";
       //ADUser = "Usman.Javed@intechww.com";
@@ -707,6 +707,17 @@ namespace LeaveON.Controllers
       //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie, DefaultAuthenticationTypes.ExternalCookie);
       //Session.Abandon();
       //return RedirectToAction("Login", "Account");
+      return RedirectToAction("Logout", "Account");
+      //return Redirect("https://lms.intechww.com:1001/");
+    }
+    [AllowAnonymous]
+    public ActionResult Logout()
+    {
+      return View();
+    }
+    [AllowAnonymous]
+    public ActionResult LoginAgain()
+    {
       return Redirect("https://lms.intechww.com:1001/");
     }
     //

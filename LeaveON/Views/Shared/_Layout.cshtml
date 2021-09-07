@@ -268,7 +268,12 @@
 
               if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("User"))
               {
-
+                <li class="nav-item">
+                  <a href="/Dashboard/Index" class="nav-link">
+                    <i class="nav-icon fa fa-tachometer-alt"></i>
+                    <p>Dashboard</p>
+                  </a>
+                </li>
                 <li class="nav-item">
                   <a href="/LeavesRequest/Create" class="nav-link">
                     <i class="nav-icon fa fa-address-card"></i>
@@ -334,7 +339,7 @@
                     <li class="nav-item">
                       <a href="/LeavesResponse/QuotaResponseHistory" class="nav-link">
                         &nbsp; &nbsp;<i class="far far fa fa-history"></i>
-                        <p>Compensatory Approval Requests</p>
+                        <p>Compensatory Approval Req.</p>
                       </a>
                     </li>
                     @*<li class="nav-item">
