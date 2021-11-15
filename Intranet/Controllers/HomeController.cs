@@ -1,4 +1,6 @@
-﻿using Repository.Models;
+﻿using Intranet.UtilityClasses;
+using LeaveON.UtilityClasses;
+using Repository.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +15,12 @@ namespace Intranet.Controllers
         private LeaveONEntities db = new LeaveONEntities();
         public ActionResult Index(string ReturnUrl)
         {
+            //if (StaticClass.IsAutoSyncRunning==false)
+            //{
+            //    StaticClass.IsAutoSyncRunning = true;
+            //    new ScheduledTasks().InitTimerForScheduleTasks();
+            //}
+
             //GetLog();
             List<string> loginsList = new List<string>();
             //string id1 = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
@@ -60,6 +68,13 @@ namespace Intranet.Controllers
             //return Redirect("https://localhost:44380/Account/Login?ReturnUrl=" + ReturnUrl + "&ADUser=" + ADUserValue);//this for production
 
         }
+        public ActionResult Sync()
+        {
+            ViewBag.Message = "Your application description page.";
+
+            return View();
+        }
+
         public void GetLog()
         {
             var path = Server.MapPath(@"~/UsersAndProperties.txt");

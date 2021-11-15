@@ -404,7 +404,8 @@ namespace LeaveON.Controllers
       string UserName = string.Empty;
       string timeZone = string.Empty;
       string countryName = string.Empty;
-      AspNetUser aspNetUser = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == int.Parse(UserId));
+      int intUserId = int.Parse(UserId);
+      AspNetUser aspNetUser = dbLeaveOn.AspNetUsers.FirstOrDefault(x => x.BioStarEmpNum.Value == intUserId);
       UserName = aspNetUser.UserName.Substring(0, aspNetUser.UserName.IndexOf('@')).Replace(".", " ");
       string userLeavePolicyDescription = string.Empty;
       if (aspNetUser.UserLeavePolicy != null) userLeavePolicyDescription = aspNetUser.UserLeavePolicy.Description;
@@ -620,8 +621,6 @@ namespace LeaveON.Controllers
         Claim claim = claims.Where(x => x.Value == DepartmentName).FirstOrDefault();
 
         if (claim is null) return null;
-
-
 
         //string userId = User.Identity.GetUserId();
 

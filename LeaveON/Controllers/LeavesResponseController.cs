@@ -38,22 +38,7 @@ namespace LeaveON.Controllers
       return View(await leaves.ToListAsync());
     }
 
-    // GET: Leaves/Details/5
-    public async Task<ActionResult> Details(decimal id)
-    {
-      if (id == null)
-      {
-        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-      }
-      Leave leave = await db.Leaves.FindAsync(id);
-      if (leave == null)
-      {
-        return HttpNotFound();
-      }
-      return View(leave);
-    }
-
-    // GET: Leaves/Create
+  
 
     public List<AspNetUser> GetSeniorStaff()
     {
@@ -83,10 +68,12 @@ namespace LeaveON.Controllers
         return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
       }
       Leave leave = await db.Leaves.FindAsync(id);
+
       if (leave == null)
       {
         return HttpNotFound();
       }
+      if (User.Identity.GetUserId() != leave.LineManager1Id || User.Identity.GetUserId() != leave.LineManager2Id) return RedirectToAction("Index");
 
       //ViewBag.LineManager1 = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager1Id).UserName;
       //ViewBag.LineManager2 = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager2Id).UserName;
@@ -226,7 +213,7 @@ namespace LeaveON.Controllers
       {
         return HttpNotFound();
       }
-
+      if (User.Identity.GetUserId() != leave.LineManager1Id || User.Identity.GetUserId() != leave.LineManager2Id) return RedirectToAction("Index");
       //ViewBag.LineManager1 = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager1Id).UserName;
       //ViewBag.LineManager2 = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.LineManager2Id).UserName;
       List<AspNetUser> Seniors = GetSeniorStaff();

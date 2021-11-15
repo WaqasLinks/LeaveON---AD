@@ -83,8 +83,6 @@
           <Property Name="Id" Type="decimal" Precision="10" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="TimeZone" Type="nvarchar" MaxLength="500" />
-          <Property Name="TempName" Type="nvarchar" MaxLength="500" />
-          <Property Name="IsRelocated" Type="bit" />
         </EntityType>
         <EntityType Name="DepartmentNames">
           <Key>

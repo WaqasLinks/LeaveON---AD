@@ -16,71 +16,85 @@ using System.DirectoryServices;
 using System.DirectoryServices.ActiveDirectory;
 using System.Reflection;
 using System.Globalization;
+using System.Web.Mvc;
+using System.Web;
+using System.IO;
 
 namespace LeaveON.UtilityClasses
 {
     public class ScheduledTasks// : Controller
     {
+        //static bool IsSecheduleTaskRunning = false;
         // Added this class visible variable to hold the timer interval so it's not gotten from the
         // web.config file on each Elapsed event of the timer
-        private static double TimerIntervalInMilliseconds =
-            Convert.ToDouble(WebConfigurationManager.AppSettings["TimerIntervalInMilliseconds"]);
+
+        private static double TimerIntervalInMilliseconds = 600000;//10min
+                                                                    //Convert.ToDouble(WebConfigurationManager.AppSettings["TimerIntervalInMilliseconds"]);
 
         private LeaveONEntities db = new LeaveONEntities();
         public void InitTimerForScheduleTasks()
         {
-            // This will raise the Elapsed event every 'x' millisceonds (whatever you set in the
-            // Web.Config file for the added TimerIntervalInMilliseconds AppSetting
-            Timer timer = new Timer(TimerIntervalInMilliseconds);
+            if (MyGlobalClass.MyGlobalBool == false)
+            {
+                MyGlobalClass.MyGlobalBool = true;
+                // This will raise the Elapsed event every 'x' millisceonds (whatever you set in the
+                // Web.Config file for the added TimerIntervalInMilliseconds AppSetting
+                Timer timer = new Timer(TimerIntervalInMilliseconds);
 
-            timer.Enabled = true;
+                timer.Enabled = true;
 
-            // Setup Event Handler for Timer Elapsed Event
-            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
+                // Setup Event Handler for Timer Elapsed Event
+                timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
 
-            timer.Start();
+                timer.Start();
+            }
         }
         // Added the following procedure:
+        //void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        //{
+        //    // Get the TimerStartTime web.config value
+        //    DateTime MyScheduledRunTime = DateTime.Parse(WebConfigurationManager.AppSettings["TimerStartTime"]);
+
+        //    // Get the current system time
+        //    DateTime CurrentSystemTime = DateTime.Now;
+
+        //    Debug.WriteLine(string.Concat("Timer Event Handler Called: ", CurrentSystemTime.ToString()));
+
+        //    // This makes sure your code will only run once within the time frame of (Start Time) to
+        //    // (Start Time+Interval). The timer's interval and this (Start Time+Interval) must stay in sync
+        //    // or your code may not run, could run once, or may run multiple times per day.
+        //    DateTime LatestRunTime = MyScheduledRunTime.AddMilliseconds(TimerIntervalInMilliseconds);
+
+        //    // If within the (Start Time) to (Start Time+Interval) time frame - run the processes
+        //    if ((CurrentSystemTime.CompareTo(MyScheduledRunTime) >= 0) && (CurrentSystemTime.CompareTo(LatestRunTime) <= 0))
+        //    {
+        //        Debug.WriteLine(String.Concat("Timer Event Handling MyScheduledRunTime Actions: ", DateTime.Now.ToString()));
+        //        // RUN YOUR PROCESSES HERE
+        //        //Experiment();
+        //        //Experiment1();
+        //        SyncAppWithAD();
+
+        //    }
+        //}
         void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            // Get the TimerStartTime web.config value
-            DateTime MyScheduledRunTime = DateTime.Parse(WebConfigurationManager.AppSettings["TimerStartTime"]);
-
-            // Get the current system time
-            DateTime CurrentSystemTime = DateTime.Now;
-
-            Debug.WriteLine(string.Concat("Timer Event Handler Called: ", CurrentSystemTime.ToString()));
-
-            // This makes sure your code will only run once within the time frame of (Start Time) to
-            // (Start Time+Interval). The timer's interval and this (Start Time+Interval) must stay in sync
-            // or your code may not run, could run once, or may run multiple times per day.
-            DateTime LatestRunTime = MyScheduledRunTime.AddMilliseconds(TimerIntervalInMilliseconds);
-
-            // If within the (Start Time) to (Start Time+Interval) time frame - run the processes
-            if ((CurrentSystemTime.CompareTo(MyScheduledRunTime) >= 0) && (CurrentSystemTime.CompareTo(LatestRunTime) <= 0))
-            {
-                Debug.WriteLine(String.Concat("Timer Event Handling MyScheduledRunTime Actions: ", DateTime.Now.ToString()));
-                // RUN YOUR PROCESSES HERE
-                //Experiment();
-                //Experiment1();
-                SyncAppWithAD();
-
-            }
+            SyncAppWithAD();
         }
 
         public void SyncAppWithAD()
         {
+            string filePath = Path.Combine(HttpRuntime.AppDomainAppPath, "SyncLog.txt");
+            System.IO.File.AppendAllText(filePath, DateTime.Now.ToString() + Environment.NewLine);
 
             using (var context = new PrincipalContext(ContextType.Domain, "intechww.com"))// "tenf.loc"))
             {
-
                 byte empFound = 0;
                 int counter = 0;
                 int insertedEmp = 0;
                 int UpdatedEmp = 0;
                 //List<string> loginsList = new List<string>();
                 var path = @"D:\LeaveON - AD\Intranet\ADUserList.txt";
-              
+
                 using (var searcher = new PrincipalSearcher(new UserPrincipal(context)))
                 {
 
@@ -133,19 +147,19 @@ namespace LeaveON.UtilityClasses
                         //DateTime WhenCreated = DateTime.Parse(de.Properties["whenCreated"].Value.ToString().Trim());
                         //DateTime LastLogon = DateTime.ParseExact("01/01/2019", "dd/MM/yyyy", CultureInfo.InvariantCulture); //= DateTime.Parse(de.Properties["LastLogon"].Value.ToString().Trim());
                         auth = result as AuthenticablePrincipal;
-                        
+
                         if (auth == null || auth.UserPrincipalName == null || string.IsNullOrEmpty(auth.UserPrincipalName) || auth.Enabled == false)
                         {
                             continue;//we dont need this. simply move to next
                         }
-                        if (auth.UserPrincipalName.ToLower().Contains("muzammil.riaz"))
+                        if (auth.UserPrincipalName.ToLower().Contains("usman.shahzad"))
                         {
                             var abc = "";
                             var abbb = de.Properties["EmployeeId"].Value;
                         }
                         counter += 1;
                         object adsLargeInteger = de.Properties["lastLogon"].Value;
-                        
+
                         if (adsLargeInteger == null)
                         {
                             continue;
@@ -171,7 +185,7 @@ namespace LeaveON.UtilityClasses
                             departmentsList.Add(Convert.ToString(de.Properties["department"].Value));
                             countriesList.Add(Convert.ToString(de.Properties["co"].Value));
                             AspNetUser aspNetUser = LstAspNetUsers.FirstOrDefault(x => x.UserName.Replace(" ", "").ToUpper() == auth.UserPrincipalName.Replace(" ", "").ToUpper());
-                           
+
 
                             if (aspNetUser == null)
                             {//Insert
@@ -185,9 +199,9 @@ namespace LeaveON.UtilityClasses
                             }
                             else
                             {//Update
-                                if (aspNetUser.IsActive != IsActive(de) || string.IsNullOrEmpty(aspNetUser.DepartmentName) || 
-                                    aspNetUser.DepartmentName != Convert.ToString(de.Properties["department"].Value) || 
-                                    aspNetUser.CntryName != Convert.ToString(de.Properties["co"].Value) || aspNetUser.BioStarEmpNum ==0)
+                                if (aspNetUser.IsActive != IsActive(de) || string.IsNullOrEmpty(aspNetUser.DepartmentName) ||
+                                    aspNetUser.DepartmentName != Convert.ToString(de.Properties["department"].Value) ||
+                                    aspNetUser.CntryName != Convert.ToString(de.Properties["co"].Value) || aspNetUser.BioStarEmpNum == 0)
                                 {
                                     UpdateEmployee(aspNetUser, de);
                                 }
@@ -283,7 +297,7 @@ namespace LeaveON.UtilityClasses
         {
             //return;
             AspNetUser emp = new AspNetUser();
-            
+
             emp.UserName = Convert.ToString(de.Properties["userPrincipalName"].Value);
             emp.Email = Convert.ToString(de.Properties["userPrincipalName"].Value);
             emp.Id = Guid.NewGuid().ToString();
@@ -296,11 +310,11 @@ namespace LeaveON.UtilityClasses
             emp.LockoutEnabled = true;
             emp.AccessFailedCount = 0;
             emp.DateCreated = DateTime.Now;
-            
+
             emp.DepartmentName = Convert.ToString(de.Properties["department"].Value);
             emp.CntryName = Convert.ToString(de.Properties["co"].Value);
             emp.IsActive = IsActive(de);
-            
+
             db.AspNetUsers.Add(emp);
 
             //----add user role
@@ -323,12 +337,14 @@ namespace LeaveON.UtilityClasses
             oldEmp.CntryName = Convert.ToString(de.Properties["co"].Value);
             oldEmp.DepartmentName = Convert.ToString(de.Properties["department"].Value);
             oldEmp.BioStarEmpNum = Convert.ToInt32(de.Properties["facsimileTelephoneNumber"].Value);
+            oldEmp.DateModified = DateTime.Now;
             db.AspNetUsers.Attach(oldEmp);
 
             db.Entry(oldEmp).Property(x => x.IsActive).IsModified = true;
             db.Entry(oldEmp).Property(x => x.DepartmentName).IsModified = true;
             db.Entry(oldEmp).Property(x => x.CntryName).IsModified = true;
             db.Entry(oldEmp).Property(x => x.BioStarEmpNum).IsModified = true;
+            db.Entry(oldEmp).Property(x => x.DateModified).IsModified = true;
             //db.SaveChangesAsync();
             db.SaveChanges();
             //db.Entry(emp).State = EntityState.Modified;
@@ -355,6 +371,10 @@ namespace LeaveON.UtilityClasses
                 }
             }
         }
+    }
+    public static class MyGlobalClass
+    {
+        public static bool MyGlobalBool { get; set; }
     }
 }
 

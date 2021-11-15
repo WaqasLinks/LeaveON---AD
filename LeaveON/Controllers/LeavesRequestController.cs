@@ -39,20 +39,7 @@ namespace LeaveON.Controllers
       return View(await leaves.ToListAsync());
     }
 
-    // GET: Leaves/Details/5
-    public async Task<ActionResult> Details(decimal id)
-    {
-      if (id == null)
-      {
-        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-      }
-      Leave leave = await db.Leaves.FindAsync(id);
-      if (leave == null)
-      {
-        return HttpNotFound();
-      }
-      return View(leave);
-    }
+   
 
     // GET: Leaves/Create
     public ActionResult Create()
@@ -328,6 +315,8 @@ namespace LeaveON.Controllers
     // GET: Leaves/Edit/5
     public async Task<ActionResult> Edit(decimal id)
     {
+      return RedirectToAction("Index");
+
       if (id == null)
       {
         return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -337,6 +326,7 @@ namespace LeaveON.Controllers
       {
         return HttpNotFound();
       }
+      
       if (!(leave.IsAccepted1 == null || leave.IsAccepted2 == null))
       {
         return RedirectToAction("Index");
@@ -367,7 +357,7 @@ namespace LeaveON.Controllers
     //GET
     public async Task<ActionResult> EditCompensatoryQuotaRequest(decimal id)
     {
-
+      return RedirectToAction("Index");
       if (id == null)
       {
         return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -398,7 +388,7 @@ namespace LeaveON.Controllers
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> Edit([Bind(Include = "Id,UserId,LeaveTypeId,Reason,StartDate,EndDate,TotalDays,EmergencyContact,ResponseDate1,ResponseDate2,IsAccepted1,IsAccepted2,LineManager1Id,LineManager2Id,Remarks1,Remarks2,DateCreated,DateModified,UserLeavePolicyId")] Leave leave,decimal LastLeaveDaysCount)
     {
-      
+      return RedirectToAction("Index");
       leave.UserId = User.Identity.GetUserId();
       leave.AspNetUser = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.UserId);
       leave.DateModified = DateTime.Now;
@@ -447,7 +437,7 @@ namespace LeaveON.Controllers
     [ValidateAntiForgeryToken]
     public async Task<ActionResult> EditCompensatoryQuotaRequest([Bind(Include = "Id,UserId,LeaveTypeId,Reason,StartDate,EndDate,TotalDays,EmergencyContact,ResponseDate1,ResponseDate2,IsAccepted1,IsAccepted2,LineManager1Id,LineManager2Id,Remarks1,Remarks2,DateCreated,DateModified,UserLeavePolicyId")] Leave leave, decimal LastLeaveDaysCount)
     {
-
+      return RedirectToAction("Index");
       leave.UserId = User.Identity.GetUserId();
       leave.AspNetUser = db.AspNetUsers.FirstOrDefault(x => x.Id == leave.UserId);
       leave.DateModified = DateTime.Now;
