@@ -23,7 +23,7 @@ namespace LeaveON.Controllers
     LeaveONEntities dbLeaveOn = new LeaveONEntities();
     //enum ReadersIn {538600343, 38677, 538595648, 35816,540093375,540093369,540093374 , 547241993  ,540133115 , 538848767 }
 
-    List<int> LstCardReadersIn = new List<int> { 538600343, 38677, 538595648, 35816, 540093375, 540093369, 540093374, 547241993, 540133115, 538848767 };
+    List<int> LstCardReadersIn = new List<int> { 538600343, 38677, 538595648, 35816, 540093375, 540093369, 540093374, 547241993, 540133115, 538848767, 540095692 };
 
     private Task<List<TimeData>> ConnectToDBandReturnWorkingHours(string ReqMonthYear, List<int> UserIds)
     {
@@ -48,7 +48,12 @@ namespace LeaveON.Controllers
         int UserId = Id;
         //cmd = new SqlCommand("select * from T_LG202106 where USRID = '9919' and SRVDT>= '2021-06-01' AND SRVDT<= '2021-06-30' order by EVTLGUID", con);
         //cmd = new SqlCommand("select * from T_LG201901 where USRID = '2205' order by EVTLGUID", con);
-        cmd = new SqlCommand("select USRID,SRVDT,DEVDT,DEVUID from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' order by DEVDT", con);
+
+
+        cmd = new SqlCommand("select USRID,SRVDT,DEVDT,DEVUID from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' order by DEVDT", con);//last good
+
+        //cmd = new SqlCommand("select USRID,SRVDT,DEVDT,DEVUID from T_LG" + dateAttr[1] + dateAttr[0] + " where USRID ='" + UserId + "' and SRVDT BETWEEN '2022/08/02' AND '2022/08/03' order by DEVDT", con);
+
         dr = cmd.ExecuteReader();
         DataTable dt = new DataTable();
         dt.Load(dr);
@@ -91,7 +96,9 @@ namespace LeaveON.Controllers
         int EmptyDays = 0;
         bool IsCardIn = false;
         bool IsCardOut = false;
+        bool lastsemiIn = false;
         TimeSpan ThidDayWorkingHours = new TimeSpan();
+        int k = -1;
         //for (int k = dayCounter; k < thisDay; k++)
         //{
         //  LstEmptyDays.Add(k);
@@ -100,6 +107,10 @@ namespace LeaveON.Controllers
         for (int j = 0; j <= rowsCount - 1; j++)
         {
 
+          if (k >= j)             //                                |
+          {                           //                                |
+            continue;   // Skip the remainder of this iteration. -----+
+          }
           firstDateTime = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
 
           if (firstDateTime.Day != firstDay)
@@ -136,21 +147,39 @@ namespace LeaveON.Controllers
 
           }
 
+          k = j;
+          k++;
+          while ((k <= rowsCount - 1) && LstCardReadersIn.Contains((int)dt.Rows[k]["DEVUID"]))//find last semi in
+          {
+            k++; //Last semi in
+            lastsemiIn = true;
+          }
+          if (lastsemiIn==true)
+          {
+            while ((k <= rowsCount - 1) && !LstCardReadersIn.Contains((int)dt.Rows[k]["DEVUID"]))//find last semi out
+            {
+              k++; 
+              lastsemiIn = false;
+            }
+            k--;//Last semi out
+          }
+
+
           //------get actual working hour of this date--------
           //if ((j + 1 <= rowsCount - 1) && (int)dt.Rows[j]["TNAKEY"] == 1 && (int)dt.Rows[j + 1]["TNAKEY"] == 2 &&
-          if ((j + 1 <= rowsCount - 1) && LstCardReadersIn.Contains((int)dt.Rows[j]["DEVUID"]) && !LstCardReadersIn.Contains((int)dt.Rows[j + 1]["DEVUID"]) &&
-            Convert.ToDateTime(ConvertToCountryTimeZone(dt, j, timeZone)).Day == firstDay && Convert.ToDateTime(ConvertToCountryTimeZone(dt, j + 1, timeZone)).Day == firstDay)
+          if ((k <= rowsCount - 1) && LstCardReadersIn.Contains((int)dt.Rows[j]["DEVUID"]) && !LstCardReadersIn.Contains((int)dt.Rows[k]["DEVUID"]) &&
+            Convert.ToDateTime(ConvertToCountryTimeZone(dt, j, timeZone)).Day == firstDay && Convert.ToDateTime(ConvertToCountryTimeZone(dt, k, timeZone)).Day == firstDay)
           {
             if (IsCardIn == false)
             {//get first time in
               firsTimeIn = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
-              lastTimeOut = ConvertToCountryTimeZone(dt, j + 1, timeZone);
+              lastTimeOut = ConvertToCountryTimeZone(dt, k, timeZone);
               IsCardIn = true;
               //UserId = Convert.ToInt32(dt.Rows[j]["USRID"]);
             }
 
             timeIn = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
-            timeOut = ConvertToCountryTimeZone(dt, j + 1, timeZone);//(DateTime)dt.Rows[j + 1]["SRVDT"];
+            timeOut = ConvertToCountryTimeZone(dt, k, timeZone);//(DateTime)dt.Rows[j + 1]["SRVDT"];
             TimeSpan workingHour = (timeOut - timeIn);
             ThidDayWorkingHours = ThidDayWorkingHours.Add(workingHour);
 
@@ -158,13 +187,14 @@ namespace LeaveON.Controllers
 
           }
           //if (IsCardIn == true && (int)dt.Rows[j]["TNAKEY"] == 2)
-          if (IsCardIn == true && !LstCardReadersIn.Contains((int)dt.Rows[j]["DEVUID"]))
+          if (IsCardIn == true && !LstCardReadersIn.Contains((int)dt.Rows[k]["DEVUID"]))
           {//get last time out
             IsCardOut = true;
-            lastTimeOut = ConvertToCountryTimeZone(dt, j, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
+            lastTimeOut = ConvertToCountryTimeZone(dt, k, timeZone);//(DateTime)dt.Rows[j]["SRVDT"];
           }
 
-        }
+        }//datetime for end here
+
         //add last date to list here as loop ended
 
         if (firsTimeIn.Year != 2001 && lastTimeOut.Year != 2001)//(IsCardIn == true && IsCardOut == true)
