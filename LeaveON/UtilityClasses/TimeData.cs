@@ -17,7 +17,7 @@ namespace LeaveON.UtilityClasses
     public int EmployeeNumber { get; set; }
     public string TimeZone { get; set; }
     public string Policy { get; set; }
-
+    public string DepartmentName { get; set; }
     [DisplayFormat(DataFormatString = "{0: dd/MM/yyyy}")]
     public DateTime Date { get; set; }
     public string Day { get; set; }

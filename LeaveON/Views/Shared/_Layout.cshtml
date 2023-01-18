@@ -239,11 +239,11 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="https://www.intechww.com/" class="brand-link">
-        <img src="~/dist/img/AdminLTELogo.png"
-             alt="AdminLTE Logo"
-             class="brand-image img-circle elevation-3"
-             style="opacity: .8">
-        <span class="brand-text font-weight-light">INTECH</span>
+        <img src="~/dist/img/INTECH.png"
+             alt="Intech"
+             class="brand-image-xl img-fluid elevation-0"
+             style="opacity: .8; display: block; margin-left: auto; margin-right: auto; ">
+        <span class="brand-text font-weight-light"></span>
       </a>
 
       <!-- Sidebar -->
@@ -436,7 +436,7 @@
                       </a>
                     </li>
 
-                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    @if (User.IsInRole("Admin"))
                     {
                       @*<li class="nav-item">
                           <a href="/AccessTimeData/DepartmentData" class="nav-link">
@@ -450,6 +450,12 @@
                           <p>Department Data</p>
                         </a>
                       </li>
+                      <li class="nav-item">
+                      <a href="/AccessBiostarAC/MonthsWiseData" class="nav-link">
+                        &nbsp; &nbsp;  <i class="far fa fa-history"></i>
+                        <p>Months Wise Data</p>
+                      </a>
+                    </li>
                       @*<li class="nav-item">
                           <a href="/AccessTimeData/WhoIsIn" class="nav-link">
                             &nbsp; &nbsp;  <i class="far fa fa-history"></i>

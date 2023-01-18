@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -11,7 +11,8 @@ using Repository.Models;
 
 namespace LeaveON.Controllers
 {
-    public class DepartmentNamesController : Controller
+  [Authorize(Roles = "Admin")]
+  public class DepartmentNamesController : Controller
     {
         private LeaveONEntities db = new LeaveONEntities();
 

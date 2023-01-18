@@ -166,11 +166,15 @@ namespace LeaveON.Controllers
     [AllowAnonymous]
     public ActionResult Login(string returnUrl, string ADUser)
     {
+#if DEBUG
       //ADUser = "bsserviceaccount@intechww.com";
       //ADUser = "Ahsan.Ahmad@intechww.com";
-      //ADUser = "muzammil.riaz@intechww.com";
+
+      ADUser = "muzammil.riaz@intechww.com";
+      //ADUser = "kashif.ijaz@intechww.com";
+
       //ADUser = "usama.abbas@intechww.com";
-      ADUser = "bilal.hussain@intechww.com";
+      //ADUser = "bilal.hussain@intechww.com";
       //ADUser = "asrar.ahmed@intechww.com";
       //ADUser = "Khaleel.khan@intechww.com";
       //ADUser = "Usman.Javed@intechww.com";
@@ -181,7 +185,7 @@ namespace LeaveON.Controllers
       //ADUser = "testing@intechww.com";
       //ADUser = "kashif.ali@intechww.com";
       //ali.raza@intechww.com
-
+#endif
       //var path = System.Web.HttpContext.Current.Server.MapPath(@"~/myLog.txt");
       //var identityName = HttpContext.User.Identity.Name;
       //using (HostingEnvironment.Impersonate())

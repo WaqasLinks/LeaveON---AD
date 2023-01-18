@@ -1,0 +1,215 @@
+@model IEnumerable<LeaveON.UtilityClasses.TimeData>
+@{
+
+  <div id="NewData">
+
+    <section class="content">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">User Data</h3>
+
+
+            </div>
+
+
+            <div class="card-body">
+
+              <div d="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                  <div class="col-sm-12 col-md-6">
+                  </div>
+                  <div class="col-sm-12 col-md-6"></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    @if (!(Model is null))
+                    {
+                      TimeSpan AllWorkingHours = new TimeSpan();
+                      TimeSpan AllTotalTime = new TimeSpan();
+                      <table id="example2" class="table table-bordered table-hover dataTable dtr-inline" role="grid" aria-describedby="example2_info">
+                        <thead>
+                          <tr>
+                            <th>
+                              @Html.DisplayNameFor(model => model.EmployeeName)
+                            </th>
+                            <th>
+                              @Html.DisplayNameFor(model => model.EmployeeNumber)
+                            </th>
+                            <th>
+                              Time Zone
+                            </th>
+                            <th>
+                              Policy
+                            </th>
+                            @*<th>
+                                Dep
+                              </th>*@
+                            <th>
+                              @Html.DisplayNameFor(model => model.Date)
+                            </th>
+                            <th>
+                              @Html.DisplayNameFor(model => model.Day)
+                            </th>
+                            <th>
+                              @Html.DisplayNameFor(model => model.TimeIn)
+                            </th>
+                            <th>
+                              @Html.DisplayNameFor(model => model.TimeOut)
+                            </th>
+                            <th>
+                              @Html.DisplayNameFor(model => model.WorkingHours)
+                            </th>
+                            <th>
+                              @Html.DisplayNameFor(model => model.TotalTime)
+                            </th>
+                            <th>
+                              @Html.DisplayNameFor(model => model.Status)
+                            </th>
+                            @*<th></th>*@
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach (var item in Model)
+                          {
+                            <tr>
+                              <td>
+                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                              </td>
+                              <td>
+                                @Html.DisplayFor(modelItem => item.EmployeeNumber)
+                              </td>
+                              <td>
+                                @Html.DisplayFor(modelItem => item.TimeZone)
+                              </td>
+                              <td>
+                                @Html.DisplayFor(modelItem => item.Policy)
+                              </td>
+                              @*<td>
+                                  @Html.DisplayFor(modelItem => item.)
+                                </td>*@
+                              <td>
+                                @Html.DisplayFor(modelItem => item.Date)
+                              </td>
+                              <td>
+                                @Html.DisplayFor(modelItem => item.Day)
+                              </td>
+                              @{ TimeSpan offDayTime = TimeSpan.Parse("00.00:00");
+
+                                if (item.WorkingHours != offDayTime)
+                                {
+                                  <td>
+                                    @Html.DisplayFor(modelItem => item.TimeIn)
+                                  </td>
+                                  <td>
+                                    @Html.DisplayFor(modelItem => item.TimeOut)
+                                  </td>
+                                  <td>
+                                    @Html.DisplayFor(modelItem => item.WorkingHours)
+                                  </td>
+                                  <td>
+                                    @Html.DisplayFor(modelItem => item.TotalTime)
+                                  </td>
+                                }
+                                else
+                                {
+                                  <td>
+                                    <text>-</text>
+                                  </td>
+                                  <td>
+                                    <text>-</text>
+                                  </td>
+                                  <td>
+                                    <text>-</text>
+                                  </td>
+                                  <td>
+                                    <text>-</text>
+                                  </td>
+                                }
+
+                              }
+
+                              <td>
+
+                                @{
+                                  if (String.IsNullOrEmpty(item.Status))
+                                  {
+                                    @Html.ActionLink("Detail", "ConnectToDBandReturnOffHours", new { reqDate = item.Date.ToString("dd-MM-yyyy"), UserId = item.EmployeeNumber }, new { target = "_blank" })
+                                  }
+                                  else
+                                  {
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                  }
+                                }
+
+
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="font-weight:bold">@ViewBag.TotalWorkingHours Hours</td>
+                            <td style="font-weight:bold">@ViewBag.TotalHours Hours</td>
+                            <td></td>
+                          </tr>
+                        </tfoot>
+                      </table>
+
+                    }
+
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+}
+<link href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+@*<script src="https://code.jquery.com/jquery-3.5.1.js"></script>*@
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
+
+
+<script>
+  $(function () {
+
+    $('#example2').DataTable({
+      "paging": false,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": true,
+      "responsive": true,
+      "order": [[4, "asc"]],
+      dom: 'Bfrtip',
+      buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+      ]
+    });
+  });
+</script>
+

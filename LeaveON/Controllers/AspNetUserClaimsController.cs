@@ -11,6 +11,7 @@ using Repository.Models;
 
 namespace LeaveON.Controllers
 {
+  [Authorize(Roles = "Admin")]
   public class AspNetUserClaimsController : Controller
   {
     private LeaveONEntities db = new LeaveONEntities();

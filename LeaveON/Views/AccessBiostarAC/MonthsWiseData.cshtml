@@ -1,0 +1,80 @@
+@model IEnumerable<TimeManagement.Models.UD_TB_AccessTime_Data>
+
+  @{
+  ViewBag.Title = "Index";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+  }
+
+
+<div>
+  @*@Html.DropDownList("DepartmentList", new MultiSelectList(ViewBag.Departments, "Value", "Text", ViewBag.SelectedDepartments), htmlAttributes: new { @class = "selectpicker", @id = "listDepartments", data_live_search = "true", data_actions_box = "true", data_done_button = "true" })*@
+  @Html.DropDownList("FromMonth", (IEnumerable<SelectListItem>)ViewBag.MonthSelectList, htmlAttributes: new { @class = "selectpicker", @id = "fromMonth", data_live_search = "true", data_actions_box = "true", data_done_button = "true" })
+  To
+  @Html.DropDownList("ToMonth", (IEnumerable<SelectListItem>)ViewBag.MonthSelectList, htmlAttributes: new { @class = "selectpicker", @id = "toMonth", data_live_search = "true", data_actions_box = "true", data_done_button = "true" })
+  @*@Html.Editor("FromDate", new { htmlAttributes = new { @required = "required", @id = "fromDate" } })
+    @Html.Editor("ToDate", new { htmlAttributes = new { @required = "required", @id = "toDate" } })*@
+
+  <button id="load">go</button>
+  <div id="wait" style="display:none;"><img src='~/Images/Ripple_1s_200px_Transparent.gif' width="38" height="38" /></div>
+  @{Html.RenderPartial("_MonthsWiseData", Model); }
+</div>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  @*
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>*@
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <script type="text/javascript">
+
+    $(document).ready(function () {
+      $("#fromDate,#toDate").datepicker({
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        changeMonth: true,
+        changeYear: true,
+        numberOfMonths: 2,
+        dateFormat: 'DD, MM, d, yy',
+        //showButtonPanel: true
+        defaultDate: '-1m',
+        showOn: "both"
+        //buttonImage: "images/calendar.gif",
+        //buttonImageOnly: true,
+        //buttonText: "Select date",
+
+        //minDate: -20,
+        //maxDate: "+1M +10D"
+      });
+      $(document).ajaxStart(function () {
+        $("#wait").css("display", "block");
+      });
+      $(document).ajaxComplete(function () {
+        $("#wait").css("display", "none");
+      });
+
+      $('#load').click(function () {
+        var ReqFromMonth = $('#fromMonth').val();
+        var ReqToMonth = $('#toMonth').val();
+
+        $.ajax({
+          url: "@Url.Action("MonthsWiseData", "AccessBiostarAC")",
+          data: { 'ReqFromMonth': ReqFromMonth, 'ReqToMonth': ReqToMonth},
+          type: "GET",
+          cache: false,
+          success: function (data) {
+            //alert(data);
+            $("#NewData").html(data);
+
+            //$("#hdnOrigComments").val($('#txtComments').val());
+            //$('#lblCommentsNotification').text(savingStatus);
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            //$('#lblCommentsNotification').text("Error encountered while saving the comments.");
+            alert('Data provided was not valid');
+          }
+        });
+      });
+    });
+
+
+  </script>
+

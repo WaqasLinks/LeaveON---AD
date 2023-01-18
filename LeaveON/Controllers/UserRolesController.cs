@@ -12,6 +12,7 @@ using LeaveON.Models;
 
 namespace LeaveON.Controllers
 {
+  [Authorize(Roles = "Admin")]
   public class UserRolesController : Controller
   {
     private LeaveONEntities db = new LeaveONEntities();
