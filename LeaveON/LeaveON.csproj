@@ -403,6 +403,7 @@
     <Content Include="dist\css\alt\adminlte.plugins.css" />
     <Content Include="dist\css\alt\adminlte.plugins.min.css" />
     <Content Include="dist\img\AdminLTELogo.png" />
+    <Content Include="dist\img\ads-b.png" />
     <Content Include="dist\img\avatar.png" />
     <Content Include="dist\img\avatar04.png" />
     <Content Include="dist\img\avatar2.png" />

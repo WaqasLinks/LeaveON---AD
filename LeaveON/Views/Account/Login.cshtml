@@ -48,7 +48,7 @@
 
     <div class="card">
       <div class="card-body register-card-body">
-        <p class="login-box-msg">Signing in to start your session... please wait</p>
+        <p class="login-box-msg">Sign in to start your session</p>
         @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", autocomplete = "off", role = "form", name = "accountLogin", id = "accountLogin" }))
         {
 
@@ -57,32 +57,32 @@
           @Html.ValidationSummary(true, "", new { @class = "text-danger" })
           <form action="../../index.html" method="post">
             <div class="input-group mb-3">
-              @*@Html.TextBoxFor(m => m.Email, new { @class = "form-control   ", placeholder = "Email" style = "display: none;", autocomplete = "off"  })*@
+              @Html.TextBoxFor(m => m.Email, new { @class = "form-control   ", placeholder = "Email", autocomplete = "off" })
               @*@Html.TextBox("Email", (string)ViewBag.Eamil, new { @class = "form-control", autocomplete = "off", placeholder = "Email", style = "display: none;" })*@
-              @Html.TextBox("Email", (string)ViewBag.ADUser, new { @class = "form-control", autocomplete = "off", placeholder = "Email", style = "display: none;" })
-              @*<div class="input-group-append">
-                      <div class="input-group-text">
-                        <span class="fas fa-user"></span>
-                      </div>
-                    </div>
-                </div>*@
-              @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-
-              <div class="input-group mb-3">
-                @*@Html.PasswordFor(m => m.Password, new { @class = "form-control fas fa-lock", placeholder = "Password", style = "display: none;", autocomplete = "off" })*@
-                @Html.Password("Password", "●●●●●●●●●●", new { @class = "form-control fas fa-lock", autocomplete = "off", placeholder = "Password", style = "display: none;" })
-                @*<div class="input-group-append">
-                    <div class="input-group-text">
-                      <span class="fas fa-lock"></span>
-                    </div>
-                  </div>*@
+              @*@Html.TextBox("Email", (string)ViewBag.ADUser, new { @class = "form-control", autocomplete = "off", placeholder = "Email", style = "display: none;" })*@
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-user"></span>
+                </div>
               </div>
-              @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
 
-
-              <div class="col-4">
-                <button type="submit" class="btn btn-primary btn-block" hidden>SignIn</button>
+            <div class="input-group mb-3">
+              @Html.PasswordFor(m => m.Password, new { @class = "form-control fas fa-lock", placeholder = "Password", autocomplete = "off" })
+              @*@Html.Password("Password", "●●●●●●●●●●", new { @class = "form-control fas fa-lock", autocomplete = "off", placeholder = "Password", style = "display: none;" })*@
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-lock"></span>
+                </div>
               </div>
+            </div>
+            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+
+            <div class="col-4">
+              <button type="submit" class="btn btn-primary btn-block">SignIn</button>
+            </div>
           </form>
 
 
@@ -109,8 +109,9 @@
     //$('#Email').val('admin.intech@intech.com');
     //$('#Password').val("●●●●●●●●●●");
 
-    $('#accountLogin').attr('autocomplete', 'off');
-    document.forms["accountLogin"].submit();
+    //$('#accountLogin').attr('autocomplete', 'off');
+    //document.forms["accountLogin"].submit();
+
     //$('#submit_100').trigger('click');
   });
 </script>

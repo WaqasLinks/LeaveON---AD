@@ -166,26 +166,10 @@ namespace LeaveON.Controllers
     [AllowAnonymous]
     public ActionResult Login(string returnUrl, string ADUser)
     {
-#if DEBUG
       //ADUser = "bsserviceaccount@intechww.com";
       //ADUser = "Ahsan.Ahmad@intechww.com";
-
-      ADUser = "muzammil.riaz@intechww.com";
-      //ADUser = "kashif.ijaz@intechww.com";
-
-      //ADUser = "usama.abbas@intechww.com";
-      //ADUser = "bilal.hussain@intechww.com";
+      //ADUser = "muzammil.riaz@intechww.com";
       //ADUser = "asrar.ahmed@intechww.com";
-      //ADUser = "Khaleel.khan@intechww.com";
-      //ADUser = "Usman.Javed@intechww.com";
-      //ADUser = "kashif.ali@intechww.com";
-      //ADUser = "Hassan.masood@intechww.com";
-      //ADUser = "salman.saleem@intechww.com";
-      //ADUser = "waqqasjavaid@gmail.com";
-      //ADUser = "testing@intechww.com";
-      //ADUser = "kashif.ali@intechww.com";
-      //ali.raza@intechww.com
-#endif
       //var path = System.Web.HttpContext.Current.Server.MapPath(@"~/myLog.txt");
       //var identityName = HttpContext.User.Identity.Name;
       //using (HostingEnvironment.Impersonate())
@@ -225,25 +209,11 @@ namespace LeaveON.Controllers
       //loginsList.Add(currentUser.UserPrincipalName);
 
       //System.IO.File.AppendAllLines(path, loginsList);
-
-      AspNetUser user = db.AspNetUsers.Where(x => x.UserName.Trim().ToUpper() == ADUser.Trim().ToUpper()).FirstOrDefault();
-      //if (user != null)
-      //{
-      //  UserManager.AddToRoleAsync(user.Id, "User");
-      //}
-
-      if (user != null && !UserManager.IsInRole(user.Id, "User"))
-      {
-        UserManager.AddToRole(user.Id, "User");
-        UserManager.AddToRole(user.Id, "Manager");
-      }
-
-
-
       ViewBag.ADUser = ADUser;//"bsserviceaccount@intechww.com";//ADUser;
       ViewBag.ReturnUrl = returnUrl;
       //ViewBag.ReturnUrl = @"\LeavesRequest\Index";
-
+      AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie, DefaultAuthenticationTypes.ExternalCookie);
+      Session.Abandon();
       return View();
     }
 
@@ -255,20 +225,6 @@ namespace LeaveON.Controllers
     //public async Task<ActionResult> Login(LoginViewModel model, string returnUrl, FormCollection formCollection)
     public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
     {
-      //string abc =User.Identity.Name;
-      //List<string> loginsList = new List<string>();
-      //string id1 = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-      //string id4 = Request.LogonUserIdentity.Name;
-
-      //PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
-      //UserPrincipal currentUser = UserPrincipal.FindByIdentity(ctx, User.Identity.Name);
-      //loginsList.Add(currentUser.Name);
-      //loginsList.Add(currentUser.DisplayName);
-      //loginsList.Add(currentUser.GivenName);
-      //loginsList.Add(currentUser.SamAccountName);
-      //loginsList.Add(currentUser.UserPrincipalName);
-
-
 
       //var path = Server.MapPath(@"~/myLog.txt");
       //System.IO.File.AppendAllLines(path, loginsList);
@@ -276,8 +232,12 @@ namespace LeaveON.Controllers
 
       if (!ModelState.IsValid)
       {
-        //return View(model);
-        return RedirectToAction("Error404", "Error");
+        //Response.Cookies[".AspNet.ApplicationCookie"].Expires = DateTime.Now.AddDays(-1);
+        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie, DefaultAuthenticationTypes.ExternalCookie);
+        Session.Abandon();
+        return View(model);
+
+        //return RedirectToAction("Error404", "Error");
       }
 
       // This doesn't count login failures towards account lockout
@@ -286,7 +246,8 @@ namespace LeaveON.Controllers
       //string userName = formCollection.Get("UserName");//"Cash"; //cash//other
       //string IsAuthenticated = formCollection.Get("IsAuthenticated");
 
-      var result = await SignInManager.PasswordSignInAsync(model.Email, "Leaves12*", model.RememberMe, shouldLockout: false);
+      //var result = await SignInManager.PasswordSignInAsync(model.Email, "Leaves12*", model.RememberMe, shouldLockout: false);
+      var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
       //Mubashar.ali@intechww.com
       //var result = await SignInManager.PasswordSignInAsync("Mubashar.ali@intechww.com", "Leaves12*", model.RememberMe, shouldLockout: false);
       //var result = await SignInManager.PasswordSignInAsync("umer@tenf.loc", "Leaves12*", model.RememberMe, shouldLockout: false);
@@ -296,7 +257,8 @@ namespace LeaveON.Controllers
       switch (result)
       {
         case SignInStatus.Success:
-          return Redirect(returnUrl);
+
+          return RedirectToLocal(returnUrl);
         //return RedirectToAction("Index", "LeavesRequest");
         case SignInStatus.LockedOut:
           return View("Lockout");
@@ -305,8 +267,11 @@ namespace LeaveON.Controllers
         case SignInStatus.Failure:
         default:
           ModelState.AddModelError("", "Invalid login attempt.");
-          //return View(model);
-          return RedirectToAction("Error404", "Error");
+          //Response.Cookies[".AspNet.ApplicationCookie"].Expires = DateTime.Now.AddDays(-1);
+          AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie, DefaultAuthenticationTypes.ExternalCookie);
+          Session.Abandon();
+          return View(model);
+          //return RedirectToAction("Error404", "Error");
       }
     }
 

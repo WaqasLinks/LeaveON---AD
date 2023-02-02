@@ -27,6 +27,7 @@ namespace LeaveON.EmailSender
     /// code in the future </remarks>
     public static void SendEmailUsingLeavON(Leave userLeave, string LeavON_Email, string LeavON_Password, AspNetUser sender, AspNetUser receiver, String MessageType)
     {
+      return;
       MailMessage mail = new MailMessage();
       SmtpClient smtpServer = new SmtpClient("mail.smtp2go.com");
       // SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
@@ -100,7 +101,7 @@ namespace LeaveON.EmailSender
     }
     public static void SendLeaveRequestEmail(string senderEmail, string senderPassword, AspNetUser receiver)
     {
-
+      return;
       MailMessage mail = new MailMessage();
 
       SmtpClient smtpServer = new SmtpClient("mail.smtp2go.com");
